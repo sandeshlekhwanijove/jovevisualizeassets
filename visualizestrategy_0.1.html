@@ -60,44 +60,38 @@
         }
 
         /* Typography */
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            font-family: 'Inter', sans-serif;
+            text-transform: none;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+        }
+
         .reveal h1 { 
             font-family: 'JetBrains Mono', monospace;
             font-size: 5rem; 
             line-height: 1.1;
             margin-bottom: 40px;
             font-weight: 700;
-            letter-spacing: -0.02em;
         }
         
         .reveal h2 { 
-            font-family: 'Inter', sans-serif;
             font-size: 3rem; 
             border-bottom: 3px solid var(--border-color);
             padding-bottom: 20px;
             margin-bottom: 50px;
             display: flex; align-items: center; gap: 20px;
             font-weight: 700;
-            color: var(--text-main);
         }
 
         .reveal h3 { 
-            font-family: 'Inter', sans-serif;
             font-size: 1.8rem; 
             color: var(--accent-blue); 
             margin-bottom: 20px; 
             font-weight: 700;
         }
 
-        .reveal h4 {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.3rem;
-            color: var(--text-main);
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
         .reveal p, .reveal li { 
-            font-family: 'Inter', sans-serif;
             font-size: 1.6rem; 
             color: var(--text-muted); 
             line-height: 1.5; 
@@ -126,72 +120,7 @@
             font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; color: var(--accent-green); font-weight: 700;
         }
 
-        /* Insight Cards */
-        .insight-card {
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 25px;
-            height: 100%;
-            display: flex; flex-direction: column;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-        }
-
-        .insight-header {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 15px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-
-        .insight-section {
-            margin-bottom: 15px;
-        }
-
-        .insight-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            font-weight: 700;
-            margin-bottom: 4px;
-            display: block;
-            letter-spacing: 0.5px;
-        }
-
-        .insight-text {
-            font-size: 1rem;
-            color: var(--text-main);
-            line-height: 1.4;
-            font-style: italic;
-        }
-
-        .insight-analysis {
-            font-size: 1rem;
-            color: var(--accent-green); /* Using green for the insight */
-            font-weight: 600;
-            line-height: 1.3;
-        }
-
-        .proposal-box {
-            margin-top: auto; /* Push to bottom */
-            background: #f0f9ff;
-            border: 1px solid #bae6fd;
-            border-radius: 8px;
-            padding: 12px;
-        }
-        
-        .proposal-text {
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--accent-blue);
-            font-weight: 700;
-            font-size: 0.9rem;
-            display: flex; align-items: center; gap: 8px;
-        }
-
-        /* --- NEW ROW LAYOUT FOR INSIGHTS --- */
+        /* Insight Row Layout */
         .insight-row-container {
             display: flex;
             flex-direction: column;
@@ -221,7 +150,7 @@
 
         .irc-grid {
             display: grid;
-            grid-template-columns: 1.2fr 1.2fr 0.8fr; /* 3 Columns: Quote, Insight, Feature */
+            grid-template-columns: 1.2fr 1.2fr 0.8fr;
             gap: 30px;
             align-items: start;
         }
@@ -231,7 +160,7 @@
         }
 
         .irc-quote {
-            font-size: 1.3rem; /* Large Text */
+            font-size: 1.3rem;
             font-style: italic; color: var(--text-muted);
             line-height: 1.4;
             border-left: 4px solid var(--border-color);
@@ -239,7 +168,7 @@
         }
 
         .irc-insight {
-            font-size: 1.3rem; /* Large Text */
+            font-size: 1.3rem;
             font-weight: 600; color: var(--accent-green);
             line-height: 1.3;
         }
@@ -255,6 +184,79 @@
             font-size: 1.1rem;
             display: flex; align-items: center; gap: 10px;
         }
+
+        /* --- COMPETITIVE TABLE --- */
+        .comp-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1rem;
+        }
+        
+        .comp-table th {
+            text-align: center;
+            padding: 12px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--border-color);
+            font-weight: 700;
+        }
+        
+        .comp-table th:first-child { text-align: left; }
+
+        .comp-table td {
+            padding: 15px 12px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+        
+        .comp-table td:first-child { text-align: left; font-weight: 600; }
+        
+        .comp-row-jove {
+            background-color: #f0fdf4;
+            border: 2px solid var(--accent-green);
+        }
+        
+        .comp-row-jove td {
+            color: var(--text-main);
+            border-bottom: none;
+            font-weight: 600;
+        }
+
+        .status-check { color: var(--accent-green); }
+        .status-cross { color: #e2e8f0; } 
+        .status-warn { color: #f59e0b; }
+
+        /* --- ROADMAP TABLE (High Density) --- */
+        .roadmap-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem; /* Slightly smaller for density */
+        }
+
+        .roadmap-table th {
+            text-align: left;
+            padding: 12px;
+            background: #f1f5f9;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .roadmap-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+            color: var(--text-main);
+            line-height: 1.4;
+        }
+
+        .roadmap-phase { font-weight: 700; color: var(--accent-blue); display: block; margin-bottom: 4px; font-size: 0.9rem; }
+        .roadmap-time { font-size: 0.75rem; color: var(--text-muted); font-family: 'JetBrains Mono'; }
+        .roadmap-list { margin: 5px 0 0 15px; padding: 0; list-style-type: disc; }
+        .roadmap-list li { font-size: 0.8rem; margin-bottom: 4px; color: var(--text-main); }
 
         /* Grids */
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: stretch; height: 100%; }
@@ -284,7 +286,7 @@
             position: fixed; top: 40px; left: 40px; z-index: 100;
             font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 1.4rem;
             display: flex; align-items: center; gap: 15px; color: var(--text-main);
-            background: rgba(255,255,255,0.9); padding: 10px 20px; border-radius: 50px;
+            background: rgba(255,255,255,0.9); padding: 10px 25px; border-radius: 50px;
             border: 1px solid var(--border-color);
         }
         
@@ -315,7 +317,7 @@
     <div class="bg-grid"></div>
 
     <div class="logo-mark">
-        <i class="fas fa-flask" style="color: var(--accent-green);"></i> VISUALIZE STRATEGY
+        <img src="https://visualize.jove.com/wp-content/uploads/2025/06/jove-header.webp" alt="JoVE Logo" style="height: 32px; width: auto;"> VISUALIZE
     </div>
 
     <!-- Navigation Toolbar -->
@@ -330,9 +332,9 @@
             <!-- Slide 1: Title -->
             <section style="text-align: center;">
                 <div style="display: inline-block; padding: 10px 20px; background: #dcfce7; color: #15803d; border-radius: 8px; font-family: 'JetBrains Mono'; font-weight: 700; font-size: 1.1rem; margin-bottom: 40px;">
-                    STRATEGIC ROADMAP 2025
+                    STRATEGIC ROADMAP Q1 - 2026
                 </div>
-                <h1>THE REPRODUCIBLE<br><span style="color: var(--accent-blue);">SCIENCE REPOSITORY</span></h1>
+                <h1>A TRUSTED GATEWAY FOR<br><span style="color: var(--accent-blue);">SCIENTIFIC LITERATURE TO EXPEIMENTAL METHODS</span></h1>
                 <p style="font-size: 1.8rem; max-width: 900px; margin: 0 auto; color: var(--text-muted);">
                     Transforming JoVE Visualise from a search engine into the world's most complete platform for reproducible scientific methods.
                 </p>
@@ -424,16 +426,13 @@
                 </div>
             </section>
 
-            <!-- Slide 6: Key Insights 1 -->
+            <!-- Slide 6: Key Insights 1 (Row Layout) -->
             <section>
                 <h2>KEY INSIGHTS (1/2)</h2>
                 <div class="insight-row-container">
-                    
                     <!-- Insight 1 -->
                     <div class="insight-row-card">
-                        <div class="irc-header">
-                            <span>1. RENEWALS & USAGE</span>
-                        </div>
+                        <div class="irc-header"><span>1. RENEWALS & USAGE</span></div>
                         <div class="irc-grid">
                             <div>
                                 <span class="irc-col-label">WHAT WE HEARD</span>
@@ -449,12 +448,9 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Insight 2 -->
                     <div class="insight-row-card">
-                        <div class="irc-header">
-                            <span>2. JOVE AS SUPPLEMENT</span>
-                        </div>
+                        <div class="irc-header"><span>2. JOVE AS SUPPLEMENT</span></div>
                         <div class="irc-grid">
                             <div>
                                 <span class="irc-col-label">WHAT WE HEARD</span>
@@ -470,12 +466,9 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Insight 3 -->
                     <div class="insight-row-card">
-                        <div class="irc-header">
-                            <span>3. UPSELL POTENTIAL</span>
-                        </div>
+                        <div class="irc-header"><span>3. UPSELL POTENTIAL</span></div>
                         <div class="irc-grid">
                             <div>
                                 <span class="irc-col-label">WHAT WE HEARD</span>
@@ -491,20 +484,16 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </section>
 
-            <!-- Slide 7: Key Insights 2 -->
+            <!-- Slide 7: Key Insights 2 (Row Layout) -->
             <section>
                 <h2>KEY INSIGHTS (2/2)</h2>
                 <div class="insight-row-container">
-                    
                     <!-- Insight 4 -->
                     <div class="insight-row-card">
-                        <div class="irc-header">
-                            <span>4. UX FRICTION</span>
-                        </div>
+                        <div class="irc-header"><span>4. UX FRICTION</span></div>
                         <div class="irc-grid">
                             <div>
                                 <span class="irc-col-label">WHAT WE HEARD</span>
@@ -520,12 +509,9 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Insight 5 -->
                     <div class="insight-row-card">
-                        <div class="irc-header">
-                            <span>5. TIME-TO-VALUE</span>
-                        </div>
+                        <div class="irc-header"><span>5. TIME-TO-VALUE</span></div>
                         <div class="irc-grid">
                             <div>
                                 <span class="irc-col-label">WHAT WE HEARD</span>
@@ -541,12 +527,9 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Insight 6 -->
                     <div class="insight-row-card">
-                        <div class="irc-header">
-                            <span>6. EARLY MARKET</span>
-                        </div>
+                        <div class="irc-header"><span>6. EARLY MARKET</span></div>
                         <div class="irc-grid">
                             <div>
                                 <span class="irc-col-label">WHAT WE HEARD</span>
@@ -562,7 +545,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </section>
 
@@ -641,7 +623,7 @@
                 <p>We are building a digital workspace to standardise workflows across institutions.</p>
             </section>
 
-            <!-- Slide 11: Workbench UI -->
+            <!-- Slide 11: Workbench Interface -->
             <section>
                 <h2>WORKBENCH INTERFACE</h2>
                 <div class="card" style="padding: 0; overflow: hidden; height: 500px; display: flex; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
@@ -677,7 +659,79 @@
                 </div>
             </section>
 
-            <!-- Slide 12: Value Prop -->
+            <!-- Slide 12: Competitive Landscape (Placed after Workbench) -->
+            <section>
+                <h2>COMPETITIVE LANDSCAPE</h2>
+                <div class="card" style="padding: 0; overflow: hidden; background: white;">
+                    <table class="comp-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%;">Tool / Platform</th>
+                                <th style="width: 12%;">Lit. Discovery</th>
+                                <th style="width: 12%;">Method Support</th>
+                                <th style="width: 12%;">Workflow</th>
+                                <th style="width: 12%;">AI Context</th>
+                                <th style="width: 12%;">Video</th>
+                                <th style="width: 15%;">Institutional</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- JoVE -->
+                            <tr class="comp-row-jove">
+                                <td><span style="color: var(--accent-green); font-weight: 800;">JoVE Visualize</span><br><small style="font-weight: 400; color: var(--text-muted);">Unified Execution Platform</small></td>
+                                <td><i class="fas fa-check-circle status-check"></i></td>
+                                <td><i class="fas fa-check-circle status-check"></i></td>
+                                <td><i class="fas fa-check-circle status-check"></i></td>
+                                <td><i class="fas fa-check-circle status-check"></i></td>
+                                <td><i class="fas fa-check-circle status-check"></i></td>
+                                <td><i class="fas fa-check-circle status-check"></i></td>
+                            </tr>
+                            <!-- Protocols.io -->
+                            <tr>
+                                <td><strong>protocols.io</strong><br><small>Repository</small></td>
+                                <td><i class="fas fa-times-circle status-cross"></i></td>
+                                <td><i class="fas fa-check-circle status-check"></i></td>
+                                <td><i class="fas fa-check-circle status-check"></i></td>
+                                <td><i class="fas fa-times-circle status-cross"></i></td>
+                                <td><i class="fas fa-times-circle status-cross"></i></td>
+                                <td><i class="fas fa-exclamation-circle status-warn"></i></td>
+                            </tr>
+                            <!-- ResearchRabbit -->
+                            <tr>
+                                <td><strong>ResearchRabbit</strong><br><small>Lit Discovery</small></td>
+                                <td><i class="fas fa-check-circle status-check"></i></td>
+                                <td><i class="fas fa-times-circle status-cross"></i></td>
+                                <td><i class="fas fa-times-circle status-cross"></i></td>
+                                <td><i class="fas fa-exclamation-circle status-warn"></i></td>
+                                <td><i class="fas fa-times-circle status-cross"></i></td>
+                                <td><i class="fas fa-exclamation-circle status-warn"></i></td>
+                            </tr>
+                            <!-- Semantic Scholar -->
+                            <tr>
+                                <td><strong>Semantic Scholar</strong><br><small>AI Summary</small></td>
+                                <td><i class="fas fa-check-circle status-check"></i></td>
+                                <td><i class="fas fa-times-circle status-cross"></i></td>
+                                <td><i class="fas fa-times-circle status-cross"></i></td>
+                                <td><i class="fas fa-check-circle status-check"></i></td>
+                                <td><i class="fas fa-times-circle status-cross"></i></td>
+                                <td><i class="fas fa-exclamation-circle status-warn"></i></td>
+                            </tr>
+                            <!-- Canvas -->
+                            <tr>
+                                <td><strong>Canvas / LMS</strong><br><small>Management</small></td>
+                                <td><i class="fas fa-times-circle status-cross"></i></td>
+                                <td><i class="fas fa-exclamation-circle status-warn"></i></td>
+                                <td><i class="fas fa-exclamation-circle status-warn"></i></td>
+                                <td><i class="fas fa-times-circle status-cross"></i></td>
+                                <td><i class="fas fa-exclamation-circle status-warn"></i></td>
+                                <td><i class="fas fa-check-circle status-check"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Slide 13: Value Prop -->
             <section>
                 <h2>VALUE PROPOSITION</h2>
                 <div class="grid-2">
@@ -698,7 +752,119 @@
                 </div>
             </section>
 
-            <!-- Slide 13: Roadmap Evolution -->
+            <!-- Slide 14: Detailed Roadmap -->
+            <section>
+                <h2>DETAILED EXECUTION ROADMAP</h2>
+                <div class="card" style="padding: 0; overflow: auto; background: white; border: none; box-shadow: none;">
+                    <table class="roadmap-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%">Phase</th>
+                                <th style="width: 15%">Primary Goal</th>
+                                <th style="width: 30%">What Changes vs Today</th>
+                                <th style="width: 20%">Explicitly NOT Doing</th>
+                                <th style="width: 20%">Success Metrics</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Baseline -->
+                            <tr>
+                                <td><span class="roadmap-phase" style="color: var(--text-muted);">Baseline</span><span class="roadmap-time">Today</span></td>
+                                <td>Large-scale PubMed surface</td>
+                                <td>
+                                    <ul class="roadmap-list">
+                                        <li>Many clicks to reach abstract</li>
+                                        <li>Mixed page intent (SEO vs user)</li>
+                                        <li>Ambiguous AI summaries</li>
+                                    </ul>
+                                </td>
+                                <td>—</td>
+                                <td>Indexed pages, Raw impressions</td>
+                            </tr>
+                            <!-- Phase 0 -->
+                            <tr>
+                                <td><span class="roadmap-phase">Phase 0</span><span class="roadmap-time">Weeks 0–4</span></td>
+                                <td>SEO & Foundation</td>
+                                <td>
+                                    <ul class="roadmap-list">
+                                        <li>Canonical URLs fixed</li>
+                                        <li>Clear article page intent</li>
+                                        <li>Strong internal linking (JoVE ↔ Visualize)</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="roadmap-list">
+                                        <li>No UX expansion</li>
+                                        <li>No new features</li>
+                                        <li>No monetization hooks</li>
+                                    </ul>
+                                </td>
+                                <td>Stable indexation, Lower bounce on entry</td>
+                            </tr>
+                            <!-- Phase 1 -->
+                            <tr style="background: #f0fdf4;">
+                                <td><span class="roadmap-phase" style="color: var(--accent-green);">Phase 1</span><span class="roadmap-time">Weeks 4–10</span></td>
+                                <td>Best-in-Class Discovery</td>
+                                <td>
+                                    <ul class="roadmap-list">
+                                        <li><strong>Abstract visible immediately</strong></li>
+                                        <li>Clear hierarchy: Context → Methods → Video</li>
+                                        <li>Topic & method clustering pages</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="roadmap-list">
+                                        <li>No workflows</li>
+                                        <li>No accounts/login wall</li>
+                                        <li>No pricing</li>
+                                    </ul>
+                                </td>
+                                <td>Organic sessions, Time on page, CTR to JoVE</td>
+                            </tr>
+                            <!-- Phase 2 -->
+                            <tr>
+                                <td><span class="roadmap-phase">Phase 2</span><span class="roadmap-time">Weeks 10–16</span></td>
+                                <td>Traffic → Inst. Signals</td>
+                                <td>
+                                    <ul class="roadmap-list">
+                                        <li>Soft capture (save article, follow topic)</li>
+                                        <li>“Access via your library” cues</li>
+                                        <li>Clear signaling of JoVE value</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="roadmap-list">
+                                        <li>No hard paywalls</li>
+                                        <li>No forced signup</li>
+                                    </ul>
+                                </td>
+                                <td>Email capture, Repeat usage, Account engagement</td>
+                            </tr>
+                            <!-- Phase 3 -->
+                            <tr>
+                                <td><span class="roadmap-phase">Phase 3</span><span class="roadmap-time">Parallel (Wk 6-14)</span></td>
+                                <td>Workbench Validation</td>
+                                <td>
+                                    <ul class="roadmap-list">
+                                        <li>Primary interviews (lab managers)</li>
+                                        <li>Paper / clickable prototypes</li>
+                                        <li>Direct comparison vs protocols.io</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="roadmap-list">
+                                        <li>No production build</li>
+                                        <li>No monetization discussion yet</li>
+                                    </ul>
+                                </td>
+                                <td>Go / Pivot / Kill decision</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Slide 15: Product Evolution (Visual) -->
             <section>
                 <h2>PRODUCT EVOLUTION</h2>
                 <div class="grid-3" style="gap: 20px;">
@@ -743,7 +909,7 @@
                 </div>
             </section>
 
-            <!-- Slide 14: End -->
+            <!-- Slide 16: End -->
             <section style="text-align: center;">
                 <div style="border: 3px solid var(--accent-green); padding: 60px; border-radius: 20px; background: #f0fdf4; display: inline-block;">
                     <h2 style="border: none; margin-bottom: 40px; color: var(--accent-green);">CORE VISION</h2>
@@ -781,4 +947,3 @@
     </script>
 </body>
 </html>
-```
