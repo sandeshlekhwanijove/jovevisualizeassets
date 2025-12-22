@@ -182,19 +182,64 @@
             display: flex; align-items: center; gap: 8px;
         }
 
-        /* Metric Box */
+        /* Metric Box (Redesigned) */
         .metric-card {
             background: white;
             border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 30px;
+            padding: 30px 20px;
             text-align: center;
             box-shadow: var(--shadow);
-            display: flex; flex-direction: column; justify-content: space-between;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; /* Center content vertically */
+            gap: 25px;
         }
-        .metric-title { font-size: 1.2rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .metric-val-big { font-family: 'JetBrains Mono'; font-size: 6rem; font-weight: 800; line-height: 1; color: var(--text-main); margin: 20px 0; }
-        .metric-context { display: flex; justify-content: space-between; border-top: 1px solid #e2e8f0; padding-top: 15px; font-size: 1rem; }
+        .metric-title { font-size: 1.3rem; color: var(--text-main); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 5px; }
+        
+        .metric-comparison {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .metric-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-family: 'JetBrains Mono';
+            line-height: 1;
+        }
+
+        .metric-block.current .metric-value {
+            font-size: 2.2rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+            font-weight: 600;
+        }
+
+        .metric-block.target .metric-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+        }
+
+        .metric-arrow {
+            color: var(--border-color);
+            font-size: 1.5rem;
+            margin-top: 20px; /* visual align with numbers */
+        }
 
         /* Tables */
         .comp-table { width: 100%; border-collapse: collapse; font-size: 1.3rem; }
@@ -280,6 +325,86 @@
             text-align: center;
             letter-spacing: 1px;
         }
+        
+        /* Execution Table */
+        .exec-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+        .exec-table th { text-align: left; padding: 15px 20px; color: var(--text-muted); text-transform: uppercase; font-size: 0.9rem; font-weight: 700; border-bottom: 2px solid var(--border-color); }
+        .exec-table td { padding: 20px; background: white; border: 1px solid var(--border-color); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); vertical-align: top; }
+        .exec-table tr td:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-left: 1px solid var(--border-color); }
+        .exec-table tr td:last-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-right: 1px solid var(--border-color); }
+        
+        .exec-month { font-family: 'JetBrains Mono'; font-weight: 700; color: var(--accent-blue); font-size: 1.1rem; }
+        .exec-focus { font-weight: 800; color: var(--text-main); font-size: 1.1rem; display: block; margin-bottom: 5px;}
+        .reasoning-pill { display: inline-block; background: #f1f5f9; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
+        .poc-box { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 10px; border-radius: 6px; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 8px;}
+
+        /* --- PIVOT SLIDE LAYOUT --- */
+        .pivot-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 10px;
+        }
+
+        .pivot-row {
+            display: grid;
+            grid-template-columns: 1fr 60px 1fr;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .pivot-item {
+            padding: 25px;
+            border-radius: 16px;
+            font-size: 1.5rem;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .pivot-from {
+            justify-content: flex-end;
+            text-align: right;
+            color: var(--text-muted);
+            opacity: 0.6;
+            border: 2px dashed #cbd5e1;
+            background: transparent;
+        }
+
+        .pivot-to {
+            justify-content: flex-start;
+            text-align: left;
+            color: var(--text-main);
+            background: white;
+            border: 3px solid var(--accent-green);
+            box-shadow: 0 10px 25px -5px rgba(22, 163, 74, 0.15);
+            font-weight: 800;
+            position: relative;
+        }
+        
+        /* Checkmark icon for "TO" items */
+        .pivot-to::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent-green);
+            opacity: 0.3;
+            font-size: 1.2rem;
+        }
+
+        .pivot-arrow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--accent-blue);
+            font-size: 2.5rem;
+            opacity: 0.8;
+        }
 
     </style>
 </head>
@@ -294,7 +419,7 @@
     <!-- Custom Control Panel -->
     <div class="control-panel">
         <button class="control-btn" id="btn-prev" title="Previous Slide"><i class="fas fa-chevron-left"></i></button>
-        <div class="slide-indicator" id="slide-number">01 / 09</div>
+        <div class="slide-indicator" id="slide-number">01 / 14</div>
         <button class="control-btn" id="btn-next" title="Next Slide"><i class="fas fa-chevron-right"></i></button>
     </div>
 
@@ -305,7 +430,7 @@
                 <div style="display: inline-block; padding: 10px 20px; background: #dcfce7; color: #15803d; border-radius: 8px; font-family: 'JetBrains Mono'; font-weight: 700; font-size: 1.1rem; margin-bottom: 40px;">
                     STRATEGIC ROADMAP Q1 - 2026
                 </div>
-                <h1>UNIFYING <br><span style="color: var(--accent-blue);">DISCOVERY & EXECUTION</span></h1>
+                <h1>UNIFYING DISCOVERY <br><span style="color: var(--accent-blue);">AND EXECUTION</span></h1>
                
                 <p style="font-size: 1.4rem; max-width: 900px; margin: 20px auto 0 auto; color: #94a3b8;">
                     Establishing JoVE Visualize as the most trusted gateway from scientific literature to experimental methods.
@@ -319,6 +444,7 @@
                         <div class="card" style="padding: 30px;">
                             <div class="card-header"><i class="fas fa-check-circle"></i> SYSTEM ASSETS</div>
                             <ul style="list-style: none; padding: 0; margin: 0; font-size: 1.2rem;">
+                                <br>
                                 <li><strong style="color: var(--accent-green);">+</strong> Trusted Global Brand</li>
                                 <li><strong style="color: var(--accent-green);">+</strong> Massive Indexed Corpus</li>
                                 <li><strong style="color: var(--accent-green);">+</strong> Video-First IP</li>
@@ -327,6 +453,7 @@
                         <div class="card" style="border-left: 8px solid var(--accent-red); padding: 30px;">
                             <div class="card-header" style="color: var(--accent-red);"><i class="fas fa-exclamation-triangle"></i> CRITICAL GAPS</div>
                             <ul style="list-style: none; padding: 0; margin: 0; font-size: 1.2rem;">
+                                <br>
                                 <li><strong style="color: var(--accent-red);">!</strong> Usage is Episodic (Search & Leave) </li>
                                 <li><strong style="color: var(--accent-red);">!</strong> No Topic Ownership (Fragmented SEO) </li>
                                 <li><strong style="color: var(--accent-red);">!</strong> No Engagement Loop After Discovery </li>
@@ -348,25 +475,45 @@
 
             <section>
                 <h2>02. STRATEGIC PIVOT</h2>
-                <div class="grid-2">
-                    <div style="opacity: 0.5;">
-                        <h3>FROM: SEARCH UTILITY</h3>
-                        <div class="card">
-                            <ul style="margin: 0; padding-left: 20px; font-size: 1.5rem;">
-                                <li>Article-Centric Pages</li>
-                                <li>Abstract Dumps</li>
-                                <li>Implicit "Related" Lists</li>
-                            </ul>
+                
+                <!-- Pivot Header -->
+                <div style="display: grid; grid-template-columns: 1fr 60px 1fr; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; font-size: 1.2rem; gap: 20px;">
+                    <div style="text-align: right; color: var(--text-muted);">From: Search Utility</div>
+                    <div></div>
+                    <div style="text-align: left; color: var(--accent-green);">To: Method Authority</div>
+                </div>
+
+                <div class="pivot-container">
+                    <!-- Row 1 -->
+                    <div class="pivot-row">
+                        <div class="pivot-item pivot-from">
+                            Article-Centric<br>Pages
+                        </div>
+                        <div class="pivot-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="pivot-item pivot-to">
+                            Method-Centric<br><span style="color: var(--accent-green);"> Topic Hubs</span>
                         </div>
                     </div>
-                    <div>
-                        <h3 style="color: var(--accent-green);">TO: METHOD AUTHORITY</h3>
-                        <div class="card" style="border: 4px solid var(--accent-green);">
-                            <ul style="margin: 0; padding-left: 20px; font-size: 1.5rem;">
-                                <li><strong>Method-Centric Topic Hubs</strong> </li>
-                                <li><strong>Structured Decision Context</strong> </li>
-                                <li><strong>Standard vs. Variant Mapping</strong> </li>
-                            </ul>
+
+                    <!-- Row 2 -->
+                    <div class="pivot-row">
+                        <div class="pivot-item pivot-from">
+                            Unstructured<br>Abstract Dumps
+                        </div>
+                        <div class="pivot-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="pivot-item pivot-to">
+                            Structured<br><span style="color: var(--accent-green);"> Decision Context</span>
+                        </div>
+                    </div>
+
+                    <!-- Row 3 -->
+                    <div class="pivot-row">
+                        <div class="pivot-item pivot-from">
+                            Implicit<br>"Related" Lists
+                        </div>
+                        <div class="pivot-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="pivot-item pivot-to">
+                            Standard vs Variant<br><span style="color: var(--accent-green);"> Mapping</span>
                         </div>
                     </div>
                 </div>
@@ -377,7 +524,7 @@
                 <div class="grid-insights">
                     <div class="insight-card">
                         <div class="insight-header">Vaishali (CSM)</div>
-                        <div class="insight-quote">"Difficult to access due to 'too many clicks'... need immediate abstract display." </div>
+                        <div class="insight-quote">"Existing Jove users find it difficult to access due to 'too many clicks'... need immediate abstract display." </div>
                         <div class="insight-action"><i class="fas fa-mouse-pointer"></i> Zero-Click UI Update</div>
                     </div>
                     <div class="insight-card">
@@ -401,6 +548,142 @@
                         <div class="insight-action"><i class="fas fa-box-open"></i> Workbench Container</div>
                     </div>
                 </div>
+            </section>
+
+            <!-- 10K PAGE ANALYSIS SLIDE -->
+            <section>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                    <h2>10K PAGE ANALYSIS</h2>
+                    <div style="background: #fffbeb; border: 1px solid #f59e0b; color: #b45309; padding: 5px 15px; border-radius: 50px; font-size: 0.9rem; font-weight: 700;">
+                        <i class="fas fa-search"></i> STATUS: CRAWLED – NOT INDEXED
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <!-- Left: Diagnosis -->
+                    <div class="card" style="border-left: 8px solid var(--accent-red);">
+                        <div class="card-header" style="color: var(--accent-red); margin-bottom: 20px;">
+                            <i class="fas fa-stethoscope"></i> THE DIAGNOSIS
+                        </div>
+                        <p style="font-size: 1.2rem; margin-bottom: 20px; font-weight: 600;">
+                            Googlebot visited but <span style="text-decoration: underline; text-decoration-color: var(--accent-red);">declined to index</span>. This is a quality signal, not a technical error.
+                        </p>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 1.1rem; display: flex; flex-direction: column; gap: 15px;">
+                            <li>
+                                <strong>Thin AI Content:</strong><br>
+                                <span style="color: var(--text-muted);">Generic summaries lack "human" value, authorship, and citations (Low E-E-A-T).</span>
+                            </li>
+                            <li>
+                                <strong>Orphaned Structure:</strong><br>
+                                <span style="color: var(--text-muted);">Pages sit deep in hierarchy with weak internal linking, signaling "low importance".</span>
+                            </li>
+                            <li>
+                                <strong>Zero Engagement:</strong><br>
+                                <span style="color: var(--text-muted);">No dwell time signals. Users bounce because pages are "dead ends".</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Right: Competitors Gap -->
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        <div class="card" style="padding: 25px; border: 2px solid var(--accent-blue);">
+                            <div class="card-header" style="color: var(--accent-blue); margin-bottom: 20px;">
+                                <i class="fas fa-crosshairs"></i> COMPETITOR GAP (Nature / RG)
+                            </div>
+                            <ul style="list-style: none; padding: 0; margin: 0; font-size: 1.1rem; display:flex; flex-direction:column; gap: 15px;">
+                                <li>
+                                    <div style="font-weight:700; color:var(--text-main);"><i class="fas fa-check-circle status-check"></i> Rich Metadata</div>
+                                    <div style="font-size:0.95rem; color:var(--text-muted); margin-left:25px;">Clickable authors & journals build a "Trust Web."</div>
+                                </li>
+                                <li>
+                                    <div style="font-weight:700; color:var(--text-main);"><i class="fas fa-check-circle status-check"></i> Engagement Loops</div>
+                                    <div style="font-size:0.95rem; color:var(--text-muted); margin-left:25px;">Citation webs and related searches increase dwell time.</div>
+                                </li>
+                            </ul>
+                        </div>
+                         <div class="insight-card" style="background: var(--text-main); color: white; border: none; justify-content: center; align-items: center; opacity: 0.9;">
+                             <i class="fas fa-arrow-down" style="font-size: 2rem; color: var(--accent-green); margin-bottom: 10px;"></i>
+                             <div style="font-weight: 700;">NEXT: TACTICAL EXECUTION PLAN</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NEW SLIDE: Q1 2026 EXECUTION ROADMAP -->
+            <section>
+                <h2>Q1 2026: TACTICAL EXECUTION</h2>
+                <div style="margin-bottom: 25px; font-size: 1.1rem; color: var(--text-muted);">
+                    Addressing "Crawled - Not Indexed" via <strong style="color:var(--text-main);">Structural POCs</strong>, <strong style="color:var(--text-main);">High-Value Hubs</strong>, and <strong style="color:var(--text-main);">Continuous Optimization</strong>.
+                </div>
+                
+                <table class="exec-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">Phase</th>
+                            <th style="width: 20%;">Focus Area</th>
+                            <th style="width: 30%;">Strategic Reasoning</th>
+                            <th style="width: 40%;">POC / Key Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="exec-month">JAN</div></td>
+                            <td>
+                                <span class="exec-focus">Structure & Validation</span>
+                            </td>
+                            <td>
+                                <span class="reasoning-pill">AUTHORITY</span>
+                                <div style="font-size: 0.9rem; color: var(--text-muted); margin-top:5px;">
+                                    Orphaned pages signal low importance. We must validate user intent via primary research before scaling content.
+                                </div>
+                            </td>
+                            <td>
+                                <div class="poc-box"><i class="fas fa-project-diagram"></i> Interlinking POC + Research</div>
+                                <ul style="font-size: 0.85rem; margin-top: 8px; padding-left: 15px; color: var(--text-main); margin-bottom: 0;">
+                                    <li><strong>Interlinking:</strong> Manually cluster 50 orphaned variants to parent categories to pass authority.</li>
+                                    <li><strong>Primary Research:</strong> Validate "Workbench" hypothesis and pain points with users.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><div class="exec-month">FEB</div></td>
+                            <td>
+                                <span class="exec-focus">Topic Bridges</span>
+                            </td>
+                            <td>
+                                <span class="reasoning-pill">EXPERTISE</span>
+                                <div style="font-size: 0.9rem; color: var(--text-muted); margin-top:5px;">
+                                    High-quality "Hubs" are needed to anchor the thin variant pages and demonstrate deep knowledge.
+                                </div>
+                            </td>
+                            <td>
+                                <div class="poc-box"><i class="fas fa-bridge"></i> Topic Bridge POC (100 Topics)</div>
+                                <div style="font-size: 0.85rem; margin-top: 8px; color: var(--text-main);">
+                                    <strong>Methodology:</strong> Select top 100 topics via GSC Query Analysis. Identify high-impression/low-click gaps between <em>jove.com</em> (Authority) and <em>visualize.jove.com</em> (Opportunity).
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><div class="exec-month">MAR</div></td>
+                            <td>
+                                <span class="exec-focus">Continuous Improvement</span>
+                            </td>
+                            <td>
+                                <span class="reasoning-pill">SCALABILITY</span>
+                                <div style="font-size: 0.9rem; color: var(--text-muted); margin-top:5px;">
+                                    Iterative refinement of templates and structure based on Jan/Feb performance data.
+                                </div>
+                            </td>
+                            <td>
+                                <div class="poc-box"><i class="fas fa-sync-alt"></i> Scale & Refine Structure</div>
+                                <ul style="font-size: 0.85rem; margin-top: 8px; padding-left: 15px; color: var(--text-main); margin-bottom: 0;">
+                                    <li>Automate internal linking logic based on successful manual POCs.</li>
+                                    <li>Refine "Expert Commentary" templates for broader rollout.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </section>
 
             <section>
@@ -450,28 +733,46 @@
                 <div class="grid-3">
                     <div class="metric-card">
                         <div class="metric-title">Indexation Rate</div>
-                        <div class="metric-val-big" style="color: var(--accent-green);">80%</div>
-                        <div class="metric-context">
-                            <span style="color: var(--text-muted);">Current: ~40%</span>
-                            <span style="color: var(--accent-green); font-weight: 700;">Target </span>
+                        <div class="metric-comparison">
+                            <div class="metric-block current">
+                                <span class="metric-label">Current</span>
+                                <span class="metric-value">32%</span>
+                            </div>
+                            <div class="metric-arrow"><i class="fas fa-arrow-right"></i></div>
+                            <div class="metric-block target">
+                                <span class="metric-label">Target</span>
+                                <span class="metric-value" style="color: var(--accent-green);">80%</span>
+                            </div>
                         </div>
                     </div>
 
                     <div class="metric-card">
                         <div class="metric-title">Avg SERP Position</div>
-                        <div class="metric-val-big" style="color: var(--accent-blue);">Top 3</div>
-                        <div class="metric-context">
-                            <span style="color: var(--text-muted);">Current: 8th</span>
-                            <span style="color: var(--accent-blue); font-weight: 700;">Target </span>
+                        <div class="metric-comparison">
+                            <div class="metric-block current">
+                                <span class="metric-label">Current</span>
+                                <span class="metric-value">8th</span>
+                            </div>
+                            <div class="metric-arrow"><i class="fas fa-arrow-right"></i></div>
+                            <div class="metric-block target">
+                                <span class="metric-label">Target</span>
+                                <span class="metric-value" style="color: var(--accent-blue);">Top 3</span>
+                            </div>
                         </div>
                     </div>
 
                     <div class="metric-card">
                         <div class="metric-title">Engagement (Handoff)</div>
-                        <div class="metric-val-big" style="color: var(--text-main);">>8%</div>
-                        <div class="metric-context">
-                            <span style="color: var(--text-muted);">Current: ~1%</span>
-                            <span style="color: var(--text-main); font-weight: 700;">Target </span>
+                        <div class="metric-comparison">
+                            <div class="metric-block current">
+                                <span class="metric-label">Current</span>
+                                <span class="metric-value">1%</span>
+                            </div>
+                            <div class="metric-arrow"><i class="fas fa-arrow-right"></i></div>
+                            <div class="metric-block target">
+                                <span class="metric-label">Target</span>
+                                <span class="metric-value" style="color: var(--text-main);">>8%</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -697,11 +998,9 @@
                 <div style="border: 4px solid var(--accent-green); padding: 60px; border-radius: 20px; background: #f0fdf4; display: inline-block;">
                     <h2 style="border: none; margin-bottom: 40px; color: var(--accent-green);">CORE VISION</h2>
                     <p style="font-size: 3.5rem; color: var(--text-main); line-height: 1.2; margin-bottom: 30px; font-weight: 800;">
-                        The Premier Platform to <br>Visualize Research
+                        UNIFYING DISCOVERY <br> AND EXECUTION
                     </p>
-                    <p style="font-size: 1.6rem; color: var(--text-muted); max-width: 800px; margin: 0 auto;">
-                        Unifying Discovery and Execution.
-                    </p>
+                    
                 </div>
             </section>
 
@@ -711,187 +1010,195 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
     <script>
         // Init Reveal
-        Reveal.initialize({
-            controls: false, // We use custom controls
-            controlsLayout: 'bottom-right',
-            controlsBackArrows: 'faded',
-            progress: true,
-            center: false,
-            hash: false,
-            history: false,
-            transition: 'fade', 
-            width: 1280,
-            height: 720,
-            margin: 0.05,
-            minScale: 0.2,
-            maxScale: 1.5
+        // Ensure DOM is ready before initializing Reveal
+        document.addEventListener('DOMContentLoaded', () => {
+             Reveal.initialize({
+                controls: false, // We use custom controls
+                controlsLayout: 'bottom-right',
+                controlsBackArrows: 'faded',
+                progress: true,
+                center: false,
+                hash: false,
+                history: false,
+                transition: 'fade', 
+                width: 1280,
+                height: 720,
+                margin: 0.05,
+                minScale: 0.2,
+                maxScale: 1.5
+            });
+
+            // --- CUSTOM CONTROLS ---
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            const slideNumber = document.getElementById('slide-number');
+
+            if(btnPrev) btnPrev.addEventListener('click', () => Reveal.prev());
+            if(btnNext) btnNext.addEventListener('click', () => Reveal.next());
+
+            // Update slide indicator
+            function updateIndicator() {
+                const indices = Reveal.getIndices();
+                const total = Reveal.getTotalSlides();
+                // indices.h is 0-indexed
+                const current = (indices.h + 1).toString().padStart(2, '0');
+                const totalStr = total.toString().padStart(2, '0');
+                if(slideNumber) slideNumber.textContent = `${current} / ${totalStr}`;
+            }
+
+            Reveal.on('slidechanged', updateIndicator);
+            // Init indicator
+            if(Reveal.isReady()) {
+                updateIndicator();
+            } else {
+                Reveal.on('ready', updateIndicator);
+            }
         });
-
-        // --- CUSTOM CONTROLS ---
-        const btnPrev = document.getElementById('btn-prev');
-        const btnNext = document.getElementById('btn-next');
-        const slideNumber = document.getElementById('slide-number');
-
-        btnPrev.addEventListener('click', () => Reveal.prev());
-        btnNext.addEventListener('click', () => Reveal.next());
-
-        // Update slide indicator
-        function updateIndicator() {
-            const indices = Reveal.getIndices();
-            const total = Reveal.getTotalSlides();
-            // indices.h is 0-indexed
-            const current = (indices.h + 1).toString().padStart(2, '0');
-            const totalStr = total.toString().padStart(2, '0');
-            slideNumber.textContent = `${current} / ${totalStr}`;
-        }
-
-        Reveal.on('slidechanged', updateIndicator);
-        // Init indicator
-        updateIndicator();
-
 
         // --- CANVAS BACKGROUND ANIMATION ---
         const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particles = [];
-        const gridSize = 60; // Size of the grid cells
-        const particleCount = 20; // Number of flowing blue lines
-        let mouse = { x: -1000, y: -1000 };
+        if(canvas) {
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+            const gridSize = 60; // Size of the grid cells
+            const particleCount = 20; // Number of flowing blue lines
+            let mouse = { x: -1000, y: -1000 };
 
-        // Resize Canvas
-        function resize() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-            initParticles();
-        }
-
-        // Particle for flowing lines
-        class Particle {
-            constructor() {
-                this.init();
+            // Resize Canvas
+            function resize() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+                initParticles();
             }
 
-            init() {
-                // Snap to grid lines
-                const isHorizontal = Math.random() > 0.5;
-                if (isHorizontal) {
-                    this.y = Math.floor(Math.random() * (height / gridSize)) * gridSize;
-                    this.x = Math.random() * width;
-                    this.vx = (Math.random() * 1.5 + 0.5) * (Math.random() > 0.5 ? 1 : -1);
-                    this.vy = 0;
-                    this.len = Math.random() * 150 + 50; // Length of the trail
-                } else {
-                    this.x = Math.floor(Math.random() * (width / gridSize)) * gridSize;
-                    this.y = Math.random() * height;
-                    this.vx = 0;
-                    this.vy = (Math.random() * 1.5 + 0.5) * (Math.random() > 0.5 ? 1 : -1);
-                    this.len = Math.random() * 150 + 50;
-                }
-                this.life = Math.random() * 100;
-                // Bright Blue, VERY SUBTLE (#0369a1 base, low alpha)
-                this.color = `rgba(14, 165, 233, ${Math.random() * 0.1 + 0.05})`; 
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                
-                // Wrap around logic
-                if (this.x > width + this.len || this.x < -this.len || 
-                    this.y > height + this.len || this.y < -this.len) {
+            // Particle for flowing lines
+            class Particle {
+                constructor() {
                     this.init();
                 }
+
+                init() {
+                    // Snap to grid lines
+                    const isHorizontal = Math.random() > 0.5;
+                    if (isHorizontal) {
+                        this.y = Math.floor(Math.random() * (height / gridSize)) * gridSize;
+                        this.x = Math.random() * width;
+                        this.vx = (Math.random() * 1.5 + 0.5) * (Math.random() > 0.5 ? 1 : -1);
+                        this.vy = 0;
+                        this.len = Math.random() * 150 + 50; // Length of the trail
+                    } else {
+                        this.x = Math.floor(Math.random() * (width / gridSize)) * gridSize;
+                        this.y = Math.random() * height;
+                        this.vx = 0;
+                        this.vy = (Math.random() * 1.5 + 0.5) * (Math.random() > 0.5 ? 1 : -1);
+                        this.len = Math.random() * 150 + 50;
+                    }
+                    this.life = Math.random() * 100;
+                    // Bright Blue, VERY SUBTLE (#0369a1 base, low alpha)
+                    this.color = `rgba(14, 165, 233, ${Math.random() * 0.1 + 0.05})`; 
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    
+                    // Wrap around logic
+                    if (this.x > width + this.len || this.x < -this.len || 
+                        this.y > height + this.len || this.y < -this.len) {
+                        this.init();
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    // Create a gradient trail
+                    const gradient = ctx.createLinearGradient(
+                        this.x, this.y, 
+                        this.x - this.vx * this.len, this.y - this.vy * this.len
+                    );
+                    gradient.addColorStop(0, this.color);
+                    gradient.addColorStop(1, 'rgba(14, 165, 233, 0)');
+                    
+                    ctx.strokeStyle = gradient;
+                    ctx.lineWidth = 2;
+                    ctx.lineCap = 'round';
+                    ctx.moveTo(this.x, this.y);
+                    ctx.lineTo(this.x - this.vx * this.len, this.y - this.vy * this.len);
+                    ctx.stroke();
+                }
             }
 
-            draw() {
-                ctx.beginPath();
-                // Create a gradient trail
-                const gradient = ctx.createLinearGradient(
-                    this.x, this.y, 
-                    this.x - this.vx * this.len, this.y - this.vy * this.len
-                );
-                gradient.addColorStop(0, this.color);
-                gradient.addColorStop(1, 'rgba(14, 165, 233, 0)');
+            function initParticles() {
+                particles = [];
+                for(let i=0; i<particleCount; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function drawGrid() {
+                // Static Grid Color
+                ctx.strokeStyle = 'rgba(15, 23, 42, 0.05)'; 
+                ctx.lineWidth = 1;
                 
-                ctx.strokeStyle = gradient;
-                ctx.lineWidth = 2;
-                ctx.lineCap = 'round';
-                ctx.moveTo(this.x, this.y);
-                ctx.lineTo(this.x - this.vx * this.len, this.y - this.vy * this.len);
-                ctx.stroke();
-            }
-        }
+                // Vertical lines
+                for (let x = 0; x <= width; x += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, height);
+                    ctx.stroke();
+                }
 
-        function initParticles() {
-            particles = [];
-            for(let i=0; i<particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function drawGrid() {
-            // Static Grid Color
-            ctx.strokeStyle = 'rgba(15, 23, 42, 0.05)'; 
-            ctx.lineWidth = 1;
-            
-            // Vertical lines
-            for (let x = 0; x <= width; x += gridSize) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, height);
-                ctx.stroke();
+                // Horizontal lines
+                for (let y = 0; y <= height; y += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(width, y);
+                    ctx.stroke();
+                }
             }
 
-            // Horizontal lines
-            for (let y = 0; y <= height; y += gridSize) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(width, y);
-                ctx.stroke();
+            function drawCursorEffect() {
+                if (mouse.x === -1000) return;
+                
+                // Subtle blue glow around cursor
+                const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 400);
+                gradient.addColorStop(0, 'rgba(3, 105, 161, 0.08)'); // Center glow
+                gradient.addColorStop(1, 'rgba(3, 105, 161, 0)'); // Fade out
+
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, width, height);
             }
-        }
 
-        function drawCursorEffect() {
-            if (mouse.x === -1000) return;
-            
-            // Subtle blue glow around cursor
-            const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 400);
-            gradient.addColorStop(0, 'rgba(3, 105, 161, 0.08)'); // Center glow
-            gradient.addColorStop(1, 'rgba(3, 105, 161, 0)'); // Fade out
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                
+                drawGrid();
+                
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
 
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-        }
+                drawCursorEffect();
 
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
+                requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', resize);
             
-            drawGrid();
-            
-            particles.forEach(p => {
-                p.update();
-                p.draw();
+            // Track mouse globally
+            window.addEventListener('mousemove', e => {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
             });
 
-            drawCursorEffect();
-
-            requestAnimationFrame(animate);
+            // Initialize
+            resize();
+            animate();
         }
-
-        window.addEventListener('resize', resize);
-        
-        // Track mouse globally
-        window.addEventListener('mousemove', e => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-        });
-
-        // Initialize
-        resize();
-        animate();
 
     </script>
 </body>
