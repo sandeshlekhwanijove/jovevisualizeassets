@@ -24,6 +24,12 @@
             --bg-page: #ffffff;
             --bg-figure: #f8fafc;
             --border: #e2e8f0;
+
+            /* Taxonomy Colors */
+            --tax-tactile: #d97706;   /* Amber */
+            --tax-setup: #059669;     /* Emerald */
+            --tax-endpoint: #7c3aed;  /* Violet */
+            --tax-motion: #db2777;    /* Pink */
         }
 
         * { box-sizing: border-box; }
@@ -35,6 +41,7 @@
             color: var(--text-body);
             line-height: 1.6;
             overflow-x: hidden;
+            display: flex; flex-direction: column; min-height: 100vh;
         }
 
         /* --- UI COMPONENTS --- */
@@ -80,6 +87,7 @@
             display: flex; flex-direction: column; align-items: center;
             padding-top: 80px; padding-bottom: 100px;
             background: radial-gradient(circle at 50% 0%, var(--jove-brand-light) 0%, white 70%);
+            flex: 1;
         }
 
         .hero-section { text-align: center; max-width: 800px; padding: 0 20px; animation: fadeIn 0.8s ease; }
@@ -187,12 +195,42 @@
         }
 
         h1 { 
-            font-family: 'Lora', serif; font-size: 3rem; line-height: 1.2; 
-            margin: 0 0 20px 0; color: var(--text-main); letter-spacing: -0.02em; 
+            font-family: 'Lora', serif; 
+            font-size: clamp(1.8rem, 4vw, 2.5rem); 
+            line-height: 1.25; 
+            margin: 0 0 20px 0; 
+            color: var(--text-main); 
+            letter-spacing: -0.02em; 
         }
 
-        .authors-line { font-family: 'Inter', sans-serif; font-size: 1rem; color: var(--text-meta); margin-bottom: 15px;}
-        .affiliations { font-family: 'Inter', sans-serif; font-size: 0.85rem; color: var(--text-meta); font-style: italic; }
+        /* Unified Button Style for Author & PubMed */
+        .meta-btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+        
+        .meta-btn {
+            background: none; border: 1px solid var(--border); border-radius: 20px;
+            padding: 6px 12px; color: var(--text-meta); font-size: 0.85rem; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;
+            text-decoration: none; font-weight: 500; font-family: 'Inter', sans-serif;
+        }
+        .meta-btn:hover { border-color: var(--text-main); color: var(--text-main); background: #fcfcfc; }
+        .meta-btn i { color: var(--text-meta); font-size: 0.9em; }
+
+        /* Author Dropdown */
+        .author-block { position: relative; display: inline-block; }
+        .author-details {
+            display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            background: white; border: 1px solid var(--border); border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); padding: 15px; width: 300px;
+            text-align: left; z-index: 50; margin-top: 10px;
+        }
+        .author-details.active { display: block; animation: fadeIn 0.2s ease; }
+        .author-details p { font-family: 'Inter', sans-serif; font-size: 0.85rem; margin: 0 0 8px 0; color: var(--text-body); }
+        .author-details i { color: var(--text-meta); margin-right: 6px; }
+
+        .author-link { 
+            color: var(--jove-brand); font-weight: 700; text-decoration: none; cursor: pointer;
+        }
+        .author-link:hover { text-decoration: underline; }
 
         /* Typography */
         h2 { 
@@ -374,30 +412,88 @@
         .nav-pill-item.active { background: var(--text-main); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .nav-pill-item:hover:not(.active) { background: #f3f4f6; color: var(--text-main); }
 
-        /* Author Info Toggle */
-        .author-block { position: relative; display: inline-block; }
+        /* --- RIGHT SIDEBAR (Collapsible) --- */
+        .visual-sidebar {
+            position: fixed; top: 80px; right: -320px; width: 320px; bottom: 0;
+            background: white; border-left: 1px solid var(--border);
+            box-shadow: -5px 0 20px rgba(0,0,0,0.05);
+            transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 800; display: flex; flex-direction: column;
+        }
+        .visual-sidebar.open { right: 0; }
+
+        .vs-header {
+            padding: 20px; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .vs-title { font-weight: 700; color: var(--text-main); font-size: 0.95rem; }
+        .vs-close { cursor: pointer; color: var(--text-meta); }
+
+        .vs-content {
+            padding: 20px; overflow-y: auto; flex: 1;
+        }
+
+        /* Sidebar Toggle Button */
+        .sidebar-toggle {
+            position: fixed; right: 0; top: 140px;
+            background: var(--jove-brand); color: white;
+            padding: 12px 6px;
+            border-top-left-radius: 8px; border-bottom-left-radius: 8px;
+            border: none;
+            cursor: pointer; z-index: 850; 
+            box-shadow: -4px 4px 15px rgba(0,0,0,0.08);
+            transition: right 0.3s ease; font-weight: 700; font-size: 0.75rem;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);
+            height: 140px; letter-spacing: 1px;
+        }
         
-        .author-toggle {
-            background: none; border: 1px solid var(--border); border-radius: 20px;
-            padding: 6px 12px; color: var(--text-meta); font-size: 0.85rem; cursor: pointer;
-            display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;
-        }
-        .author-toggle:hover { border-color: var(--text-main); color: var(--text-main); }
+        .sidebar-toggle:hover { background: var(--jove-brand-dark); color: white; }
+        .sidebar-toggle.hidden { right: 320px; opacity: 0; pointer-events: none; }
 
-        .author-details {
-            display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-            background: white; border: 1px solid var(--border); border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15); padding: 15px; width: 300px;
-            text-align: left; z-index: 50; margin-top: 10px;
+        @keyframes pulse-attention {
+            0% { box-shadow: -4px 4px 15px rgba(0,0,0,0.08); transform: rotate(180deg) scale(1); }
+            50% { box-shadow: -4px 4px 25px rgba(33, 131, 237, 0.4); transform: rotate(180deg) scale(1.05); border-color: var(--jove-brand); }
+            100% { box-shadow: -4px 4px 15px rgba(0,0,0,0.08); transform: rotate(180deg) scale(1); }
         }
-        .author-details.active { display: block; animation: fadeIn 0.2s ease; }
-        .author-details p { font-family: 'Inter', sans-serif; font-size: 0.85rem; margin: 0 0 8px 0; color: var(--text-body); }
-        .author-details i { color: var(--text-meta); margin-right: 6px; }
+        .pulse-once { animation: pulse-attention 1.5s 2s 1; }
 
-        .author-link { 
-            color: var(--jove-brand); font-weight: 700; text-decoration: none; cursor: pointer;
+        /* Mat Grid in Sidebar */
+        .mat-grid-sidebar {
+            display: grid; grid-template-columns: 1fr; gap: 15px;
         }
-        .author-link:hover { text-decoration: underline; }
+        .mat-card {
+            background: white; border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+            text-align: center; transition: transform 0.2s; cursor: pointer;
+        }
+        .mat-card:hover { transform: translateY(-3px); border-color: var(--jove-brand); }
+        .mat-img { height: 120px; width: 100%; object-fit: cover; background: #e2e8f0; }
+        .mat-name { padding: 10px; font-size: 0.85rem; font-weight: 600; color: var(--text-main); line-height: 1.3; }
+
+        /* --- VISUAL MATERIALS GRID (Horizontal - Abstract View) --- */
+        .materials-section {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin: 40px 0;
+        }
+        
+        .mat-row {
+            display: flex; gap: 15px; margin-top: 15px;
+            overflow-x: auto; padding-bottom: 10px;
+            scrollbar-width: thin; scrollbar-color: #cbd5e1 #f1f5f9;
+        }
+        
+        .mat-card-h {
+            min-width: 140px; flex-shrink: 0;
+            background: white; border: 1px solid var(--border);
+            border-radius: 8px; overflow: hidden; text-align: center;
+            transition: all 0.2s; cursor: pointer;
+        }
+        .mat-card-h:hover { border-color: var(--jove-brand); transform: translateY(-2px); }
+        .mat-img-h { height: 90px; width: 100%; object-fit: cover; }
+        .mat-name-h { padding: 8px; font-size: 0.8rem; font-weight: 600; color: var(--text-main); }
 
         /* --- AUTHOR VIEW --- */
         #author-view {
@@ -433,6 +529,7 @@
         /* Footer */
         footer {
             background: #f8fafc; border-top: 1px solid var(--border); padding: 80px 0 40px 0; font-family: 'Inter', sans-serif;
+            margin-top: auto; /* Push to bottom */
         }
         .footer-grid {
             max-width: 1200px; margin: 0 auto; padding: 0 20px;
@@ -454,38 +551,49 @@
         .tax-tactile { background-color: #d97706; }
         .tax-endpoint { background-color: #7c3aed; }
 
-        /* --- NEW: VISUAL MATERIALS GRID --- */
-        .materials-section {
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 25px;
-            margin: 40px 0;
+        /* --- NEW: REAGENT CHIP STYLES --- */
+        .reagent-chip {
+            background: rgba(5, 150, 105, 0.1); /* Emerald tint */
+            color: #047857;
+            border-bottom: 2px solid #059669;
+            padding: 0 4px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: help;
+            position: relative;
+            white-space: nowrap;
+            transition: all 0.2s;
         }
-        
-        .mat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
+        .reagent-chip:hover {
+            background: #059669;
+            color: white;
         }
+        .reagent-chip i { font-size: 0.8em; margin-right: 4px; opacity: 0.7; }
 
-        .mat-card {
+        /* Reagent Tooltip */
+        .reagent-tooltip {
+            position: absolute;
             background: white;
             border: 1px solid var(--border);
             border-radius: 8px;
-            overflow: hidden;
-            text-align: center;
-            transition: transform 0.2s;
-            cursor: pointer;
+            padding: 12px;
+            width: 220px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);
+            z-index: 100;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.2s;
+            bottom: 120%; left: 50%; transform: translateX(-50%);
+            font-family: 'Inter', sans-serif;
+            text-align: left;
         }
-        .mat-card:hover { transform: translateY(-3px); border-color: var(--jove-brand); }
-
-        .mat-img {
-            height: 100px; width: 100%; object-fit: cover; background: #e2e8f0;
-        }
-        .mat-name {
-            padding: 8px; font-size: 0.8rem; font-weight: 600; color: var(--text-main); line-height: 1.3;
+        .reagent-chip:hover .reagent-tooltip { opacity: 1; }
+        
+        .rt-header { font-size: 0.75rem; color: var(--text-meta); text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
+        .rt-name { font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+        .rt-desc { font-size: 0.8rem; color: var(--text-body); line-height: 1.4; }
+        .rt-role { 
+            margin-top: 8px; font-size: 0.75rem; 
+            background: #f0fdf4; color: #166534; padding: 4px 8px; border-radius: 4px; display: inline-block; 
         }
 
         /* --- NEW: TROUBLESHOOTING ALERT --- */
@@ -520,6 +628,40 @@
                 <span id="st-time">0:15 Loop</span>
             </div>
         </div>
+    </div>
+
+    <!-- RIGHT SIDEBAR (Collapsible) -->
+    <div id="visual-sidebar" class="visual-sidebar">
+        <div class="vs-header">
+            <div class="vs-title"><i class="fas fa-microscope"></i> &nbsp; KEY VISUALS</div>
+            <div class="vs-close" onclick="toggleSidebar()"><i class="fas fa-times"></i></div>
+        </div>
+        <div class="vs-content">
+            <p style="font-size:0.85rem; color:var(--text-meta); margin-bottom:15px;">Visual inventory of equipment and methods referenced in this paper.</p>
+            <div class="mat-grid-sidebar">
+                <div class="mat-card">
+                    <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/13470.jpg&w=828&q=75" class="mat-img">
+                    <div class="mat-name">Fire-polished Pipette</div>
+                </div>
+                <div class="mat-card">
+                    <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75" class="mat-img">
+                    <div class="mat-name">70µm Nylon Mesh</div>
+                </div>
+                <div class="mat-card">
+                    <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/2544.jpg&w=828&q=75" class="mat-img">
+                    <div class="mat-name">EGF / FGF-2</div>
+                </div>
+                <div class="mat-card">
+                    <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75" class="mat-img">
+                    <div class="mat-name">Orbital Shaker</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR TOGGLE BUTTON -->
+    <div id="sidebar-toggle" class="sidebar-toggle pulse-once" onclick="toggleSidebar()">
+        <i class="fas fa-chevron-left"></i> KEY VISUALS
     </div>
 
     <header>
@@ -637,13 +779,13 @@
             <div class="col-wide article-header-block">
                 <div class="journal-meta-row">
                     <span class="journal-label" id="art-journal">Nature • Published May 14, 1998</span>
-                    <a id="art-pubmed" href="https://pubmed.ncbi.nlm.nih.gov/9579857/" target="_blank" class="link-pubmed"><i class="fas fa-book-medical"></i> View on PubMed</a>
+                    <a id="art-pubmed" href="https://pubmed.ncbi.nlm.nih.gov/9579857/" target="_blank" class="meta-btn"><i class="fas fa-book-medical"></i> View on PubMed</a>
                 </div>
                 <h1 id="art-title">Cell Therapy</h1>
                 
                 <!-- Toggleable Author Details -->
                 <div class="author-block">
-                    <button class="author-toggle" onclick="toggleAuthors()">
+                    <button class="meta-btn" onclick="toggleAuthors()">
                         <i class="fas fa-info-circle"></i> Author Information
                     </button>
                     <div id="author-details" class="author-details">
@@ -665,6 +807,45 @@
                         <span class="area-tag">Regenerative Medicine</span>
                         <span class="area-tag">Immunology</span>
                         <span class="area-tag">Biotechnology</span>
+                    </div>
+
+                    <!-- NEW: VISUAL INVENTORY FOR ABSTRACT (Reagents/Tools) -->
+                    <div class="materials-section" style="margin-top: 20px;">
+                        <div style="font-family:'Inter'; font-weight:700; color:var(--text-meta); font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">
+                            <i class="fas fa-flask"></i> &nbsp; Essentials
+                        </div>
+                        <p style="margin:0; font-size:0.95rem;">Key items identified for reproduction.</p>
+                        
+                        <div class="mat-row">
+                            <div class="mat-card-h">
+                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/12518.jpg&w=828&q=75" class="mat-img-h">
+                                <div class="mat-name-h">
+                                    <span style="font-size:0.7rem; color:var(--text-meta); display:block; font-weight:400;">CELL LINE</span>
+                                    Stem Cells
+                                </div>
+                            </div>
+                            <div class="mat-card-h">
+                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/10815.jpg&w=828&q=75" class="mat-img-h">
+                                <div class="mat-name-h">
+                                    <span style="font-size:0.7rem; color:#059669; display:block; font-weight:700;">REAGENT</span>
+                                    Viral Vectors
+                                </div>
+                            </div>
+                            <div class="mat-card-h">
+                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68150.jpg&w=828&q=75" class="mat-img-h">
+                                <div class="mat-name-h">
+                                    <span style="font-size:0.7rem; color:var(--text-meta); display:block; font-weight:400;">EQUIPMENT</span>
+                                    Electroporator
+                                </div>
+                            </div>
+                            <div class="mat-card-h">
+                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75" class="mat-img-h">
+                                <div class="mat-name-h">
+                                    <span style="font-size:0.7rem; color:var(--text-meta); display:block; font-weight:400;">EQUIPMENT</span>
+                                    Flow Cytometer
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Visual Abstract Placement -->
@@ -712,7 +893,8 @@
                     <ul>
                         <li>Review of current cell therapy strategies and challenges.</li>
                         <li>Analysis of factors influencing cell type selection for therapeutic applications.</li>
-                        <li>Discussion of advancements in addressing immunological, manufacturing, and safety issues, particularly regarding <span class="vid-ref" data-target="fig2"><i class="fas fa-play-circle"></i> in vivo reprogramming</span>.</li>
+                        <li>Discussion of advancements in addressing immunological, manufacturing, and safety issues, particularly regarding <span class="vid-ref" data-target="fig2"><i class="fas fa-play-circle"></i> in vivo reprogramming</span>. 
+                        Careful attention must be paid to <span class="visual-snippet trouble-spot" data-id="enzymatic"><i class="fas fa-exclamation-triangle trouble-icon"></i>enzymatic digestion timing</span> to prevent cell death.</li>
                     </ul>
 
                     <!-- Abstract Video 2 -->
@@ -749,6 +931,44 @@
                     <p>
                         The study of the basic physiology of the neural precursors generated during brain development is driven by two inextricably linked goals. First, such knowledge is instrumental to our understanding of how the high degree of cellular complexity of the mature central nervous system (CNS) is generated, and how to dissect the steps of proliferation, fate commitment, and differentiation that lead early pluripotent neural progenitors to give rise to mature CNS cells.
                     </p>
+                      <!-- NEW: VISUAL INVENTORY FOR FULL PAPER (Moved Up) -->
+                    <div class="materials-section" style="margin: 30px 0;">
+                        <div style="font-family:'Inter'; font-weight:700; color:var(--text-meta); font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">
+                            <i class="fas fa-boxes"></i> &nbsp; Essentials
+                        </div>
+                        <p style="margin:0; font-size:0.95rem;">Key equipment and reagents identified in this protocol.</p>
+                        
+                        <div class="mat-row">
+                            <div class="mat-card-h">
+                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/13470.jpg&w=828&q=75" class="mat-img-h">
+                                <div class="mat-name-h">
+                                    <span style="font-size:0.7rem; color:var(--text-meta); display:block; font-weight:400;">EQUIPMENT</span>
+                                    Fire-polished Pipette
+                                </div>
+                            </div>
+                            <div class="mat-card-h">
+                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75" class="mat-img-h">
+                                <div class="mat-name-h">
+                                    <span style="font-size:0.7rem; color:var(--text-meta); display:block; font-weight:400;">CONSUMABLE</span>
+                                    70µm Nylon Mesh
+                                </div>
+                            </div>
+                            <div class="mat-card-h">
+                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/2544.jpg&w=828&q=75" class="mat-img-h">
+                                <div class="mat-name-h">
+                                    <span style="font-size:0.7rem; color:#059669; display:block; font-weight:700;">REAGENT</span>
+                                    EGF / FGF-2
+                                </div>
+                            </div>
+                            <div class="mat-card-h">
+                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75" class="mat-img-h">
+                                <div class="mat-name-h">
+                                    <span style="font-size:0.7rem; color:var(--text-meta); display:block; font-weight:400;">EQUIPMENT</span>
+                                    Orbital Shaker
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <p>
                         Second, it is hoped that the isolation, propagation, and manipulation of brain precursors and, particularly, of multipotent <span class="visual-snippet" data-id="nsc">neural stem cells (NSCs)</span>, will lead to therapeutic applications in neurological disorders. The debate is still open concerning the most appropriate definition of a stem cell and on how it is best identified, characterized, and manipulated. By adopting an operational definition of NSCs, we review some of the basic findings in this area and elaborate on their potential therapeutic applications.
                     </p>
@@ -774,45 +994,29 @@
 
                     <h2 id="full-methods">Materials & Methods</h2>
                     
-                    <!-- NEW: VISUAL MATERIALS SECTION -->
-                    <div class="materials-section">
-                        <div style="font-family:'Inter'; font-weight:700; color:var(--text-meta); font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">
-                            <i class="fas fa-boxes"></i> &nbsp; Visual Inventory
-                        </div>
-                        <p style="margin:0; font-size:0.95rem;">Key equipment and reagents identified in this protocol.</p>
-                        
-                        <div class="mat-grid">
-                            <div class="mat-card">
-                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/13470.jpg&w=828&q=75" class="mat-img">
-                                <div class="mat-name">Fire-polished Pipette</div>
-                            </div>
-                            <div class="mat-card">
-                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75" class="mat-img">
-                                <div class="mat-name">70µm Nylon Mesh</div>
-                            </div>
-                            <div class="mat-card">
-                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/2544.jpg&w=828&q=75" class="mat-img">
-                                <div class="mat-name">EGF / FGF-2</div>
-                            </div>
-                            <div class="mat-card">
-                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75" class="mat-img">
-                                <div class="mat-name">Orbital Shaker</div>
-                            </div>
-                        </div>
-                    </div>
+                  
 
                     <p>
                         <strong>Tissue Preparation:</strong> Human fetal brain tissue (10-12 weeks post-conception) was obtained from legal abortions following informed consent. The tissue was dissected to isolate the forebrain germinal zone, the region surrounding the lateral ventricles where neural precursors reside. The dissection was performed in cold sterile saline to minimize metabolic activity.
                     </p>
                     <p>
-                        <strong>Dissociation:</strong> The tissue was mechanically dissociated using a fire-polished Pasteur pipette to obtain a single-cell suspension. This <span class="visual-snippet" data-id="dissociation">mechanical dissociation</span> step is critical for viability. 
-                        Care must be taken to avoid creating a <span class="visual-snippet trouble-spot" data-id="frothy"><i class="fas fa-exclamation-triangle trouble-icon"></i>frothy suspension</span>, as bubbles can denature proteins and kill cells.
+                        <strong>Dissociation:</strong> The tissue was mechanically dissociated using a fire-polished Pasteur pipette to obtain a single-cell suspension. This <span class="visual-snippet" data-id="dissociation">mechanical dissociation</span> step is critical for viability; enzymatic digestion was avoided to preserve cell surface markers often sensitive to proteases like trypsin.
                     </p>
                     <p>
-                        <strong>Culture Conditions:</strong> Cells were plated in serum-free medium supplemented with <span class="visual-snippet" data-id="expansion">EGF and FGF-2</span> (20 ng/ml each) along with N2 supplement. The cultures were fed every 3-4 days by partial medium replacement. Under these conditions, NSCs proliferate to form floating clusters known as neurospheres, while differentiated cells die off.
+                        <strong>Culture Conditions:</strong> Cells were plated in serum-free medium supplemented with 
+                        <span class="reagent-chip">
+                            <i class="fas fa-vial"></i> EGF and FGF-2
+                            <div class="reagent-tooltip">
+                                <div class="rt-header">Key Growth Factors</div>
+                                <div class="rt-name">Epidermal & Fibroblast GF</div>
+                                <div class="rt-desc">Essential for maintaining NSC multipotency and preventing differentiation.</div>
+                                <div class="rt-role">Conc: 20 ng/ml</div>
+                            </div>
+                        </span> 
+                        (20 ng/ml each) along with N2 supplement. The cultures were fed every 3-4 days by partial medium replacement. Under these conditions, NSCs proliferate to form floating clusters known as neurospheres, while differentiated cells die off.
                     </p>
                     <p>
-                         <strong>Cloning:</strong> Individual spheres were dissociated and replated at clonal density (1 cell/well) by <span class="visual-snippet" data-id="dilution">limiting dilution</span> to establish clonal lines.
+                         <strong>Cloning:</strong> Individual spheres were dissociated and replated at clonal density (1 cell/well) in 96-well plates by <span class="visual-snippet" data-id="dilution">limiting dilution</span> to establish clonal lines. Wells containing single cells were monitored daily to ensure clonality.
                     </p>
 
                      <!-- Full Fig 2 -->
@@ -837,7 +1041,7 @@
 
                     <h2 id="full-results">Results</h2>
                     <p>
-                        <strong>Establishment of NSC Clones:</strong> We successfully isolated and propagated clones of NSCs from the human fetal brain. These clones exhibited stable growth kinetics and could be passaged for over 40 generations without loss of multipotency or significant changes in karyotype. The doubling time was approximately 24-36 hours during the exponential growth phase.
+                        <strong>Establishment of NSC Clones:</strong> We successfully isolated and propagated clones of NSCs from the human fetal brain. These clones exhibited stable growth kinetics and could be passaged for over 40 generations without loss of multipotency. The doubling time was approximately 24-36 hours during the exponential growth phase.
                     </p>
                     <p>
                         <strong>Multipotency:</strong> Upon withdrawal of mitogens and plating on poly-ornithine/laminin substrate, the clonal progeny differentiated into the three major neural lineages. Immunofluorescence analysis revealed neurons positive for <span class="visual-snippet" data-id="immunofluorescence">TuJ1</span>, astrocytes positive for GFAP, and oligodendrocytes positive for GalC.
@@ -1006,6 +1210,10 @@
             safeDisplay('article-view', 'none');
             safeDisplay('author-view', 'none');
             safeDisplay('nav-pill', 'none');
+            const sidebar = document.getElementById('visual-sidebar');
+            if(sidebar) sidebar.classList.remove('open');
+            // Sidebar is now available in both article views
+            safeDisplay('sidebar-toggle', 'none'); 
 
             // 2. Show Author View
             if (type === 'author') {
@@ -1048,6 +1256,9 @@
             safeDisplay('visuals-full', isFull ? 'block' : 'none');
             safeDisplay('visuals-full-2', isFull ? 'block' : 'none');
             safeDisplay('visuals-full-3', isFull ? 'block' : 'none');
+            
+            // Sidebar is available for both Abstract and Full Paper modes now
+            safeDisplay('sidebar-toggle', 'flex');
             
             // 5. Update Nav Pill Content
             let navHTML = '';
@@ -1094,7 +1305,24 @@
                 safeDisplay('home-view', 'flex');
                 const navPill = document.getElementById('nav-pill');
                 if(navPill) navPill.classList.remove('visible');
+                
+                const sidebar = document.getElementById('visual-sidebar');
+                if(sidebar) sidebar.classList.remove('open');
+                safeDisplay('sidebar-toggle', 'none');
             }, 100);
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('visual-sidebar');
+            const toggle = document.getElementById('sidebar-toggle');
+            if(sidebar) {
+                sidebar.classList.toggle('open');
+                if(sidebar.classList.contains('open')) {
+                    toggle.classList.add('hidden');
+                } else {
+                    toggle.classList.remove('hidden');
+                }
+            }
         }
 
         function switchTab(mode) {
