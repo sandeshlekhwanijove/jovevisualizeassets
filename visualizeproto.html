@@ -187,38 +187,12 @@
         }
 
         h1 { 
-            font-family: 'Lora', serif; 
-            font-size: clamp(1.8rem, 4vw, 2.5rem); 
-            line-height: 1.25; 
-            margin: 0 0 20px 0; 
-            color: var(--text-main); 
-            letter-spacing: -0.02em; 
+            font-family: 'Lora', serif; font-size: 3rem; line-height: 1.2; 
+            margin: 0 0 20px 0; color: var(--text-main); letter-spacing: -0.02em; 
         }
 
-        /* Author Info Toggle */
-        .author-block { position: relative; display: inline-block; }
-        
-        .author-toggle {
-            background: none; border: 1px solid var(--border); border-radius: 20px;
-            padding: 6px 12px; color: var(--text-meta); font-size: 0.85rem; cursor: pointer;
-            display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;
-        }
-        .author-toggle:hover { border-color: var(--text-main); color: var(--text-main); }
-
-        .author-details {
-            display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-            background: white; border: 1px solid var(--border); border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15); padding: 15px; width: 300px;
-            text-align: left; z-index: 50; margin-top: 10px;
-        }
-        .author-details.active { display: block; animation: fadeIn 0.2s ease; }
-        .author-details p { font-family: 'Inter', sans-serif; font-size: 0.85rem; margin: 0 0 8px 0; color: var(--text-body); }
-        .author-details i { color: var(--text-meta); margin-right: 6px; }
-
-        .author-link { 
-            color: var(--jove-brand); font-weight: 700; text-decoration: none; cursor: pointer;
-        }
-        .author-link:hover { text-decoration: underline; }
+        .authors-line { font-family: 'Inter', sans-serif; font-size: 1rem; color: var(--text-meta); margin-bottom: 15px;}
+        .affiliations { font-family: 'Inter', sans-serif; font-size: 0.85rem; color: var(--text-meta); font-style: italic; }
 
         /* Typography */
         h2 { 
@@ -479,6 +453,54 @@
         .tax-setup { background-color: #059669; }
         .tax-tactile { background-color: #d97706; }
         .tax-endpoint { background-color: #7c3aed; }
+
+        /* --- NEW: VISUAL MATERIALS GRID --- */
+        .materials-section {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 40px 0;
+        }
+        
+        .mat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .mat-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        .mat-card:hover { transform: translateY(-3px); border-color: var(--jove-brand); }
+
+        .mat-img {
+            height: 100px; width: 100%; object-fit: cover; background: #e2e8f0;
+        }
+        .mat-name {
+            padding: 8px; font-size: 0.8rem; font-weight: 600; color: var(--text-main); line-height: 1.3;
+        }
+
+        /* --- NEW: TROUBLESHOOTING ALERT --- */
+        .trouble-spot {
+            border-bottom: 2px solid #ef4444; /* Red warning underline */
+            background: rgba(239, 68, 68, 0.05);
+            color: #b91c1c;
+            cursor: help;
+            padding: 0 4px;
+            border-radius: 4px;
+            position: relative;
+            font-weight: 600;
+        }
+        .trouble-spot:hover { background: rgba(239, 68, 68, 0.15); }
+        .trouble-icon { font-size: 0.8em; margin-right: 4px; }
 
     </style>
 </head>
@@ -751,17 +773,46 @@
                     </div>
 
                     <h2 id="full-methods">Materials & Methods</h2>
+                    
+                    <!-- NEW: VISUAL MATERIALS SECTION -->
+                    <div class="materials-section">
+                        <div style="font-family:'Inter'; font-weight:700; color:var(--text-meta); font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">
+                            <i class="fas fa-boxes"></i> &nbsp; Visual Inventory
+                        </div>
+                        <p style="margin:0; font-size:0.95rem;">Key equipment and reagents identified in this protocol.</p>
+                        
+                        <div class="mat-grid">
+                            <div class="mat-card">
+                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/13470.jpg&w=828&q=75" class="mat-img">
+                                <div class="mat-name">Fire-polished Pipette</div>
+                            </div>
+                            <div class="mat-card">
+                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75" class="mat-img">
+                                <div class="mat-name">70µm Nylon Mesh</div>
+                            </div>
+                            <div class="mat-card">
+                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/2544.jpg&w=828&q=75" class="mat-img">
+                                <div class="mat-name">EGF / FGF-2</div>
+                            </div>
+                            <div class="mat-card">
+                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75" class="mat-img">
+                                <div class="mat-name">Orbital Shaker</div>
+                            </div>
+                        </div>
+                    </div>
+
                     <p>
                         <strong>Tissue Preparation:</strong> Human fetal brain tissue (10-12 weeks post-conception) was obtained from legal abortions following informed consent. The tissue was dissected to isolate the forebrain germinal zone, the region surrounding the lateral ventricles where neural precursors reside. The dissection was performed in cold sterile saline to minimize metabolic activity.
                     </p>
                     <p>
-                        <strong>Dissociation:</strong> The tissue was mechanically dissociated using a fire-polished Pasteur pipette to obtain a single-cell suspension. This <span class="visual-snippet" data-id="dissociation">mechanical dissociation</span> step is critical for viability; enzymatic digestion was avoided to preserve cell surface markers often sensitive to proteases like trypsin.
+                        <strong>Dissociation:</strong> The tissue was mechanically dissociated using a fire-polished Pasteur pipette to obtain a single-cell suspension. This <span class="visual-snippet" data-id="dissociation">mechanical dissociation</span> step is critical for viability. 
+                        Care must be taken to avoid creating a <span class="visual-snippet trouble-spot" data-id="frothy"><i class="fas fa-exclamation-triangle trouble-icon"></i>frothy suspension</span>, as bubbles can denature proteins and kill cells.
                     </p>
                     <p>
                         <strong>Culture Conditions:</strong> Cells were plated in serum-free medium supplemented with <span class="visual-snippet" data-id="expansion">EGF and FGF-2</span> (20 ng/ml each) along with N2 supplement. The cultures were fed every 3-4 days by partial medium replacement. Under these conditions, NSCs proliferate to form floating clusters known as neurospheres, while differentiated cells die off.
                     </p>
                     <p>
-                         <strong>Cloning:</strong> To establish clonal lines, individual spheres were dissociated and replated at clonal density (1 cell/well) in 96-well plates by <span class="visual-snippet" data-id="dilution">limiting dilution</span>. Wells containing single cells were monitored daily to ensure clonality.
+                         <strong>Cloning:</strong> Individual spheres were dissociated and replated at clonal density (1 cell/well) by <span class="visual-snippet" data-id="dilution">limiting dilution</span> to establish clonal lines.
                     </p>
 
                      <!-- Full Fig 2 -->
@@ -807,17 +858,13 @@
                             <div class="vf-caption">Immunofluorescence staining showing differentiation of NSCs into neurons (Green) and glia (Red). This confirms the tripotent potential of the isolated clones.</div>
                         </div>
                     </div>
-                    
-                    <p>
-                        <strong>In Vivo Plasticity:</strong> To assess integration potential, labeled NSCs were transplanted into the germinal zones of neonatal mice. The human cells integrated extensively into the host brain, migrating to appropriate regions and differentiating into site-specific neurons and glia, suggesting that environmental cues play a dominant role in determining cell fate.
-                    </p>
 
                     <h2 id="full-discussion">Discussion</h2>
                     <p>
-                        We describe, based on a rigorous definition, the isolation and propagation of clones of NSCs from the human fetal brain. These cells have begun to show promise for neural cell replacement and molecular support therapy in models of degenerative CNS diseases. The ability to expand these cells indefinitely provides a renewable source of human neural tissue for both basic research and transplantation.
+                        We describe, based on a rigorous definition, the isolation and propagation of clones of NSCs from the human fetal brain. These cells have begun to show promise for neural cell replacement and molecular support therapy in models of degenerative CNS diseases.
                     </p>
                     <p>
-                        The extensive propagation and engraftment potential of human CNS stem cells may, in the not-too-distant-future, be directed towards genuine clinical therapeutic ends, and may open novel and multifaceted strategies for redressing a variety of heretofore untreatable CNS dysfunctions, including Parkinson's disease and spinal cord injury. Future work will focus on directing the differentiation of these cells into specific neuronal subtypes required for targeted repair.
+                        The extensive propagation and engraftment potential of human CNS stem cells may, in the not-too-distant-future, be directed towards genuine clinical therapeutic ends, and may open novel and multifaceted strategies for redressing a variety of heretofore untreatable CNS dysfunctions.
                     </p>
                 </div>
 
@@ -888,7 +935,7 @@
             }
         };
 
-        // Added more snippets for the full paper view
+        // --- SNIPPET DATA ---
         const snippetData = {
             'compatibility': { 
                 title: "Immune Compatibility", 
@@ -896,6 +943,12 @@
                 videoId: "tTNXbRH334g",
                 start: "54",
                 time: "0:12"
+            },
+            'frothy': {
+                title: "❌ Common Pitfall: Bubbles",
+                img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75",
+                time: "0:05",
+                // In real app, this would point to a specific 'failure' clip
             },
             'expansion': { 
                 title: "In Vitro Cell Expansion", 
