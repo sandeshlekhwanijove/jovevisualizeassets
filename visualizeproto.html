@@ -187,12 +187,38 @@
         }
 
         h1 { 
-            font-family: 'Lora', serif; font-size: 3rem; line-height: 1.2; 
-            margin: 0 0 20px 0; color: var(--text-main); letter-spacing: -0.02em; 
+            font-family: 'Lora', serif; 
+            font-size: clamp(1.8rem, 4vw, 2.5rem); 
+            line-height: 1.25; 
+            margin: 0 0 20px 0; 
+            color: var(--text-main); 
+            letter-spacing: -0.02em; 
         }
 
-        .authors-line { font-family: 'Inter', sans-serif; font-size: 1rem; color: var(--text-meta); margin-bottom: 15px;}
-        .affiliations { font-family: 'Inter', sans-serif; font-size: 0.85rem; color: var(--text-meta); font-style: italic; }
+        /* Author Info Toggle */
+        .author-block { position: relative; display: inline-block; }
+        
+        .author-toggle {
+            background: none; border: 1px solid var(--border); border-radius: 20px;
+            padding: 6px 12px; color: var(--text-meta); font-size: 0.85rem; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;
+        }
+        .author-toggle:hover { border-color: var(--text-main); color: var(--text-main); }
+
+        .author-details {
+            display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            background: white; border: 1px solid var(--border); border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); padding: 15px; width: 300px;
+            text-align: left; z-index: 50; margin-top: 10px;
+        }
+        .author-details.active { display: block; animation: fadeIn 0.2s ease; }
+        .author-details p { font-family: 'Inter', sans-serif; font-size: 0.85rem; margin: 0 0 8px 0; color: var(--text-body); }
+        .author-details i { color: var(--text-meta); margin-right: 6px; }
+
+        .author-link { 
+            color: var(--jove-brand); font-weight: 700; text-decoration: none; cursor: pointer;
+        }
+        .author-link:hover { text-decoration: underline; }
 
         /* Typography */
         h2 { 
@@ -399,6 +425,37 @@
         }
         .author-link:hover { text-decoration: underline; }
 
+        /* --- AUTHOR VIEW --- */
+        #author-view {
+            display: none; opacity: 0; transition: opacity 0.5s;
+            padding: 40px 20px 100px 20px;
+            max-width: 1000px; margin: 0 auto;
+            width: 100%;
+        }
+
+        .author-profile-header {
+            display: flex; align-items: flex-start; gap: 30px; margin-bottom: 50px;
+            border-bottom: 1px solid var(--border); padding-bottom: 40px;
+        }
+        .author-avatar {
+            width: 100px; height: 100px; border-radius: 50%; background: #e2e8f0;
+            display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: #94a3b8;
+        }
+        .author-info h1 { font-family: 'Inter', sans-serif; margin-bottom: 5px; margin-top: 0; font-size: 2.5rem; }
+        .author-meta { color: var(--text-meta); font-size: 1rem; display: flex; gap: 20px; margin-top: 15px; }
+        .author-stat { display: flex; flex-direction: column; }
+        .stat-num { font-weight: 800; color: var(--text-main); font-size: 1.2rem; }
+        .stat-lab { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .cat-tabs { display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid var(--border); }
+        .cat-tab {
+            padding: 10px 20px; cursor: pointer; color: var(--text-meta); font-weight: 600; border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+        .cat-tab.active { color: var(--jove-brand); border-bottom-color: var(--jove-brand); }
+
+        .pub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+
         /* Footer */
         footer {
             background: #f8fafc; border-top: 1px solid var(--border); padding: 80px 0 40px 0; font-family: 'Inter', sans-serif;
@@ -488,6 +545,65 @@
                 </div>
             </div>
         </div>
+
+        <div class="trend-grid">
+            <div class="paper-card" onclick="loadAbstract()">
+                <span class="paper-tag">Neuroscience</span>
+                <div class="paper-head">Isolation and Culture of Primary Murine Microglia</div>
+                <div class="paper-meta"><i class="fas fa-video"></i> 12 Video Matches</div>
+            </div>
+            <div class="paper-card">
+                <span class="paper-tag">Immunology</span>
+                <div class="paper-head">Flow Cytometry Analysis of T-Cell Activation</div>
+                <div class="paper-meta"><i class="fas fa-video"></i> 8 Video Matches</div>
+            </div>
+            <div class="paper-card">
+                <span class="paper-tag">Bioengineering</span>
+                <div class="paper-head">CRISPR-Cas9 Genome Editing in Human Stem Cells</div>
+                <div class="paper-meta"><i class="fas fa-video"></i> 15 Video Matches</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === AUTHOR PROFILE VIEW === -->
+    <div id="author-view">
+        <div class="author-profile-header">
+            <div class="author-avatar"><i class="fas fa-user"></i></div>
+            <div class="author-info">
+                <h1 id="p-name">F H Gage</h1>
+                <p id="p-affil" style="color:var(--text-meta);">Laboratory of Genetics, The Salk Institute, La Jolla, California</p>
+                <div class="author-meta">
+                    <div class="author-stat"><span class="stat-num">45.2k</span><span class="stat-lab">Citations</span></div>
+                    <div class="author-stat"><span class="stat-num">98</span><span class="stat-lab">H-Index</span></div>
+                    <div class="author-stat"><span class="stat-num">210</span><span class="stat-lab">Publications</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cat-tabs">
+            <div class="cat-tab active">Neuroscience</div>
+            <div class="cat-tab">Stem Cells</div>
+            <div class="cat-tab">Gene Therapy</div>
+            <div class="cat-tab">All</div>
+        </div>
+
+        <div class="pub-grid">
+            <div class="paper-card" onclick="loadAbstract()">
+                <span class="paper-tag">Neuroscience</span>
+                <div class="paper-head">Cell Therapy: A Strategic Review</div>
+                <div class="paper-meta">Nature • 1998</div>
+            </div>
+            <div class="paper-card">
+                <span class="paper-tag">Neuroscience</span>
+                <div class="paper-head">Neurogenesis in the Adult Human Hippocampus</div>
+                <div class="paper-meta">Nature Medicine • 1998</div>
+            </div>
+            <div class="paper-card">
+                <span class="paper-tag">Stem Cells</span>
+                <div class="paper-head">Neural Stem Cells in the Adult Mammalian Forebrain</div>
+                <div class="paper-meta">Science • 1999</div>
+            </div>
+        </div>
     </div>
 
     <!-- === ARTICLE VIEW === -->
@@ -509,7 +625,7 @@
                         <i class="fas fa-info-circle"></i> Author Information
                     </button>
                     <div id="author-details" class="author-details">
-                        <p><i class="fas fa-user"></i> <strong id="auth-name">F H Gage</strong></p>
+                        <p><i class="fas fa-user"></i> <a id="auth-link" onclick="loadAuthor()" class="author-link">F H Gage</a></p>
                         <p id="auth-affil"><i class="fas fa-building"></i> Laboratory of Genetics, The Salk Institute, La Jolla, California 92037, USA.</p>
                     </div>
                 </div>
@@ -606,11 +722,16 @@
 
                 <!-- === FULL PAPER CONTENT (Upload View - Dynamic Load) === -->
                 <div id="content-full" style="display:none;">
-                    <p><strong>Abstract:</strong> The study of the basic physiology of the neural precursors generated during brain development is driven by two inextricably linked goals. First, such knowledge is instrumental to our understanding of how the high degree of cellular complexity of the mature central nervous system (CNS) is generated...</p>
-
+                    
                     <h2 id="full-intro">Introduction</h2>
                     <p>
-                        It is hoped that the isolation, propagation, and manipulation of brain precursors and, particularly, of multipotent <span class="visual-snippet" data-id="nsc">neural stem cells (NSCs)</span>, will lead to therapeutic applications in neurological disorders. The debate is still open concerning the most appropriate definition of a stem cell...
+                        The study of the basic physiology of the neural precursors generated during brain development is driven by two inextricably linked goals. First, such knowledge is instrumental to our understanding of how the high degree of cellular complexity of the mature central nervous system (CNS) is generated, and how to dissect the steps of proliferation, fate commitment, and differentiation that lead early pluripotent neural progenitors to give rise to mature CNS cells.
+                    </p>
+                    <p>
+                        Second, it is hoped that the isolation, propagation, and manipulation of brain precursors and, particularly, of multipotent <span class="visual-snippet" data-id="nsc">neural stem cells (NSCs)</span>, will lead to therapeutic applications in neurological disorders. The debate is still open concerning the most appropriate definition of a stem cell and on how it is best identified, characterized, and manipulated. By adopting an operational definition of NSCs, we review some of the basic findings in this area and elaborate on their potential therapeutic applications.
+                    </p>
+                    <p>
+                        In this context, the establishment of stable, clonal lines of human neural stem cells represents a pivotal step. Unlike heterogeneous primary cultures, clonal lines allow for the precise characterization of multipotency and self-renewal capacity. Here, we report the isolation of NSC clones from the human fetal brain and their characterization <em>in vitro</em> and <em>in vivo</em>.
                     </p>
 
                     <!-- Full Fig 1 -->
@@ -625,13 +746,22 @@
                                 <div class="vf-label">Video Figure 1: Neural Stem Cell Culture</div>
                                 <span class="tax-badge tax-setup">Methods</span>
                             </div>
-                            <div class="vf-caption">Visualizing the isolation and propagation techniques for NSCs discussed in the introduction.</div>
+                            <div class="vf-caption">Visualizing the isolation and propagation techniques for NSCs discussed in the introduction. Note the formation of free-floating neurospheres.</div>
                         </div>
                     </div>
 
-                    <h2 id="full-methods">Methods & Properties</h2>
+                    <h2 id="full-methods">Materials & Methods</h2>
                     <p>
-                        We discuss recent evidence from our two groups that describe the isolation and propagation of clones of NSCs from the human fetal brain. Critical steps include the <span class="visual-snippet" data-id="dissociation">mechanical dissociation</span> of tissue and maintenance of specific growth factors.
+                        <strong>Tissue Preparation:</strong> Human fetal brain tissue (10-12 weeks post-conception) was obtained from legal abortions following informed consent. The tissue was dissected to isolate the forebrain germinal zone, the region surrounding the lateral ventricles where neural precursors reside. The dissection was performed in cold sterile saline to minimize metabolic activity.
+                    </p>
+                    <p>
+                        <strong>Dissociation:</strong> The tissue was mechanically dissociated using a fire-polished Pasteur pipette to obtain a single-cell suspension. This <span class="visual-snippet" data-id="dissociation">mechanical dissociation</span> step is critical for viability; enzymatic digestion was avoided to preserve cell surface markers often sensitive to proteases like trypsin.
+                    </p>
+                    <p>
+                        <strong>Culture Conditions:</strong> Cells were plated in serum-free medium supplemented with <span class="visual-snippet" data-id="expansion">EGF and FGF-2</span> (20 ng/ml each) along with N2 supplement. The cultures were fed every 3-4 days by partial medium replacement. Under these conditions, NSCs proliferate to form floating clusters known as neurospheres, while differentiated cells die off.
+                    </p>
+                    <p>
+                         <strong>Cloning:</strong> To establish clonal lines, individual spheres were dissociated and replated at clonal density (1 cell/well) in 96-well plates by <span class="visual-snippet" data-id="dilution">limiting dilution</span>. Wells containing single cells were monitored daily to ensure clonality.
                     </p>
 
                      <!-- Full Fig 2 -->
@@ -646,13 +776,48 @@
                                 <div class="vf-label">Video Figure 2: Neurosphere Assay</div>
                                 <span class="tax-badge tax-tactile">Technique</span>
                             </div>
-                            <div class="vf-caption">Demonstration of the neurosphere assay used to assess stem cell multipotency.</div>
+                            <div class="vf-caption">Demonstration of the neurosphere assay used to assess stem cell multipotency. The video shows the dissociation of a primary sphere into single cells for secondary sphere formation.</div>
                         </div>
                     </div>
 
-                    <h2 id="full-results">Results & Discussion</h2>
                     <p>
-                        These cells have begun to show promise for neural cell replacement and molecular support therapy in models of degenerative CNS diseases. The extensive propagation and engraftment potential may open novel strategies for untreatable CNS dysfunctions.
+                        <strong>Differentiation Assay:</strong> For differentiation studies, neurospheres were mechanically dissociated and plated onto poly-ornithine/laminin-coated coverslips in the presence of 1% Fetal Bovine Serum (FBS) without growth factors. Cells were fixed after 7 days for immunocytochemistry.
+                    </p>
+
+                    <h2 id="full-results">Results</h2>
+                    <p>
+                        <strong>Establishment of NSC Clones:</strong> We successfully isolated and propagated clones of NSCs from the human fetal brain. These clones exhibited stable growth kinetics and could be passaged for over 40 generations without loss of multipotency or significant changes in karyotype. The doubling time was approximately 24-36 hours during the exponential growth phase.
+                    </p>
+                    <p>
+                        <strong>Multipotency:</strong> Upon withdrawal of mitogens and plating on poly-ornithine/laminin substrate, the clonal progeny differentiated into the three major neural lineages. Immunofluorescence analysis revealed neurons positive for <span class="visual-snippet" data-id="immunofluorescence">TuJ1</span>, astrocytes positive for GFAP, and oligodendrocytes positive for GalC.
+                    </p>
+                    
+                    <!-- Full Fig 3 -->
+                    <div class="video-figure" id="full-fig3">
+                        <div class="vf-stage">
+                            <img class="figure-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68150.jpg&w=828&q=75" style="width:100%; height:100%; object-fit:cover;">
+                            <div class="vf-brand-overlay"><img src="https://visualize.jove.com/wp-content/uploads/2025/06/jove-header.webp"> Video</div>
+                            <div class="vf-play"><i class="fas fa-play"></i></div>
+                        </div>
+                        <div class="vf-meta">
+                            <div class="vf-header">
+                                <div class="vf-label">Video Figure 3: Differentiation Assay</div>
+                                <span class="tax-badge tax-endpoint">Visual Endpoint</span>
+                            </div>
+                            <div class="vf-caption">Immunofluorescence staining showing differentiation of NSCs into neurons (Green) and glia (Red). This confirms the tripotent potential of the isolated clones.</div>
+                        </div>
+                    </div>
+                    
+                    <p>
+                        <strong>In Vivo Plasticity:</strong> To assess integration potential, labeled NSCs were transplanted into the germinal zones of neonatal mice. The human cells integrated extensively into the host brain, migrating to appropriate regions and differentiating into site-specific neurons and glia, suggesting that environmental cues play a dominant role in determining cell fate.
+                    </p>
+
+                    <h2 id="full-discussion">Discussion</h2>
+                    <p>
+                        We describe, based on a rigorous definition, the isolation and propagation of clones of NSCs from the human fetal brain. These cells have begun to show promise for neural cell replacement and molecular support therapy in models of degenerative CNS diseases. The ability to expand these cells indefinitely provides a renewable source of human neural tissue for both basic research and transplantation.
+                    </p>
+                    <p>
+                        The extensive propagation and engraftment potential of human CNS stem cells may, in the not-too-distant-future, be directed towards genuine clinical therapeutic ends, and may open novel and multifaceted strategies for redressing a variety of heretofore untreatable CNS dysfunctions, including Parkinson's disease and spinal cord injury. Future work will focus on directing the differentiation of these cells into specific neuronal subtypes required for targeted repair.
                     </p>
                 </div>
 
@@ -723,6 +888,7 @@
             }
         };
 
+        // Added more snippets for the full paper view
         const snippetData = {
             'compatibility': { 
                 title: "Immune Compatibility", 
@@ -755,6 +921,16 @@
                 title: "Neural Stem Cells",
                 img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/10632.jpg&w=828&q=75",
                 time: "0:20"
+            },
+            'dilution': {
+                 title: "Limiting Dilution",
+                 img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/2544.jpg&w=828&q=75",
+                 time: "0:40"
+            },
+            'immunofluorescence': {
+                 title: "Immunofluorescence",
+                 img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68150.jpg&w=828&q=75",
+                 time: "0:50"
             }
         };
 
@@ -766,26 +942,61 @@
         function loadFullPaper() {
             showView('full');
         }
+        
+        function loadAuthor() {
+            showView('author');
+        }
 
         function showView(type) {
+            // 1. Hide ALL views first
             safeDisplay('home-view', 'none');
+            safeDisplay('article-view', 'none');
+            safeDisplay('author-view', 'none');
+            safeDisplay('nav-pill', 'none');
+
+            // 2. Show Author View
+            if (type === 'author') {
+                safeDisplay('author-view', 'block');
+                window.scrollTo(0, 0);
+                setTimeout(() => {
+                    const el = document.getElementById('author-view');
+                    if(el) el.style.opacity = '1';
+                }, 10);
+                return;
+            }
+
             const article = document.getElementById('article-view');
             const navPill = document.getElementById('nav-pill');
             
-            // Update Header Data
+            // 3. Update Header Data (Dynamic)
             const data = (type === 'full') ? papers.upload : papers.search;
-            document.getElementById('art-title').textContent = data.title;
-            document.getElementById('auth-name').textContent = data.authors;
-            document.getElementById('auth-affil').textContent = data.affil;
-            document.getElementById('art-journal').textContent = data.journal;
-            document.getElementById('art-pubmed').href = data.link;
+            const titleEl = document.getElementById('art-title');
+            const authLink = document.getElementById('auth-link');
+            const authAffil = document.getElementById('auth-affil');
+            const journalEl = document.getElementById('art-journal');
+            const pubmedEl = document.getElementById('art-pubmed');
 
-            // Toggle Content
+            if(titleEl) titleEl.textContent = data.title;
+            
+            // Preserve link structure
+            if(authLink) {
+                 authLink.textContent = data.authors;
+            }
+            if(authAffil) authAffil.textContent = data.affil;
+            if(journalEl) journalEl.textContent = data.journal;
+            if(pubmedEl) pubmedEl.href = data.link;
+
+            // 4. Toggle Article Content Sections
             const isFull = (type === 'full');
             safeDisplay('content-abstract', isFull ? 'none' : 'block');
             safeDisplay('content-full', isFull ? 'block' : 'none');
             
-            // Update Nav Pill Content
+            // Visuals toggle
+            safeDisplay('visuals-full', isFull ? 'block' : 'none');
+            safeDisplay('visuals-full-2', isFull ? 'block' : 'none');
+            safeDisplay('visuals-full-3', isFull ? 'block' : 'none');
+            
+            // 5. Update Nav Pill Content
             let navHTML = '';
             if(type === 'abstract') {
                 navHTML = `
@@ -801,10 +1012,12 @@
                     <div class="nav-pill-item" onclick="scrollToSection('full-intro')">Intro</div>
                     <div class="nav-pill-item" onclick="scrollToSection('full-methods')">Methods</div>
                     <div class="nav-pill-item" onclick="scrollToSection('full-results')">Results</div>
+                    <div class="nav-pill-item" onclick="scrollToSection('full-discussion')">Discussion</div>
                 `;
             }
             if(navPill) {
                 navPill.innerHTML = navHTML;
+                navPill.style.display = 'flex';
             }
 
             if(article) {
@@ -817,15 +1030,18 @@
         }
 
         function goHome() {
+            // Hide all views
+            safeDisplay('article-view', 'none');
+            safeDisplay('author-view', 'none');
+            
             const article = document.getElementById('article-view');
             if(article) article.style.opacity = '0';
             
             setTimeout(() => {
-                if(article) article.style.display = 'none';
                 safeDisplay('home-view', 'flex');
                 const navPill = document.getElementById('nav-pill');
                 if(navPill) navPill.classList.remove('visible');
-            }, 500);
+            }, 100);
         }
 
         function switchTab(mode) {
