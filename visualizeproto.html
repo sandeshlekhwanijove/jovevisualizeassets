@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <title>JoVE Visualize | The Visual Layer for Science</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Fonts: Inter (UI), Lora (Reading), JetBrains Mono (Data) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -57,6 +57,15 @@
         .btn-secondary:hover { border-color: var(--jove-brand); color: var(--jove-brand); }
         .btn-pubmed { background: #002f6c; color: white; border-color: #002f6c; padding: 6px 16px; font-size: 0.8rem; }
         .btn-pubmed:hover { background: #001d4a; }
+        
+        .header-btn {
+            background: none; border: 1px solid var(--border); border-radius: 20px;
+            padding: 6px 12px; color: var(--text-meta); font-size: 0.85rem; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;
+            text-decoration: none; font-weight: 500; font-family: 'Inter', sans-serif;
+        }
+        .header-btn:hover { border-color: var(--text-main); color: var(--text-main); background: #f9fafb; }
+        .header-btn i { color: var(--text-meta); }
 
         /* --- HEADER --- */
         header {
@@ -164,23 +173,23 @@
         .paper-meta { font-size: 0.85rem; color: var(--text-meta); display: flex; align-items: center; gap: 6px; }
 
         /* --- ARTICLE VIEW (The Core Experience) --- */
-        #article-view { display: none; opacity: 0; transition: opacity 0.5s; background: white; }
+        #article-view { display: none; opacity: 0; transition: opacity 0.5s; background: white; width: 100%; }
         
         /* Layout Grid */
         .article-grid {
             display: grid;
-            grid-template-columns: 1fr minmax(auto, 720px) 1fr;
+            grid-template-columns: 1fr minmax(auto, 900px) 1fr; /* Central column max 900px */
             gap: 0 40px;
             max-width: 1200px; margin: 0 auto;
-            padding-bottom: 100px;
+            padding: 0 20px 100px 20px;
         }
 
         .col-text { grid-column: 2; position: relative; } 
-        .col-wide { grid-column: 1 / -1; max-width: 1000px; margin: 0 auto; width: 100%; padding: 0 20px; } 
+        .col-wide { grid-column: 1 / -1; max-width: 1000px; margin: 0 auto; width: 100%; padding: 0; } 
 
         /* Header Block */
         .article-header-block {
-            padding: 60px 0 20px 0;
+            padding: 60px 0 30px 0;
             text-align: center;
             border-bottom: 1px solid var(--border);
             margin-bottom: 40px;
@@ -196,27 +205,23 @@
 
         h1 { 
             font-family: 'Lora', serif; 
-            font-size: clamp(1.8rem, 4vw, 2.5rem); 
+            font-size: clamp(2rem, 4vw, 2.8rem); 
             line-height: 1.25; 
             margin: 0 0 20px 0; 
             color: var(--text-main); 
             letter-spacing: -0.02em; 
         }
 
-        /* Unified Button Style for Author & PubMed */
-        .meta-btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+        /* Author Info Toggle */
+        .author-block { position: relative; display: inline-block; }
         
-        .meta-btn {
+        .author-toggle {
             background: none; border: 1px solid var(--border); border-radius: 20px;
             padding: 6px 12px; color: var(--text-meta); font-size: 0.85rem; cursor: pointer;
             display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;
-            text-decoration: none; font-weight: 500; font-family: 'Inter', sans-serif;
         }
-        .meta-btn:hover { border-color: var(--text-main); color: var(--text-main); background: #fcfcfc; }
-        .meta-btn i { color: var(--text-meta); font-size: 0.9em; }
+        .author-toggle:hover { border-color: var(--text-main); color: var(--text-main); }
 
-        /* Author Dropdown */
-        .author-block { position: relative; display: inline-block; }
         .author-details {
             display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
             background: white; border: 1px solid var(--border); border-radius: 8px;
@@ -312,12 +317,13 @@
         }
         .hero-visual:hover .play-big { transform: translate(-50%, -50%) scale(1.1); background: var(--jove-brand); border-color: var(--jove-brand); }
 
-        /* 2. Inline Video Figure */
+        /* 3. Inline Video Figure (Standard Breakout) */
         .video-figure {
-            margin: 50px auto 60px auto; max-width: 850px;
+            margin: 50px auto 60px auto; max-width: 100%;
             background: white; border: 1px solid var(--border); border-radius: 12px;
             box-shadow: 0 4px 10px -2px rgba(0,0,0,0.05); overflow: hidden;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            width: 100%;
         }
         .video-figure.highlight-target {
             box-shadow: 0 0 0 2px var(--jove-brand), 0 15px 35px -5px rgba(33, 131, 237, 0.2);
@@ -347,50 +353,27 @@
 
         /* SNIPPET TOOLTIP (Hover Player) */
         .snippet-tooltip {
-            position: absolute;
-            width: 320px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 50px -10px rgba(0,0,0,0.3);
-            border: 1px solid var(--border);
-            z-index: 99999; /* Max Z-Index */
-            opacity: 0;
-            pointer-events: none;
+            position: absolute; width: 320px; background: white; border-radius: 12px;
+            box-shadow: 0 20px 50px -10px rgba(0,0,0,0.3); border: 1px solid var(--border);
+            z-index: 99999; opacity: 0; pointer-events: none;
             transition: opacity 0.15s ease-out, transform 0.15s ease-out;
             top: 0; left: 0;
         }
-        
-        .snippet-tooltip.active {
-            opacity: 1; pointer-events: auto;
-        }
-
+        .snippet-tooltip.active { opacity: 1; pointer-events: auto; }
         .st-video-container {
-            width: 100%; height: 180px;
-            background: black;
-            border-radius: 12px 12px 0 0;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
+            width: 100%; height: 180px; background: black; border-radius: 12px 12px 0 0;
+            position: relative; overflow: hidden; cursor: pointer;
         }
-        
-        .st-video-container iframe, .st-video-container video {
-            width: 100%; height: 100%; object-fit: cover; border: none;
-        }
+        .st-video-container iframe, .st-video-container video { width: 100%; height: 100%; object-fit: cover; border: none; }
         .st-video-container img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
-
         .st-play-overlay {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             display: flex; align-items: center; justify-content: center;
             background: rgba(0,0,0,0.2); transition: opacity 0.2s; pointer-events: none;
         }
         .st-play-overlay i { font-size: 2rem; color: white; opacity: 0.8; }
-        
-        /* Hide play button when playing */
         .st-video-container.playing .st-play-overlay { opacity: 0; }
-
-        .st-content {
-            padding: 12px 16px;
-        }
+        .st-content { padding: 12px 16px; }
         .st-title { font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; line-height: 1.3;}
         .st-meta { font-size: 0.75rem; color: var(--text-meta); display: flex; justify-content: space-between; align-items: center; }
         .st-badge { background: var(--jove-brand-light); color: var(--jove-brand); padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.7rem;}
@@ -412,63 +395,227 @@
         .nav-pill-item.active { background: var(--text-main); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .nav-pill-item:hover:not(.active) { background: #f3f4f6; color: var(--text-main); }
 
-        /* --- RIGHT SIDEBAR (Collapsible) --- */
-        .visual-sidebar {
-            position: fixed; top: 80px; right: -320px; width: 320px; bottom: 0;
-            background: white; border-left: 1px solid var(--border);
-            box-shadow: -5px 0 20px rgba(0,0,0,0.05);
-            transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            z-index: 800; display: flex; flex-direction: column;
+        /* --- EXPERIMENT PLAN (WORKBENCH OVERLAY) REDESIGNED --- */
+        .repro-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #f8fafc; /* CHANGED to Light */
+            z-index: 2000;
+            transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex; flex-direction: column;
         }
-        .visual-sidebar.open { right: 0; }
+        .repro-overlay.open { transform: translateY(0); }
 
-        .vs-header {
-            padding: 20px; border-bottom: 1px solid var(--border);
-            display: flex; justify-content: space-between; align-items: center;
+        .repro-header {
+            padding: 15px 30px; background: white; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; z-index: 10;
         }
-        .vs-title { font-weight: 700; color: var(--text-main); font-size: 0.95rem; }
-        .vs-close { cursor: pointer; color: var(--text-meta); }
-
-        .vs-content {
-            padding: 20px; overflow-y: auto; flex: 1;
+        .repro-title { font-family: 'Inter'; font-weight: 800; font-size: 1.1rem; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+        
+        /* New Workbench Grid (Vertical Stack) */
+        .workbench-grid {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 60px);
+            width: 100%;
+            background: #ffffff; /* CHANGED to White */
         }
 
-        /* Sidebar Toggle Button */
-        .sidebar-toggle {
-            position: fixed; right: 0; top: 140px;
-            background: var(--jove-brand); color: white;
-            padding: 12px 6px;
-            border-top-left-radius: 8px; border-bottom-left-radius: 8px;
+        /* 1. TOP: Prep Bar (Horizontal) - RESTORED LARGER STYLE */
+        .wb-prep-bar {
+            height: 190px; /* Restored larger height */
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            justify-content: space-between;
+            color: var(--text-main);
+            flex-shrink: 0;
+            z-index: 20;
+        }
+
+        .prep-section-left { display: flex; gap: 40px; align-items: center; border-right: 1px solid var(--border); padding-right: 40px; height: 70%; }
+        .prep-stat { display: flex; flex-direction: column; }
+        .prep-stat-label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-meta); font-weight: 700; margin-bottom: 6px; display: block; }
+        .prep-stat-value { font-size: 1.25rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+        .prep-stat-value i { color: var(--jove-brand); font-size: 1rem; }
+
+        .prep-section-right { flex: 1; display: flex; flex-direction: column; padding-left: 40px; overflow: hidden; justify-content: center; height: 100%; }
+        .prep-materials-list { display: flex; gap: 15px; overflow-x: auto; padding: 15px 0; scrollbar-width: none; align-items: center; height: 100%; }
+        .prep-materials-list::-webkit-scrollbar { display: none; }
+        
+        /* RESTORED: Vertical Card Layout for Materials */
+        .prep-mat-chip {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0; /* Zero padding for edge-to-edge image */
+            display: flex;
+            flex-direction: column; /* Stack Vertically */
+            min-width: 150px;
+            width: 150px;
+            height: 150px; /* Fixed height */
+            transition: all 0.2s;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            overflow: hidden;
+            position: relative;
+        }
+        .prep-mat-chip:hover { border-color: var(--jove-brand); box-shadow: 0 10px 20px -3px rgba(33, 131, 237, 0.15); transform: translateY(-2px); }
+        
+        .prep-mat-img { 
+            width: 100%; 
+            height: 90px; /* Dominant Image */
+            object-fit: cover; 
             border: none;
-            cursor: pointer; z-index: 850; 
-            box-shadow: -4px 4px 15px rgba(0,0,0,0.08);
-            transition: right 0.3s ease; font-weight: 700; font-size: 0.75rem;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);
-            height: 140px; letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
+            border-radius: 0;
         }
         
-        .sidebar-toggle:hover { background: var(--jove-brand-dark); color: white; }
-        .sidebar-toggle.hidden { right: 320px; opacity: 0; pointer-events: none; }
+        .prep-mat-info { 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center;
+            padding: 8px 12px;
+            flex: 1;
+            background: white;
+        }
+        
+        .prep-mat-name { 
+            font-size: 0.85rem; 
+            font-weight: 700; 
+            color: var(--text-main); 
+            line-height: 1.2; 
+            margin-bottom: 4px; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+        }
+        
+        .prep-mat-tag { 
+            font-size: 0.65rem; font-weight: 700; 
+            text-transform: uppercase; letter-spacing: 0.5px;
+            display: inline-block;
+        }
+        
+        /* Tag Colors */
+        .tag-reagent { color: #059669; }
+        .tag-equipment { color: #64748b; }
 
-        @keyframes pulse-attention {
-            0% { box-shadow: -4px 4px 15px rgba(0,0,0,0.08); transform: rotate(180deg) scale(1); }
-            50% { box-shadow: -4px 4px 25px rgba(33, 131, 237, 0.4); transform: rotate(180deg) scale(1.05); border-color: var(--jove-brand); }
-            100% { box-shadow: -4px 4px 15px rgba(0,0,0,0.08); transform: rotate(180deg) scale(1); }
+        /* 2. MIDDLE: Main Video (Center Stage) */
+        .wb-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 40px;
+            background: #f1f5f9; /* Light grey background */
+            position: relative;
+            overflow: hidden;
         }
-        .pulse-once { animation: pulse-attention 1.5s 2s 1; }
 
-        /* Mat Grid in Sidebar */
-        .mat-grid-sidebar {
-            display: grid; grid-template-columns: 1fr; gap: 15px;
+        .wb-video-card {
+            width: 100%;
+            height: 100%;
+            max-width: 1100px;
+            max-height: 600px;
+            background: black;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px -10px rgba(0,0,0,0.15); /* Softer shadow */
+            border: 1px solid rgba(0,0,0,0.1);
+            position: relative;
         }
-        .mat-card {
-            background: white; border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
-            text-align: center; transition: transform 0.2s; cursor: pointer;
+        
+        .wb-video-stage {
+            width: 100%; height: 100%; background: black; position: relative;
         }
-        .mat-card:hover { transform: translateY(-3px); border-color: var(--jove-brand); }
-        .mat-img { height: 120px; width: 100%; object-fit: cover; background: #e2e8f0; }
-        .mat-name { padding: 10px; font-size: 0.85rem; font-weight: 600; color: var(--text-main); line-height: 1.3; }
+
+        /* --- UPDATED: Text Below Video (New Standard Layout) --- */
+        .wb-video-meta {
+            width: 100%;
+            max-width: 1100px;
+            margin-top: 20px;
+            padding: 0 10px;
+            animation: slideUp 0.3s ease;
+        }
+        .wb-meta-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .wb-meta-title { font-family: 'Inter', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--text-main); margin: 0; line-height: 1.2; }
+        .wb-meta-desc { font-family: 'Lora', serif; font-size: 1.1rem; color: var(--text-body); margin: 0; max-width: 800px; line-height: 1.6; }
+        .wb-alert-inline {
+            margin-top: 15px; padding: 12px 16px; background: #fef2f2; 
+            border: 1px solid #fee2e2; border-radius: 8px; 
+            color: #b91c1c; font-size: 0.95rem; display: flex; gap: 10px; align-items: center;
+        }
+
+        /* 3. BOTTOM: Playlist (Formerly Timeline) */
+        .wb-playlist-container {
+            background: #ffffff;
+            border-top: 1px solid var(--border);
+            padding: 20px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+        
+        .playlist-header {
+            font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 800; 
+            color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        .wb-timeline {
+            height: auto; /* Allow auto height */
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: flex-start;
+            padding: 0;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px; /* For scrollbar space */
+        }
+
+        .timeline-card {
+            min-width: 200px;
+            width: 200px;
+            height: auto;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            box-shadow: none;
+            overflow: visible;
+        }
+        .timeline-card:hover { transform: translateY(-3px); background: transparent; box-shadow: none; }
+        .timeline-card.active { border: none; background: transparent; box-shadow: none; }
+        .timeline-card.active .tc-thumb { box-shadow: 0 0 0 3px var(--jove-brand); }
+        .timeline-card.active::after { display: none; } /* Remove bottom bar */
+        
+        .tc-thumb {
+            height: 112px; /* 16:9 ratio approx for 200px width */
+            width: 100%;
+            object-fit: cover;
+            background: #000;
+            border-radius: 8px;
+            position: relative;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: box-shadow 0.2s;
+        }
+        
+        .tc-content { padding: 0; background: transparent; }
+        .tc-step { display: none; } /* Removing "Step X" concept visually */
+        .tc-title { font-size: 0.85rem; color: var(--text-main); font-weight: 600; line-height: 1.3; white-space: normal; }
+        .tc-time { position: absolute; bottom: 6px; right: 6px; top: auto; background: rgba(0,0,0,0.8); color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
 
         /* --- VISUAL MATERIALS GRID (Horizontal - Abstract View) --- */
         .materials-section {
@@ -477,6 +624,7 @@
             border-radius: 12px;
             padding: 20px 25px;
             margin: 40px 0;
+            overflow-x: hidden;
         }
         
         .mat-row {
@@ -494,6 +642,7 @@
         .mat-card-h:hover { border-color: var(--jove-brand); transform: translateY(-2px); }
         .mat-img-h { height: 90px; width: 100%; object-fit: cover; }
         .mat-name-h { padding: 8px; font-size: 0.8rem; font-weight: 600; color: var(--text-main); }
+        .mat-type { display: block; font-size: 0.65rem; font-weight: 700; color: var(--text-meta); margin-bottom: 4px; text-transform: uppercase; }
 
         /* --- AUTHOR VIEW --- */
         #author-view {
@@ -538,18 +687,6 @@
         .f-head { font-weight: 700; font-size: 0.85rem; color: var(--text-main); margin-bottom: 20px; }
         .f-link { display: block; color: var(--text-meta); text-decoration: none; margin-bottom: 12px; font-size: 0.9rem; }
         .f-link:hover { color: var(--jove-brand); }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Tax Badges */
-        .tax-badge {
-            font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.75rem; 
-            text-transform: uppercase; letter-spacing: 0.5px;
-            padding: 4px 10px; border-radius: 4px; color: white; display: inline-block;
-        }
-        .tax-setup { background-color: #059669; }
-        .tax-tactile { background-color: #d97706; }
-        .tax-endpoint { background-color: #7c3aed; }
 
         /* --- NEW: REAGENT CHIP STYLES --- */
         .reagent-chip {
@@ -610,6 +747,278 @@
         .trouble-spot:hover { background: rgba(239, 68, 68, 0.15); }
         .trouble-icon { font-size: 0.8em; margin-right: 4px; }
 
+        /* --- NEW: REPRODUCTION CTA CARD (UPDATED) --- */
+        .reproduction-card {
+            background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 100%);
+            border: 2px solid #10b981;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 40px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.15);
+            position: relative;
+            overflow: hidden;
+            animation: pulse-green 3s infinite;
+        }
+        .reproduction-card:hover {
+            transform: translateY(-2px) scale(1.01);
+            background: #d1fae5;
+            box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.25);
+        }
+        
+        /* New Thumbnail in CTA */
+        .rc-thumb-wrapper {
+            width: 100px; height: 60px; border-radius: 8px; overflow: hidden;
+            position: relative; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.1);
+        }
+        .rc-thumb { width: 100%; height: 100%; object-fit: cover; }
+        .rc-play-icon {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.4); color: white; border-radius: 50%; width: 24px; height: 24px;
+            display: flex; align-items: center; justify-content: center; font-size: 0.7rem;
+        }
+
+        .rc-content { flex: 1; }
+        .rc-content h3 {
+            font-family: 'Inter', sans-serif; font-size: 1.15rem; font-weight: 800;
+            color: #047857; margin: 0 0 4px 0; display: flex; align-items: center; gap: 8px;
+        }
+        .rc-content p {
+            font-family: 'Inter', sans-serif; font-size: 0.9rem; color: #334155; margin: 0; font-weight: 500;
+        }
+        .rc-icon {
+            font-size: 1.2rem; color: white; background: #10b981;
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+        }
+
+        /* --- ENHANCED METHOD CARDS (High Conversion Layout) --- */
+        .method-card {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr; /* Video gets slightly more space (1.2fr) */
+            gap: 40px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .method-card:hover {
+            border-color: var(--jove-brand);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        /* Left Side: Content */
+        .mc-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .mc-step-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--jove-brand);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .mc-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0 0 12px 0;
+            line-height: 1.3;
+        }
+
+        .mc-desc {
+            font-family: 'Lora', serif;
+            font-size: 1rem;
+            color: var(--text-body);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Key Highlights List */
+        .mc-highlights {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 24px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .mc-pill {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-meta);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .mc-pill i { color: var(--jove-brand); }
+
+        /* CTA Text Link */
+        .mc-cta {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            color: var(--jove-brand);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: gap 0.2s;
+        }
+        .mc-cta:hover { gap: 12px; text-decoration: underline; }
+
+        /* Right Side: Enhanced Video Stage */
+        .mc-video-wrapper {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            background: #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .method-card:hover .mc-video-wrapper {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(33, 131, 237, 0.15); /* Blue glow on hover */
+        }
+
+        .mc-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+        .method-card:hover .mc-thumb { opacity: 0.7; }
+
+        /* Premium Play Button */
+        .mc-play-btn {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px; height: 70px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .method-card:hover .mc-play-btn {
+            background: var(--jove-brand);
+            border-color: var(--jove-brand);
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 0 20px rgba(33, 131, 237, 0.4);
+        }
+
+        /* Duration Badge */
+        .mc-duration {
+            position: absolute;
+            bottom: 12px; right: 12px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* --- RESPONSIVE MEDIA QUERIES --- */
+        @media (max-width: 1024px) {
+            .article-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .col-text, .col-wide {
+                grid-column: 1;
+            }
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            /* Repro View Mobile */
+            .workbench-grid { height: auto; display: flex; flex-direction: column; overflow-y: auto; background: #f8fafc; }
+            .wb-prep-bar { flex-direction: column; height: auto; padding: 20px; align-items: flex-start; gap: 15px; }
+            .prep-section-left { border-right: none; border-bottom: 1px solid var(--border); padding-right: 0; padding-bottom: 15px; width: 100%; height: auto; }
+            .prep-section-right { padding-left: 0; width: 100%; }
+            .wb-main { padding: 20px; flex: none; height: auto; background: white; }
+            .wb-video-card { aspect-ratio: 16/9; max-height: none; }
+            .wb-video-meta { margin-top: 15px; padding: 0; }
+            .wb-timeline { display: none; } /* Hide timeline on mobile for simplicity */
+            
+            .method-card { grid-template-columns: 1fr; gap: 20px; }
+            .mc-video-wrapper { order: -1; /* Video on top for mobile */ }
+        }
+
+        @media (max-width: 768px) {
+            /* Mobile Styles */
+            body { font-size: 14px; }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.3rem; margin-top: 40px; }
+            p { font-size: 1.05rem; }
+
+            .hero-title { font-size: 2.2rem; }
+            .hero-subtitle { font-size: 1.1rem; }
+
+            .nav-links { display: none; } /* Hide Nav Links */
+            .logo img { height: 22px; }
+            .logo { font-size: 1rem; }
+            
+            .input-group { flex-direction: column; }
+            .search-input { width: 100%; border-radius: 8px; }
+            .btn-primary { width: 100%; border-radius: 8px; }
+            
+            .trend-grid, .pub-grid { grid-template-columns: 1fr; }
+            
+            .article-header-block { padding: 30px 0 20px; }
+            .hero-visual { margin-bottom: 30px; aspect-ratio: 16/9; }
+            
+            .nav-pill { padding: 4px; bottom: 20px; width: 90%; justify-content: space-around; }
+            .nav-pill-item { padding: 6px 10px; font-size: 0.75rem; }
+            
+            .video-figure { margin: 30px 0; border-radius: 8px; }
+            .vf-meta { padding: 15px; }
+            
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
+        }
+
     </style>
 </head>
 <body>
@@ -630,38 +1039,65 @@
         </div>
     </div>
 
-    <!-- RIGHT SIDEBAR (Collapsible) -->
-    <div id="visual-sidebar" class="visual-sidebar">
-        <div class="vs-header">
-            <div class="vs-title"><i class="fas fa-microscope"></i> &nbsp; KEY VISUALS</div>
-            <div class="vs-close" onclick="toggleSidebar()"><i class="fas fa-times"></i></div>
+    <!-- EXPERIMENT PLAN (WORKBENCH OVERLAY) -->
+    <div id="repro-view" class="repro-overlay">
+        <div class="repro-header">
+            <div class="repro-title"><i class="fas fa-flask" style="color:var(--jove-brand)"></i> &nbsp; Experiment Plan: Microglia AAV6 Targeting</div>
+            <button class="header-btn" onclick="closeReproduction()" style="border-radius:20px; padding: 6px 16px;"><i class="fas fa-arrow-left"></i> Back to Article</button>
         </div>
-        <div class="vs-content">
-            <p style="font-size:0.85rem; color:var(--text-meta); margin-bottom:15px;">Visual inventory of equipment and methods referenced in this paper.</p>
-            <div class="mat-grid-sidebar">
-                <div class="mat-card">
-                    <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/13470.jpg&w=828&q=75" class="mat-img">
-                    <div class="mat-name">Fire-polished Pipette</div>
+        
+        <div class="workbench-grid">
+            
+            <!-- 1. TOP: PREP BAR -->
+            <div class="wb-prep-bar">
+                <div class="prep-section-left">
+                    <div class="prep-stat">
+                        <span class="prep-stat-label">Temperature</span>
+                        <span class="prep-stat-value"><i class="fas fa-thermometer-half"></i> <span id="wb-temp">37°C</span></span>
+                    </div>
+                    <div class="prep-stat">
+                        <span class="prep-stat-label">Duration</span>
+                        <span class="prep-stat-value"><i class="fas fa-clock"></i> <span id="wb-time">2 Hours</span></span>
+                    </div>
                 </div>
-                <div class="mat-card">
-                    <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75" class="mat-img">
-                    <div class="mat-name">70µm Nylon Mesh</div>
-                </div>
-                <div class="mat-card">
-                    <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/2544.jpg&w=828&q=75" class="mat-img">
-                    <div class="mat-name">EGF / FGF-2</div>
-                </div>
-                <div class="mat-card">
-                    <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75" class="mat-img">
-                    <div class="mat-name">Orbital Shaker</div>
+                <div class="prep-section-right">
+                    <span class="prep-stat-label" style="display:block; margin-bottom:8px;">Required Materials</span>
+                    <div id="wb-materials-list" class="prep-materials-list">
+                        <!-- Dynamic Content -->
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- SIDEBAR TOGGLE BUTTON -->
-    <div id="sidebar-toggle" class="sidebar-toggle pulse-once" onclick="toggleSidebar()">
-        <i class="fas fa-chevron-left"></i> KEY VISUALS
+            <!-- 2. MIDDLE: MAIN VIDEO -->
+            <div class="wb-main">
+                <div class="wb-video-card">
+                    <div class="wb-video-stage">
+                        <img id="wb-vid-img" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75" style="width:100%; height:100%; object-fit:cover; opacity:0.8;">
+                        <div class="vf-play" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:80px; height:80px; border-radius:50%; background:rgba(255,255,255,0.2); backdrop-filter:blur(5px); border:1px solid rgba(255,255,255,0.5); display:flex; align-items:center; justify-content:center; color:white; font-size:2rem;"><i class="fas fa-play"></i></div>
+                    </div>
+                </div>
+                
+                <!-- Video Title & Description BELOW Player -->
+                <div class="wb-video-meta">
+                    <div class="wb-meta-header">
+                        <h2 class="wb-meta-title" id="wb-step-title">Stereotactic Injection</h2>
+                    </div>
+                    <p class="wb-meta-desc" id="wb-step-desc">Precise intracranial injection of AAV6 vectors into the hippocampus or striatum of adult mice.</p>
+                    <div id="wb-alert-box" class="wb-alert-inline" style="display:none;">
+                        <i class="fas fa-exclamation-triangle"></i> <span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. BOTTOM: TIMELINE (VISUAL PLAYLIST) -->
+            <div class="wb-playlist-container">
+                <div class="playlist-header">Related Videos</div>
+                <div class="wb-timeline" id="wb-timeline-container">
+                    <!-- Dynamic Timeline Cards -->
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <header>
@@ -709,24 +1145,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="trend-grid">
-            <div class="paper-card" onclick="loadAbstract()">
-                <span class="paper-tag">Neuroscience</span>
-                <div class="paper-head">Isolation and Culture of Primary Murine Microglia</div>
-                <div class="paper-meta"><i class="fas fa-video"></i> 12 Video Matches</div>
-            </div>
-            <div class="paper-card">
-                <span class="paper-tag">Immunology</span>
-                <div class="paper-head">Flow Cytometry Analysis of T-Cell Activation</div>
-                <div class="paper-meta"><i class="fas fa-video"></i> 8 Video Matches</div>
-            </div>
-            <div class="paper-card">
-                <span class="paper-tag">Bioengineering</span>
-                <div class="paper-head">CRISPR-Cas9 Genome Editing in Human Stem Cells</div>
-                <div class="paper-meta"><i class="fas fa-video"></i> 15 Video Matches</div>
-            </div>
-        </div>
     </div>
 
     <!-- === AUTHOR PROFILE VIEW === -->
@@ -734,58 +1152,101 @@
         <div class="author-profile-header">
             <div class="author-avatar"><i class="fas fa-user"></i></div>
             <div class="author-info">
-                <h1 id="p-name">F H Gage</h1>
-                <p id="p-affil" style="color:var(--text-meta);">Laboratory of Genetics, The Salk Institute, La Jolla, California</p>
-                <div class="author-meta">
-                    <div class="author-stat"><span class="stat-num">45.2k</span><span class="stat-lab">Citations</span></div>
-                    <div class="author-stat"><span class="stat-num">98</span><span class="stat-lab">H-Index</span></div>
-                    <div class="author-stat"><span class="stat-num">210</span><span class="stat-lab">Publications</span></div>
+                <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
+                    <h1 id="p-name" style="margin:0;">F H Gage</h1>
+                    <span id="claim-badge" style="display:none; background:#dcfce7; color:#166534; font-size:0.75rem; font-weight:700; padding:4px 10px; border-radius:20px; border:1px solid #bbf7d0;"><i class="fas fa-check-circle"></i> Verified Author</span>
+                </div>
+                
+                <div style="margin-top:20px;">
+                    <button id="btn-claim" class="btn btn-secondary" onclick="openClaimModal()" style="padding: 8px 20px; font-size: 0.85rem;">
+                        <i class="fas fa-user-shield"></i> &nbsp; Claim this Profile
+                    </button>
                 </div>
             </div>
         </div>
 
+        <!-- Domain Tabs -->
         <div class="cat-tabs">
-            <div class="cat-tab active">Neuroscience</div>
+            <div class="cat-tab active">All Publications</div>
+            <div class="cat-tab">Neuroscience</div>
+            <div class="cat-tab">Genetics</div>
             <div class="cat-tab">Stem Cells</div>
-            <div class="cat-tab">Gene Therapy</div>
-            <div class="cat-tab">All</div>
         </div>
 
         <div class="pub-grid">
+            <!-- Linked to Abstract View -->
             <div class="paper-card" onclick="loadAbstract()">
-                <span class="paper-tag">Neuroscience</span>
+                <span class="paper-tag">Regenerative Medicine</span>
                 <div class="paper-head">Cell Therapy: A Strategic Review</div>
                 <div class="paper-meta">Nature • 1998</div>
+                <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
+                    <i class="fas fa-magic"></i> Visualize Abstract
+                </div>
             </div>
-            <div class="paper-card">
+
+            <!-- Linked to Full Paper (AAV) View -->
+            <div class="paper-card" onclick="loadFullPaper()">
                 <span class="paper-tag">Neuroscience</span>
-                <div class="paper-head">Neurogenesis in the Adult Human Hippocampus</div>
-                <div class="paper-meta">Nature Medicine • 1998</div>
+                <div class="paper-head">Microglia-Specific Targeting by Novel Capsid-Modified AAV6 Vectors</div>
+                <div class="paper-meta">J. Virology • 2021</div>
+                <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
+                    <i class="fas fa-magic"></i> Visualize Abstract
+                </div>
             </div>
-            <div class="paper-card">
+
+            <!-- Mock Paper 3 -->
+            <div class="paper-card" onclick="loadAbstract()">
                 <span class="paper-tag">Stem Cells</span>
-                <div class="paper-head">Neural Stem Cells in the Adult Mammalian Forebrain</div>
-                <div class="paper-meta">Science • 1999</div>
+                <div class="paper-head">Survival and differentiation of adult neuronal progenitor cells</div>
+                <div class="paper-meta">PNAS • 1995</div>
+                <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
+                    <i class="fas fa-magic"></i> Visualize Abstract
+                </div>
+            </div>
+            
+            <!-- Mock Paper 4 -->
+            <div class="paper-card" onclick="loadAbstract()">
+                <span class="paper-tag">Genetics</span>
+                <div class="paper-head">Mobile elements: drivers of genome evolution</div>
+                <div class="paper-meta">Science • 2003</div>
+                <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
+                    <i class="fas fa-magic"></i> Visualize Abstract
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Claim Profile Modal (Simple Overlay) -->
+    <div id="claim-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:3000; align-items:center; justify-content:center; animation:fadeIn 0.2s ease;">
+        <div style="background:white; padding:30px; border-radius:12px; width:90%; max-width:400px; box-shadow:0 20px 50px rgba(0,0,0,0.2);">
+            <h2 style="margin-top:0; font-family:'Inter'; font-size:1.4rem;">Verify Identity</h2>
+            <p style="color:var(--text-body); font-size:0.95rem; margin-bottom:20px;">To manage <strong>F H Gage</strong>, please verify your institutional email address.</p>
+            
+            <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--text-meta); margin-bottom:8px;">Institutional Email</label>
+            <input type="email" placeholder="name@salk.edu" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; margin-bottom:20px; font-size:1rem;">
+            
+            <div style="display:flex; justify-content:flex-end; gap:10px;">
+                <button class="btn btn-secondary" onclick="closeClaimModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitClaim()">Verify & Claim</button>
             </div>
         </div>
     </div>
 
     <!-- === ARTICLE VIEW === -->
     <div id="article-view">
-        
         <div class="article-grid">
             
             <!-- HEADER SECTION -->
             <div class="col-wide article-header-block">
                 <div class="journal-meta-row">
                     <span class="journal-label" id="art-journal">Nature • Published May 14, 1998</span>
-                    <a id="art-pubmed" href="https://pubmed.ncbi.nlm.nih.gov/9579857/" target="_blank" class="meta-btn"><i class="fas fa-book-medical"></i> View on PubMed</a>
+                    <a id="art-pubmed" href="https://pubmed.ncbi.nlm.nih.gov/9579857/" target="_blank" class="header-btn"><i class="fas fa-book-medical"></i> View on PubMed</a>
                 </div>
                 <h1 id="art-title">Cell Therapy</h1>
                 
                 <!-- Toggleable Author Details -->
                 <div class="author-block">
-                    <button class="meta-btn" onclick="toggleAuthors()">
+                    <button class="header-btn" onclick="toggleAuthors()">
                         <i class="fas fa-info-circle"></i> Author Information
                     </button>
                     <div id="author-details" class="author-details">
@@ -801,7 +1262,8 @@
                 <!-- === STRUCTURED ABSTRACT CONTENT (Search View) === -->
                 <div id="content-abstract">
                     <h2 id="sec-summary">Summary</h2>
-                    <p class="abstract-text">Cell therapy offers a promising treatment for various diseases. The optimal cell type depends on the specific disease and its required function, addressing key challenges in <span class="visual-snippet" data-id="compatibility">immunological compatibility</span> and safety.</p>
+                    <!-- UPDATED: Added visual snippet to 'Cell therapy', removed large video figure -->
+                    <p class="abstract-text"><span class="visual-snippet" data-id="cell-therapy">Cell therapy</span> offers a promising treatment for various diseases. The optimal cell type depends on the specific disease and its required function, addressing key challenges in <span class="visual-snippet" data-id="compatibility">immunological compatibility</span> and safety.</p>
                     
                     <div class="area-tags">
                         <span class="area-tag">Regenerative Medicine</span>
@@ -809,107 +1271,74 @@
                         <span class="area-tag">Biotechnology</span>
                     </div>
 
-                    <!-- NEW: VISUAL INVENTORY FOR ABSTRACT (Reagents/Tools) -->
-                    <div class="materials-section" style="margin-top: 20px;">
-                        <div style="font-family:'Inter'; font-weight:700; color:var(--text-meta); font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">
-                            <i class="fas fa-flask"></i> &nbsp; Essentials
-                        </div>
-                        <p style="margin:0; font-size:0.95rem;">Key items identified for reproduction.</p>
-                        
-                        <div class="mat-row">
-                            <div class="mat-card-h">
-                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/12518.jpg&w=828&q=75" class="mat-img-h">
-                                <div class="mat-name-h">
-                                    <span style="font-size:0.7rem; color:var(--text-meta); display:block; font-weight:400;">CELL LINE</span>
-                                    Stem Cells
-                                </div>
-                            </div>
-                            <div class="mat-card-h">
-                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/10815.jpg&w=828&q=75" class="mat-img-h">
-                                <div class="mat-name-h">
-                                    <span style="font-size:0.7rem; color:#059669; display:block; font-weight:700;">REAGENT</span>
-                                    Viral Vectors
-                                </div>
-                            </div>
-                            <div class="mat-card-h">
-                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68150.jpg&w=828&q=75" class="mat-img-h">
-                                <div class="mat-name-h">
-                                    <span style="font-size:0.7rem; color:var(--text-meta); display:block; font-weight:400;">EQUIPMENT</span>
-                                    Electroporator
-                                </div>
-                            </div>
-                            <div class="mat-card-h">
-                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75" class="mat-img-h">
-                                <div class="mat-name-h">
-                                    <span style="font-size:0.7rem; color:var(--text-meta); display:block; font-weight:400;">EQUIPMENT</span>
-                                    Flow Cytometer
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Visual Abstract Placement -->
-                    <div class="col-wide video-figure" id="abs-visual-1" style="margin-left: -20px; margin-right: -20px;">
-                        <div class="vf-stage">
-                             <img class="figure-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/13475.jpg&w=828&q=75" style="width:100%; height:100%; object-fit:cover;">
-                             <div class="vf-brand-overlay"><img src="https://visualize.jove.com/wp-content/uploads/2025/06/jove-header.webp"> Video</div>
-                             <div class="vf-play"><i class="fas fa-play"></i></div>
-                        </div>
-                        <div class="vf-meta">
-                            <div class="vf-header">
-                                <div class="vf-label">Visual Abstract</div>
-                            </div>
-                            <div class="vf-caption">The Logic of Cell Therapy: An overview of cell selection and application.</div>
-                        </div>
-                    </div>
-
                     <h2 id="sec-background">Background</h2>
                     <p>
                         Cell therapy is a rapidly advancing field for treating human diseases. The effectiveness of cell therapy is highly dependent on the specific cell type and its intended function. Significant challenges remain, including immunological compatibility, <span class="visual-snippet" data-id="expansion">in vitro cell expansion</span>, and <span class="visual-snippet" data-id="qc">quality control</span>.
                     </p>
 
-                    <!-- Abstract Video 1 -->
-                    <div class="video-figure" id="fig1">
-                        <div class="vf-stage">
-                            <img class="figure-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75" style="width:100%; height:100%; object-fit:cover;">
-                            <div class="vf-brand-overlay"><img src="https://visualize.jove.com/wp-content/uploads/2025/06/jove-header.webp"> Video</div>
-                            <div class="vf-play"><i class="fas fa-play"></i></div>
-                        </div>
-                        <div class="vf-meta">
-                            <div class="vf-header">
-                                <div class="vf-label">Related Video: Enhancing CAR-EV Technology</div>
-                                <span class="tax-badge tax-setup">Methodology</span>
-                            </div>
-                            <div class="vf-caption">This protocol demonstrates engineering processes relevant to cell expansion challenges mentioned in the background.</div>
-                        </div>
-                    </div>
-
                     <h2 id="sec-purpose">Purpose Of The Study</h2>
                     <p>
                         To highlight the importance of cell source and function in tailoring cell therapy for specific diseases. To address the critical concerns hindering the widespread application of cell therapy. To emphasize the interdisciplinary approach required to overcome current limitations.
                     </p>
+                    
+                    <!-- REPRODUCTION CTA (HIGHLIGHTED + THUMBNAIL) -->
+                    <div class="reproduction-card" onclick="openReproduction()">
+                        <div class="rc-thumb-wrapper">
+                            <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75" class="rc-thumb">
+                            <div class="rc-play-icon"><i class="fas fa-play"></i></div>
+                        </div>
+                        <div class="rc-content">
+                            <h3><i class="fas fa-bolt"></i> Ready to reproduce this experiment?</h3>
+                            <p>Open the Interactive Experiment Plan for materials & protocols.</p>
+                        </div>
+                        <div class="rc-icon"><i class="fas fa-chevron-right"></i></div>
+                    </div>
 
                     <h2 id="sec-methods">Main Methods</h2>
-                    <ul>
-                        <li>Review of current cell therapy strategies and challenges.</li>
-                        <li>Analysis of factors influencing cell type selection for therapeutic applications.</li>
-                        <li>Discussion of advancements in addressing immunological, manufacturing, and safety issues, particularly regarding <span class="vid-ref" data-target="fig2"><i class="fas fa-play-circle"></i> in vivo reprogramming</span>. 
-                        Careful attention must be paid to <span class="visual-snippet trouble-spot" data-id="enzymatic"><i class="fas fa-exclamation-triangle trouble-icon"></i>enzymatic digestion timing</span> to prevent cell death.</li>
-                    </ul>
 
-                    <!-- Abstract Video 2 -->
-                    <div class="video-figure" id="fig2">
-                        <div class="vf-stage">
-                            <img class="figure-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75" style="width:100%; height:100%; object-fit:cover;">
-                            <div class="vf-brand-overlay"><img src="https://visualize.jove.com/wp-content/uploads/2025/06/jove-header.webp"> Video</div>
-                            <div class="vf-play"><i class="fas fa-play"></i></div>
-                        </div>
-                        <div class="vf-meta">
-                            <div class="vf-header">
-                                <div class="vf-label">Related Video: Tractable In Vivo Reprogramming</div>
-                                <span class="tax-badge tax-tactile">Technique</span>
+                    <!-- Method Card 1 -->
+                    <div class="method-card">
+                        <div class="mc-content">
+                            <span class="mc-step-badge"><i class="fas fa-circle"></i> &nbsp; Strategy</span>
+                            <h3 class="mc-title">Cell Type Selection</h3>
+                            <p class="mc-desc">
+                                A strategic review of how specific cell types are selected based on disease pathology. This segment visualizes the decision matrix for autologous vs. allogenic sources.
+                            </p>
+                            <ul class="mc-highlights">
+                                <li class="mc-pill"><i class="fas fa-check-circle"></i> Selection Criteria</li>
+                                <li class="mc-pill"><i class="fas fa-users"></i> Donor Matching</li>
+                            </ul>
+                            <div class="mc-cta">
+                                Watch Strategy Overview <i class="fas fa-arrow-right"></i>
                             </div>
-                            <div class="vf-caption">Visualization of tumor cell injection techniques relevant to the methods discussion.</div>
+                        </div>
+                        <div class="mc-video-wrapper">
+                            <img class="mc-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75">
+                            <div class="mc-play-btn"><i class="fas fa-play"></i></div>
+                            <span class="mc-duration">2:14</span>
+                        </div>
+                    </div>
+
+                    <!-- Method Card 2 -->
+                    <div class="method-card">
+                        <div class="mc-content">
+                            <span class="mc-step-badge"><i class="fas fa-circle"></i> &nbsp; Technique</span>
+                            <h3 class="mc-title">In Vivo Reprogramming</h3>
+                            <p class="mc-desc">
+                                Direct visualization of safety advancements using <span class="visual-snippet" data-id="enzymatic">viral vectors</span>. This protocol demonstrates the injection site preparation and monitoring.
+                            </p>
+                            <ul class="mc-highlights">
+                                <li class="mc-pill"><i class="fas fa-shield-alt"></i> Safety Checks</li>
+                                <li class="mc-pill"><i class="fas fa-microscope"></i> Viral Load</li>
+                            </ul>
+                            <div class="mc-cta">
+                                Watch Technical Step <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                        <div class="mc-video-wrapper">
+                            <img class="mc-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75">
+                            <div class="mc-play-btn"><i class="fas fa-play"></i></div>
+                            <span class="mc-duration">3:45</span>
                         </div>
                     </div>
 
@@ -917,110 +1346,168 @@
                     <p>
                         No universal cell type is suitable for all diseases; source and function are critical determinants. Progress is being made in overcoming immunological barriers and improving in vitro cell multiplication. Quality control and safety measures are actively being developed through interdisciplinary collaboration.
                     </p>
+                    
+                     <!-- Results Video -->
+                    <div class="col-wide video-figure" id="abs-visual-2" style="margin-left: 0; margin-right: 0;">
+                        <div class="vf-stage">
+                             <img class="figure-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68150.jpg&w=828&q=75" style="width:100%; height:100%; object-fit:cover;">
+                             <div class="vf-brand-overlay"><img src="https://visualize.jove.com/wp-content/uploads/2025/06/jove-header.webp"> Video</div>
+                             <div class="vf-play"><i class="fas fa-play"></i></div>
+                        </div>
+                        <div class="vf-meta">
+                            <div class="vf-header">
+                                <div class="vf-label">Video Figure: Non-Viral Engineering</div>
+                            </div>
+                            <div class="vf-caption">Visualizing the results of non-viral T cell engineering.</div>
+                        </div>
+                    </div>
 
                     <h2 id="sec-conclusions">Conclusions</h2>
                     <p>
                         Personalized cell selection based on disease requirements is essential for effective cell therapy. Interdisciplinary efforts are crucial for advancing cell therapy by addressing safety, efficacy, and scalability. Continued research and collaboration will pave the way for broader clinical applications, such as <span class="vid-ref" data-target="fig3"><i class="fas fa-play-circle"></i> non-viral engineering</span>.
                     </p>
-                </div>
 
-                <!-- === FULL PAPER CONTENT (Upload View - Dynamic Load) === -->
-                <div id="content-full" style="display:none;">
-                    
-                    <h2 id="full-intro">Introduction</h2>
-                    <p>
-                        The study of the basic physiology of the neural precursors generated during brain development is driven by two inextricably linked goals. First, such knowledge is instrumental to our understanding of how the high degree of cellular complexity of the mature central nervous system (CNS) is generated, and how to dissect the steps of proliferation, fate commitment, and differentiation that lead early pluripotent neural progenitors to give rise to mature CNS cells.
-                    </p>
-                      <!-- NEW: VISUAL INVENTORY FOR FULL PAPER (Moved Up) -->
-                    <div class="materials-section" style="margin: 30px 0;">
-                        <div style="font-family:'Inter'; font-weight:700; color:var(--text-meta); font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px;">
-                            <i class="fas fa-boxes"></i> &nbsp; Essentials
-                        </div>
-                        <p style="margin:0; font-size:0.95rem;">Key equipment and reagents identified in this protocol.</p>
-                        
-                        <div class="mat-row">
-                            <div class="mat-card-h">
-                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/13470.jpg&w=828&q=75" class="mat-img-h">
-                                <div class="mat-name-h">
-                                    <span style="font-size:0.7rem; color:var(--text-meta); display:block; font-weight:400;">EQUIPMENT</span>
-                                    Fire-polished Pipette
+                    <!-- NEW: RELEVANT CONCEPTS SECTION -->
+                    <div style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--border);">
+                        <h3 style="font-family:'Inter', sans-serif; font-size:1.1rem; color:var(--text-main); margin-bottom:20px;">
+                            <i class="fas fa-lightbulb" style="color:var(--tax-tactile)"></i> &nbsp; Relevant Concepts
+                        </h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;">
+                            
+                            <!-- Concept 1 (The one moved from top) -->
+                            <div class="concept-card" style="background:white; border:1px solid var(--border); border-radius:8px; overflow:hidden; cursor:pointer;">
+                                <div style="position:relative; height:130px;">
+                                    <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/13475.jpg&w=828&q=75" style="width:100%; height:100%; object-fit:cover;">
+                                    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:white; background:rgba(0,0,0,0.4); border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center;"><i class="fas fa-play"></i></div>
+                                </div>
+                                <div style="padding:15px;">
+                                    <div style="font-size:0.85rem; font-weight:700; margin-bottom:5px; line-height:1.3;">Logic of Cell Therapy</div>
+                                    <div style="font-size:0.75rem; color:var(--text-meta);">Core Concept • 5:12</div>
                                 </div>
                             </div>
-                            <div class="mat-card-h">
-                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75" class="mat-img-h">
-                                <div class="mat-name-h">
-                                    <span style="font-size:0.7rem; color:var(--text-meta); display:block; font-weight:400;">CONSUMABLE</span>
-                                    70µm Nylon Mesh
+
+                            <!-- Concept 2 -->
+                            <div class="concept-card" style="background:white; border:1px solid var(--border); border-radius:8px; overflow:hidden; cursor:pointer;">
+                                <div style="position:relative; height:130px;">
+                                    <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/10632.jpg&w=828&q=75" style="width:100%; height:100%; object-fit:cover;">
+                                    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:white; background:rgba(0,0,0,0.4); border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center;"><i class="fas fa-play"></i></div>
+                                </div>
+                                <div style="padding:15px;">
+                                    <div style="font-size:0.85rem; font-weight:700; margin-bottom:5px; line-height:1.3;">Stem Cell Basics</div>
+                                    <div style="font-size:0.75rem; color:var(--text-meta);">Core Concept • 8:45</div>
                                 </div>
                             </div>
-                            <div class="mat-card-h">
-                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/2544.jpg&w=828&q=75" class="mat-img-h">
-                                <div class="mat-name-h">
-                                    <span style="font-size:0.7rem; color:#059669; display:block; font-weight:700;">REAGENT</span>
-                                    EGF / FGF-2
+
+                            <!-- Concept 3 -->
+                            <div class="concept-card" style="background:white; border:1px solid var(--border); border-radius:8px; overflow:hidden; cursor:pointer;">
+                                <div style="position:relative; height:130px;">
+                                    <img src="https://img.youtube.com/vi/tTNXbRH334g/hqdefault.jpg" style="width:100%; height:100%; object-fit:cover;">
+                                    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:white; background:rgba(0,0,0,0.4); border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center;"><i class="fas fa-play"></i></div>
+                                </div>
+                                <div style="padding:15px;">
+                                    <div style="font-size:0.85rem; font-weight:700; margin-bottom:5px; line-height:1.3;">Immunology 101</div>
+                                    <div style="font-size:0.75rem; color:var(--text-meta);">Prerequisite • 12:30</div>
                                 </div>
                             </div>
-                            <div class="mat-card-h">
-                                <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75" class="mat-img-h">
-                                <div class="mat-name-h">
-                                    <span style="font-size:0.7rem; color:var(--text-meta); display:block; font-weight:400;">EQUIPMENT</span>
-                                    Orbital Shaker
-                                </div>
-                            </div>
+
                         </div>
                     </div>
+
+                </div>
+
+                <!-- === FULL PAPER CONTENT (AAV6 MICROGLIA) === -->
+                <div id="content-full" style="display:none;">
+                    <p><strong>Abstract:</strong> Microglia are the resident immune cells of the central nervous system (CNS) and play critical roles in brain development, homeostasis, and disease. Here, we identify capsid-modified <span class="visual-snippet" data-id="aav">AAV6 vectors</span> that can efficiently and specifically transduce microglia.</p>
+
+                    <h2 id="full-intro">Introduction</h2>
                     <p>
-                        Second, it is hoped that the isolation, propagation, and manipulation of brain precursors and, particularly, of multipotent <span class="visual-snippet" data-id="nsc">neural stem cells (NSCs)</span>, will lead to therapeutic applications in neurological disorders. The debate is still open concerning the most appropriate definition of a stem cell and on how it is best identified, characterized, and manipulated. By adopting an operational definition of NSCs, we review some of the basic findings in this area and elaborate on their potential therapeutic applications.
-                    </p>
-                    <p>
-                        In this context, the establishment of stable, clonal lines of human neural stem cells represents a pivotal step. Unlike heterogeneous primary cultures, clonal lines allow for the precise characterization of multipotency and self-renewal capacity. Here, we report the isolation of NSC clones from the human fetal brain and their characterization <em>in vitro</em> and <em>in vivo</em>.
+                        Adeno-associated viral (AAV) vectors are widely used for gene delivery to the CNS. However, targeting <span class="visual-snippet" data-id="microglia">microglia</span> remains challenging due to the lack of efficient vectors. We screened a library of AAV6 capsid variants to identify vectors with enhanced tropism for microglia.
                     </p>
 
-                    <!-- Full Fig 1 -->
+                    <!-- Full Fig 1: Vector Engineering -->
                     <div class="video-figure" id="full-fig1">
                         <div class="vf-stage">
-                            <img class="figure-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/10632.jpg&w=828&q=75" style="width:100%; height:100%; object-fit:cover;">
+                            <img class="figure-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75" style="width:100%; height:100%; object-fit:cover;">
                             <div class="vf-brand-overlay"><img src="https://visualize.jove.com/wp-content/uploads/2025/06/jove-header.webp"> Video</div>
                             <div class="vf-play"><i class="fas fa-play"></i></div>
                         </div>
                         <div class="vf-meta">
                             <div class="vf-header">
-                                <div class="vf-label">Video Figure 1: Neural Stem Cell Culture</div>
+                                <div class="vf-label">Video Figure 1: AAV Capsid Engineering</div>
                                 <span class="tax-badge tax-setup">Methods</span>
                             </div>
-                            <div class="vf-caption">Visualizing the isolation and propagation techniques for NSCs discussed in the introduction. Note the formation of free-floating neurospheres.</div>
+                            <div class="vf-caption">Overview of the AAV6 capsid modification process to enhance microglial tropism.</div>
                         </div>
                     </div>
 
                     <h2 id="full-methods">Materials & Methods</h2>
                     
-                  
-
-                    <p>
-                        <strong>Tissue Preparation:</strong> Human fetal brain tissue (10-12 weeks post-conception) was obtained from legal abortions following informed consent. The tissue was dissected to isolate the forebrain germinal zone, the region surrounding the lateral ventricles where neural precursors reside. The dissection was performed in cold sterile saline to minimize metabolic activity.
-                    </p>
-                    <p>
-                        <strong>Dissociation:</strong> The tissue was mechanically dissociated using a fire-polished Pasteur pipette to obtain a single-cell suspension. This <span class="visual-snippet" data-id="dissociation">mechanical dissociation</span> step is critical for viability; enzymatic digestion was avoided to preserve cell surface markers often sensitive to proteases like trypsin.
-                    </p>
-                    <p>
-                        <strong>Culture Conditions:</strong> Cells were plated in serum-free medium supplemented with 
-                        <span class="reagent-chip">
-                            <i class="fas fa-vial"></i> EGF and FGF-2
-                            <div class="reagent-tooltip">
-                                <div class="rt-header">Key Growth Factors</div>
-                                <div class="rt-name">Epidermal & Fibroblast GF</div>
-                                <div class="rt-desc">Essential for maintaining NSC multipotency and preventing differentiation.</div>
-                                <div class="rt-role">Conc: 20 ng/ml</div>
+                    <!-- REPRODUCTION CTA FOR FULL -->
+                    <div class="reproduction-card" onclick="openReproduction()">
+                        <div class="rc-thumb-wrapper">
+                            <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68150.jpg&w=828&q=75" class="rc-thumb">
+                            <div class="rc-play-icon"><i class="fas fa-play"></i></div>
+                        </div>
+                        <div class="rc-content">
+                            <h3><i class="fas fa-bolt"></i> Help me reproduce this experiment</h3>
+                            <p>View the equipment list, reagents, and protocol for stereotactic injection.</p>
+                        </div>
+                        <div class="rc-icon"><i class="fas fa-list-check"></i></div>
+                    </div>
+                    
+                    <!-- Full Method Step 1 -->
+                    <div class="method-card" onclick="updateWorkbenchStep(1); openReproduction()">
+                        <div class="mc-content">
+                            <span class="mc-step-badge">Step 1 • In Vivo</span>
+                            <h3 class="mc-title">Stereotactic Injection</h3>
+                            <p class="mc-desc">
+                                Intracranial injection of AAV vectors into the hippocampus of adult mice. Precise coordinate targeting is essential for effective delivery.
+                            </p>
+                            <ul class="mc-highlights">
+                                <li class="mc-pill"><i class="fas fa-crosshairs"></i> AP -2.0, ML +/-1.5</li>
+                                <li class="mc-pill"><i class="fas fa-clock"></i> 0.5 µL/min</li>
+                            </ul>
+                            <div class="mc-cta">
+                                Watch Injection Protocol <i class="fas fa-play-circle"></i>
                             </div>
-                        </span> 
-                        (20 ng/ml each) along with N2 supplement. The cultures were fed every 3-4 days by partial medium replacement. Under these conditions, NSCs proliferate to form floating clusters known as neurospheres, while differentiated cells die off.
-                    </p>
-                    <p>
-                         <strong>Cloning:</strong> Individual spheres were dissociated and replated at clonal density (1 cell/well) in 96-well plates by <span class="visual-snippet" data-id="dilution">limiting dilution</span> to establish clonal lines. Wells containing single cells were monitored daily to ensure clonality.
-                    </p>
+                        </div>
+                        <div class="mc-video-wrapper">
+                            <img class="mc-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75">
+                            <div class="mc-play-btn"><i class="fas fa-play"></i></div>
+                            <span class="mc-duration">3:45</span>
+                        </div>
+                    </div>
 
-                     <!-- Full Fig 2 -->
-                    <div class="video-figure" id="full-fig2">
+                    <!-- Full Method Step 2 -->
+                    <div class="method-card" onclick="updateWorkbenchStep(2); openReproduction()">
+                        <div class="mc-content">
+                            <span class="mc-step-badge">Step 2 • Analysis</span>
+                            <h3 class="mc-title">Immunohistochemistry</h3>
+                            <p class="mc-desc">
+                                Brain tissue processing and staining for microglial markers (Iba1) and viral transgene expression (GFP).
+                            </p>
+                            <ul class="mc-highlights">
+                                <li class="mc-pill"><i class="fas fa-microscope"></i> Confocal Imaging</li>
+                                <li class="mc-pill"><i class="fas fa-flask"></i> Anti-Iba1 / Anti-GFP</li>
+                            </ul>
+                            <div class="mc-cta">
+                                Watch Staining Protocol <i class="fas fa-play-circle"></i>
+                            </div>
+                        </div>
+                        <div class="mc-video-wrapper">
+                            <img class="mc-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68150.jpg&w=828&q=75">
+                            <div class="mc-play-btn"><i class="fas fa-play"></i></div>
+                            <span class="mc-duration">2:30</span>
+                        </div>
+                    </div>
+
+                    <h2 id="full-results">Results & Discussion</h2>
+                    <p>
+                        <strong>Efficient Transduction:</strong> The modified AAV6 vectors showed significantly higher <span class="visual-snippet" data-id="transduction">transduction efficiency</span> in microglia compared to wild-type AAV6. Transgene expression was stable for at least 4 weeks post-injection.
+                    </p>
+                    
+                     <!-- Full Fig 3 -->
+                    <div class="video-figure" id="full-fig3">
                         <div class="vf-stage">
                             <img class="figure-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/2544.jpg&w=828&q=75" style="width:100%; height:100%; object-fit:cover;">
                             <div class="vf-brand-overlay"><img src="https://visualize.jove.com/wp-content/uploads/2025/06/jove-header.webp"> Video</div>
@@ -1028,48 +1515,12 @@
                         </div>
                         <div class="vf-meta">
                             <div class="vf-header">
-                                <div class="vf-label">Video Figure 2: Neurosphere Assay</div>
-                                <span class="tax-badge tax-tactile">Technique</span>
-                            </div>
-                            <div class="vf-caption">Demonstration of the neurosphere assay used to assess stem cell multipotency. The video shows the dissociation of a primary sphere into single cells for secondary sphere formation.</div>
-                        </div>
-                    </div>
-
-                    <p>
-                        <strong>Differentiation Assay:</strong> For differentiation studies, neurospheres were mechanically dissociated and plated onto poly-ornithine/laminin-coated coverslips in the presence of 1% Fetal Bovine Serum (FBS) without growth factors. Cells were fixed after 7 days for immunocytochemistry.
-                    </p>
-
-                    <h2 id="full-results">Results</h2>
-                    <p>
-                        <strong>Establishment of NSC Clones:</strong> We successfully isolated and propagated clones of NSCs from the human fetal brain. These clones exhibited stable growth kinetics and could be passaged for over 40 generations without loss of multipotency. The doubling time was approximately 24-36 hours during the exponential growth phase.
-                    </p>
-                    <p>
-                        <strong>Multipotency:</strong> Upon withdrawal of mitogens and plating on poly-ornithine/laminin substrate, the clonal progeny differentiated into the three major neural lineages. Immunofluorescence analysis revealed neurons positive for <span class="visual-snippet" data-id="immunofluorescence">TuJ1</span>, astrocytes positive for GFAP, and oligodendrocytes positive for GalC.
-                    </p>
-                    
-                    <!-- Full Fig 3 -->
-                    <div class="video-figure" id="full-fig3">
-                        <div class="vf-stage">
-                            <img class="figure-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68150.jpg&w=828&q=75" style="width:100%; height:100%; object-fit:cover;">
-                            <div class="vf-brand-overlay"><img src="https://visualize.jove.com/wp-content/uploads/2025/06/jove-header.webp"> Video</div>
-                            <div class="vf-play"><i class="fas fa-play"></i></div>
-                        </div>
-                        <div class="vf-meta">
-                            <div class="vf-header">
-                                <div class="vf-label">Video Figure 3: Differentiation Assay</div>
+                                <div class="vf-label">Video Figure 2: GFP Expression in Microglia</div>
                                 <span class="tax-badge tax-endpoint">Visual Endpoint</span>
                             </div>
-                            <div class="vf-caption">Immunofluorescence staining showing differentiation of NSCs into neurons (Green) and glia (Red). This confirms the tripotent potential of the isolated clones.</div>
+                            <div class="vf-caption">Confocal microscopy showing colocalization of GFP (green) and Iba1 (red) in the hippocampus.</div>
                         </div>
                     </div>
-
-                    <h2 id="full-discussion">Discussion</h2>
-                    <p>
-                        We describe, based on a rigorous definition, the isolation and propagation of clones of NSCs from the human fetal brain. These cells have begun to show promise for neural cell replacement and molecular support therapy in models of degenerative CNS diseases.
-                    </p>
-                    <p>
-                        The extensive propagation and engraftment potential of human CNS stem cells may, in the not-too-distant-future, be directed towards genuine clinical therapeutic ends, and may open novel and multifaceted strategies for redressing a variety of heretofore untreatable CNS dysfunctions.
-                    </p>
                 </div>
 
             </div>
@@ -1077,390 +1528,345 @@
     </div>
 
     <!-- FLOATING NAV PILL -->
-    <div class="nav-pill" id="nav-pill">
-        <!-- Items injected dynamically based on mode -->
-    </div>
-
-    <!-- === FOOTER === -->
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-col">
-                <div class="f-head">ABOUT JoVE</div>
-                <a href="#" class="f-link">Overview</a>
-                <a href="#" class="f-link">Leadership</a>
-                <a href="#" class="f-link">Blog</a>
-            </div>
-            <div class="footer-col">
-                <div class="f-head">AUTHORS</div>
-                <a href="#" class="f-link">Publishing</a>
-                <a href="#" class="f-link">Editorial Board</a>
-                <a href="#" class="f-link">Submit</a>
-            </div>
-            <div class="footer-col">
-                <div class="f-head">LIBRARIANS</div>
-                <a href="#" class="f-link">Subscriptions</a>
-                <a href="#" class="f-link">Access</a>
-                <a href="#" class="f-link">Resources</a>
-            </div>
-            <div class="footer-col">
-                <div class="f-head">RESEARCH</div>
-                <a href="#" class="f-link">JoVE Journal</a>
-                <a href="#" class="f-link">Methods Collections</a>
-            </div>
-        </div>
-        <div style="max-width:1200px; margin:40px auto 0; padding:0 20px; border-top:1px solid #e2e8f0; padding-top:20px; font-size:0.85rem; color:var(--text-meta); display:flex; justify-content:space-between;">
-            <span>© 2025 JoVE. All rights reserved.</span>
-            <span>Terms & Privacy</span>
-        </div>
-    </footer>
+    <div class="nav-pill" id="nav-pill"></div>
 
     <script>
-        // --- SAFEGUARD HELPER ---
-        function safeDisplay(id, displayValue) {
-            const el = document.getElementById(id);
-            if (el) el.style.display = displayValue;
-        }
-
-        // --- DATA OBJECTS FOR DYNAMIC LOADING ---
-        const papers = {
-            'search': {
-                title: "Cell Therapy",
-                authors: "F H Gage",
-                affil: "Laboratory of Genetics, The Salk Institute, La Jolla, California 92037, USA.",
-                journal: "Nature • Published May 14, 1998",
-                link: "https://pubmed.ncbi.nlm.nih.gov/9579857/"
-            },
-            'upload': {
-                title: "Establishment and properties of neural stem cell clones: plasticity in vitro and in vivo",
-                authors: "A L Vescovi, E Y Snyder",
-                affil: "Laboratory of Neuropharmacology, National Neurological Institute C. Besta, Milan, Italy.",
-                journal: "Brain Pathol • Published Jul 1999",
-                link: "https://pubmed.ncbi.nlm.nih.gov/10416994/"
-            }
-        };
-
-        // --- SNIPPET DATA ---
-        const snippetData = {
-            'compatibility': { 
-                title: "Immune Compatibility", 
-                img: "https://img.youtube.com/vi/tTNXbRH334g/hqdefault.jpg",
-                videoId: "tTNXbRH334g",
-                start: "54",
-                time: "0:12"
-            },
-            'frothy': {
-                title: "❌ Common Pitfall: Bubbles",
-                img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75",
-                time: "0:05",
-                // In real app, this would point to a specific 'failure' clip
-            },
-            'expansion': { 
-                title: "In Vitro Cell Expansion", 
-                img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/13470.jpg&w=828&q=75",
-                time: "0:30" 
-            },
-            'qc': { 
-                title: "Quality Control Assays", 
-                img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75",
-                time: "1:05" 
-            },
-            'dissociation': { 
-                title: "Mechanical Dissociation", 
-                img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75",
-                time: "0:45"
-            },
-            'enzymatic': { 
-                title: "Enzymatic Digestion", 
-                img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68150.jpg&w=828&q=75",
-                time: "1:15"
-            },
-            'nsc': {
-                title: "Neural Stem Cells",
-                img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/10632.jpg&w=828&q=75",
-                time: "0:20"
-            },
-            'dilution': {
-                 title: "Limiting Dilution",
-                 img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/2544.jpg&w=828&q=75",
-                 time: "0:40"
-            },
-            'immunofluorescence': {
-                 title: "Immunofluorescence",
-                 img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68150.jpg&w=828&q=75",
-                 time: "0:50"
-            }
-        };
-
-        // --- ROUTING LOGIC ---
-        function loadAbstract() {
-            showView('abstract'); 
-        }
-
-        function loadFullPaper() {
-            showView('full');
-        }
-        
-        function loadAuthor() {
-            showView('author');
-        }
-
-        function showView(type) {
-            // 1. Hide ALL views first
-            safeDisplay('home-view', 'none');
-            safeDisplay('article-view', 'none');
-            safeDisplay('author-view', 'none');
-            safeDisplay('nav-pill', 'none');
-            const sidebar = document.getElementById('visual-sidebar');
-            if(sidebar) sidebar.classList.remove('open');
-            // Sidebar is now available in both article views
-            safeDisplay('sidebar-toggle', 'none'); 
-
-            // 2. Show Author View
-            if (type === 'author') {
-                safeDisplay('author-view', 'block');
-                window.scrollTo(0, 0);
-                setTimeout(() => {
-                    const el = document.getElementById('author-view');
-                    if(el) el.style.opacity = '1';
-                }, 10);
-                return;
-            }
-
-            const article = document.getElementById('article-view');
-            const navPill = document.getElementById('nav-pill');
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- DATA ---
+            const papers = {
+                'search': {
+                    title: "Cell Therapy",
+                    authors: "F H Gage",
+                    affil: "Laboratory of Genetics, The Salk Institute, La Jolla, California 92037, USA.",
+                    journal: "Nature • Published May 14, 1998",
+                    link: "https://pubmed.ncbi.nlm.nih.gov/9579857/"
+                },
+                'upload': {
+                    title: "Microglia-Specific Targeting by Novel Capsid-Modified AAV6 Vectors",
+                    authors: "Bartlett et al.",
+                    affil: "Gene Therapy Center, University of North Carolina at Chapel Hill",
+                    journal: "J. Virology • 2021",
+                    link: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8645794"
+                }
+            };
             
-            // 3. Update Header Data (Dynamic)
-            const data = (type === 'full') ? papers.upload : papers.search;
-            const titleEl = document.getElementById('art-title');
-            const authLink = document.getElementById('auth-link');
-            const authAffil = document.getElementById('auth-affil');
-            const journalEl = document.getElementById('art-journal');
-            const pubmedEl = document.getElementById('art-pubmed');
+            const snippetData = {
+                'aav': {
+                    title: "AAV Vectors",
+                    img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75",
+                    time: "Definition"
+                },
+                'microglia': {
+                    title: "Microglia Function",
+                    img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/10632.jpg&w=828&q=75",
+                    time: "Concept"
+                },
+                'transduction': {
+                    title: "Viral Transduction",
+                    img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68150.jpg&w=828&q=75",
+                    time: "Method"
+                },
+                // Keep existing for Cell Therapy
+                'cell-therapy': {
+                    title: "The Logic of Cell Therapy",
+                    img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/13475.jpg&w=828&q=75",
+                    time: "Core Concept"
+                },
+                'compatibility': { 
+                    title: "Immune Compatibility", 
+                    img: "https://img.youtube.com/vi/tTNXbRH334g/hqdefault.jpg",
+                    videoId: "tTNXbRH334g",
+                    start: "54",
+                    time: "0:12"
+                },
+                'dissociation': { 
+                    title: "Mechanical Dissociation", 
+                    img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75",
+                    time: "0:45"
+                },
+                'expansion': { 
+                    title: "In Vitro Cell Expansion", 
+                    img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/13470.jpg&w=828&q=75",
+                    time: "0:30" 
+                },
+                'qc': { 
+                    title: "Quality Control Assays", 
+                    img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75",
+                    time: "1:05" 
+                }
+            };
+            
+            // --- WORKBENCH STEP DATA (UPDATED FOR AAV PAPER) ---
+            const workbenchSteps = {
+                1: {
+                    title: "Step 1: Stereotactic Injection",
+                    desc: "Anesthetize mice and mount in stereotactic frame. Inject 2 µL of AAV6 vector (1E12 vg/mL) into the hippocampus coordinates: AP -2.0, ML +/-1.5, DV -2.0.",
+                    alert: "Maintain injection rate at 0.5 µL/min to prevent tissue damage.",
+                    time: "Day 0 • 30 mins/mouse",
+                    temp: "37°C (Heating Pad)",
+                    img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75",
+                    materials: [
+                        { name: "Stereotactic Frame", type: "Equipment", img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/12518.jpg&w=828&q=75" },
+                        { name: "Hamilton Syringe", type: "Equipment", img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/2544.jpg&w=828&q=75" },
+                        { name: "AAV Vector", type: "Reagent", img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68150.jpg&w=828&q=75" }
+                    ]
+                },
+                2: {
+                    title: "Step 2: Immunohistochemistry",
+                    desc: "Perfusion fix mice with 4% PFA. Section brains at 40 µm. Stain free-floating sections with anti-GFP and anti-Iba1 antibodies.",
+                    alert: "Keep sections in dark during incubation to prevent fluorophore bleaching.",
+                    time: "Day 28 • 2 Days",
+                    temp: "4°C (Overnight)",
+                    img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68150.jpg&w=828&q=75",
+                    materials: [
+                        { name: "Primary Antibodies", type: "Reagent", img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/files/media/science-education/science-education-thumbs/13470.jpg&w=828&q=75" },
+                        { name: "Fluorescent Scope", type: "Equipment", img: "https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75" }
+                    ]
+                }
+            };
 
-            if(titleEl) titleEl.textContent = data.title;
+            // --- VIEW LOGIC ---
+            window.loadAbstract = function() { showView('abstract'); };
+            window.loadFullPaper = function() { showView('full'); };
             
-            // Preserve link structure
-            if(authLink) {
-                 authLink.textContent = data.authors;
-            }
-            if(authAffil) authAffil.textContent = data.affil;
-            if(journalEl) journalEl.textContent = data.journal;
-            if(pubmedEl) pubmedEl.href = data.link;
+            window.loadAuthor = function() {
+                document.getElementById('home-view').style.display = 'none';
+                document.getElementById('article-view').style.display = 'none';
+                document.getElementById('author-view').style.display = 'block';
+                
+                document.getElementById('nav-pill').classList.remove('visible');
+                document.getElementById('author-details').classList.remove('active'); // Close dropdown
+                
+                window.scrollTo(0,0);
+                setTimeout(() => { document.getElementById('author-view').style.opacity = '1'; }, 10);
+            };
 
-            // 4. Toggle Article Content Sections
-            const isFull = (type === 'full');
-            safeDisplay('content-abstract', isFull ? 'none' : 'block');
-            safeDisplay('content-full', isFull ? 'block' : 'none');
+            window.goHome = function() {
+                 document.getElementById('article-view').style.display = 'none';
+                 document.getElementById('author-view').style.display = 'none';
+                 document.getElementById('home-view').style.display = 'flex';
+                 document.getElementById('nav-pill').classList.remove('visible');
+            };
             
-            // Visuals toggle
-            safeDisplay('visuals-full', isFull ? 'block' : 'none');
-            safeDisplay('visuals-full-2', isFull ? 'block' : 'none');
-            safeDisplay('visuals-full-3', isFull ? 'block' : 'none');
-            
-            // Sidebar is available for both Abstract and Full Paper modes now
-            safeDisplay('sidebar-toggle', 'flex');
-            
-            // 5. Update Nav Pill Content
-            let navHTML = '';
-            if(type === 'abstract') {
-                navHTML = `
-                    <div class="nav-pill-item" onclick="scrollToTop()">Summary</div>
-                    <div class="nav-pill-item" onclick="scrollToSection('sec-background')">Background</div>
-                    <div class="nav-pill-item" onclick="scrollToSection('sec-purpose')">Purpose</div>
-                    <div class="nav-pill-item" onclick="scrollToSection('sec-methods')">Methods</div>
-                    <div class="nav-pill-item" onclick="scrollToSection('sec-results')">Results</div>
-                `;
-            } else {
-                navHTML = `
-                    <div class="nav-pill-item" onclick="scrollToTop()">Abstract</div>
-                    <div class="nav-pill-item" onclick="scrollToSection('full-intro')">Intro</div>
-                    <div class="nav-pill-item" onclick="scrollToSection('full-methods')">Methods</div>
-                    <div class="nav-pill-item" onclick="scrollToSection('full-results')">Results</div>
-                    <div class="nav-pill-item" onclick="scrollToSection('full-discussion')">Discussion</div>
-                `;
-            }
-            if(navPill) {
-                navPill.innerHTML = navHTML;
-                navPill.style.display = 'flex';
-            }
+            window.showView = function(type) {
+                document.getElementById('home-view').style.display = 'none';
+                document.getElementById('author-view').style.display = 'none';
+                document.getElementById('article-view').style.display = 'block';
+                
+                const isFull = (type === 'full');
+                const data = isFull ? papers.upload : papers.search;
+                
+                // Update Header
+                document.getElementById('art-title').textContent = data.title;
+                document.getElementById('auth-link').textContent = data.authors;
+                document.getElementById('auth-affil').textContent = data.affil;
+                document.getElementById('art-journal').textContent = data.journal;
+                document.getElementById('art-pubmed').href = data.link;
 
-            if(article) {
-                article.style.display = 'block';
-                setTimeout(() => {
-                    article.style.opacity = '1';
-                    window.scrollTo(0, 0);
-                }, 10);
-            }
-        }
+                // Toggle Content
+                document.getElementById('content-abstract').style.display = isFull ? 'none' : 'block';
+                document.getElementById('content-full').style.display = isFull ? 'block' : 'none';
 
-        function goHome() {
-            // Hide all views
-            safeDisplay('article-view', 'none');
-            safeDisplay('author-view', 'none');
-            
-            const article = document.getElementById('article-view');
-            if(article) article.style.opacity = '0';
-            
-            setTimeout(() => {
-                safeDisplay('home-view', 'flex');
+                // Update Nav Pill
                 const navPill = document.getElementById('nav-pill');
-                if(navPill) navPill.classList.remove('visible');
-                
-                const sidebar = document.getElementById('visual-sidebar');
-                if(sidebar) sidebar.classList.remove('open');
-                safeDisplay('sidebar-toggle', 'none');
-            }, 100);
-        }
-
-        function toggleSidebar() {
-            const sidebar = document.getElementById('visual-sidebar');
-            const toggle = document.getElementById('sidebar-toggle');
-            if(sidebar) {
-                sidebar.classList.toggle('open');
-                if(sidebar.classList.contains('open')) {
-                    toggle.classList.add('hidden');
+                if(type === 'abstract') {
+                    navPill.innerHTML = `
+                        <div class="nav-pill-item" onclick="window.scrollTo(0,0)">Summary</div>
+                        <div class="nav-pill-item" onclick="scrollToSection('sec-background')">Background</div>
+                        <div class="nav-pill-item" onclick="scrollToSection('sec-methods')">Methods</div>
+                        <div class="nav-pill-item" onclick="scrollToSection('sec-results')">Results</div>
+                    `;
                 } else {
-                    toggle.classList.remove('hidden');
+                    navPill.innerHTML = `
+                        <div class="nav-pill-item" onclick="scrollToTop()">Intro</div>
+                        <div class="nav-pill-item" onclick="scrollToSection('full-methods')">Methods</div>
+                        <div class="nav-pill-item" onclick="scrollToSection('full-results')">Results</div>
+                        <div class="nav-pill-item" onclick="scrollToSection('full-discussion')">Discussion</div>
+                    `;
                 }
-            }
-        }
+                
+                setTimeout(() => { document.getElementById('article-view').style.opacity = '1'; }, 10);
+            };
 
-        function switchTab(mode) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            if(event && event.target) event.target.classList.add('active');
+            // --- INTERACTION LOGIC ---
+            window.switchTab = function(mode) {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                if(event.target) event.target.classList.add('active');
+                document.getElementById('tab-search').style.display = mode === 'search' ? 'flex' : 'none';
+                document.getElementById('tab-upload').style.display = mode === 'upload' ? 'block' : 'none';
+            };
             
-            safeDisplay('tab-search', mode === 'search' ? 'flex' : 'none');
-            safeDisplay('tab-upload', mode === 'upload' ? 'block' : 'none');
-        }
+            window.toggleAuthors = function() {
+                document.getElementById('author-details').classList.toggle('active');
+            };
+            
+            window.openReproduction = function() {
+                document.getElementById('repro-view').classList.add('open');
+                document.body.style.overflow = 'hidden';
+                window.updateWorkbenchStep(1); // Load default
+            };
+            
+            window.closeReproduction = function() {
+                document.getElementById('repro-view').classList.remove('open');
+                document.body.style.overflow = 'auto';
+            };
+            
+            window.scrollToSection = function(id) {
+                const el = document.getElementById(id);
+                if(el) {
+                    const offset = 100;
+                    const bodyRect = document.body.getBoundingClientRect().top;
+                    const elementRect = el.getBoundingClientRect().top;
+                    const elementPosition = elementRect - bodyRect;
+                    const offsetPosition = elementPosition - offset;
+                    window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+                }
+            };
+            
+            window.scrollToTop = function() { window.scrollTo({ top: 0, behavior: 'smooth' }); };
+            
+            // --- AUTHOR CLAIM LOGIC ---
+            window.openClaimModal = function() {
+                document.getElementById('claim-modal').style.display = 'flex';
+            };
+            
+            window.closeClaimModal = function() {
+                document.getElementById('claim-modal').style.display = 'none';
+            };
+            
+            window.submitClaim = function() {
+                // Simulate verification
+                document.getElementById('claim-modal').style.display = 'none';
+                document.getElementById('btn-claim').style.display = 'none';
+                document.getElementById('claim-badge').style.display = 'inline-flex';
+                alert("Verification email sent! Profile updated to verified status for demo.");
+            };
+            
+            // Workbench Interaction
+            window.updateWorkbenchStep = function(stepId) {
+                const data = workbenchSteps[stepId];
+                if(!data) return;
+                
+                // --- UPDATE TIMELINE (New Logic) ---
+                const tlContainer = document.getElementById('wb-timeline-container');
+                tlContainer.innerHTML = ''; // Clear existing
+                
+                Object.keys(workbenchSteps).forEach(key => {
+                    const step = workbenchSteps[key];
+                    const isActive = parseInt(key) === stepId;
+                    
+                    const card = document.createElement('div');
+                    card.className = `timeline-card ${isActive ? 'active' : ''}`;
+                    card.onclick = () => window.updateWorkbenchStep(parseInt(key));
+                    
+                    card.innerHTML = `
+                        <div class="tc-thumb">
+                            <img src="${step.img}" style="width:100%; height:100%; object-fit:cover;">
+                            <div class="tc-overlay-icon"><i class="fas fa-play"></i></div>
+                            <div class="tc-time">${step.time}</div>
+                        </div>
+                        <div class="tc-content">
+                            <!-- Removed Step Label here as requested -->
+                            <div class="tc-title">${step.title.split(': ')[1]}</div>
+                        </div>
+                    `;
+                    tlContainer.appendChild(card);
+                });
 
-        function toggleAuthors() {
-            const details = document.getElementById('author-details');
-            if(details) details.classList.toggle('active');
-        }
+                // Update Main Content
+                const vidImg = document.getElementById('wb-vid-img');
+                // Simple fade effect
+                vidImg.style.opacity = 0.5;
+                setTimeout(() => {
+                    vidImg.src = data.img;
+                    vidImg.style.opacity = 0.8;
+                }, 200);
 
-        function scrollToSection(id) {
-            const el = document.getElementById(id);
-            if(el) {
-                const headerOffset = 100;
-                const elementPosition = el.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-            }
-        }
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        function scrollToFigure(id) {
-            const el = document.getElementById(id);
-            if(el) {
-                el.classList.add('highlight-target');
-                setTimeout(() => el.classList.remove('highlight-target'), 2000);
-                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
+                // UPDATED: Strip "Step X:" from title
+                const cleanTitle = data.title.includes(':') ? data.title.split(': ')[1] : data.title;
+                document.getElementById('wb-step-title').textContent = cleanTitle;
+                
+                document.getElementById('wb-step-desc').textContent = data.desc;
+                
+                const alertBox = document.getElementById('wb-alert-box');
+                if(data.alert) {
+                    alertBox.style.display = 'flex';
+                    alertBox.querySelector('span').innerHTML = `<strong>Critical:</strong> ${data.alert}`;
+                } else {
+                    alertBox.style.display = 'none';
+                }
+                
+                // Update Prep Station
+                document.getElementById('wb-temp').textContent = data.temp;
+                document.getElementById('wb-time').textContent = data.time.split('•')[1] || "N/A"; // Extract time part
+                
+                // Update Materials
+                const matContainer = document.getElementById('wb-materials-list');
+                matContainer.innerHTML = '';
+                
+                data.materials.forEach(mat => {
+                    const item = document.createElement('div');
+                    item.className = 'prep-mat-chip';
+                    
+                    // Determine tag class
+                    const tagClass = mat.type === 'Reagent' ? 'tag-reagent' : 'tag-equipment';
+                    const icon = mat.type === 'Reagent' ? '<i class="fas fa-flask"></i>' : '<i class="fas fa-tools"></i>';
+                    
+                    item.innerHTML = `
+                        <img src="${mat.img}" class="prep-mat-img">
+                        <div class="prep-mat-info">
+                            <span class="prep-mat-name">${mat.name}</span>
+                            <span class="prep-mat-tag ${tagClass}">${icon} ${mat.type}</span>
+                        </div>
+                    `;
+                    matContainer.appendChild(item);
+                });
+            };
 
-        // --- Event Listeners for Correlations ---
-        document.querySelectorAll('.vid-ref').forEach(link => {
-            link.addEventListener('mouseenter', () => {
-                const targetId = link.getAttribute('data-target');
-                const target = document.getElementById(targetId);
-                if(target) target.classList.add('highlight-target');
+            // Tooltip Logic
+            const tooltip = document.getElementById('snippet-tooltip');
+            const stTitle = document.getElementById('st-title');
+            const stTime = document.getElementById('st-time');
+            const stImg = document.getElementById('st-img');
+            
+            let hideTimeout;
+
+            document.querySelectorAll('.visual-snippet').forEach(term => {
+                term.addEventListener('mouseenter', () => {
+                    clearTimeout(hideTimeout);
+                    const id = term.dataset.id;
+                    const data = snippetData[id];
+                    if(data){
+                        stTitle.innerText = data.title;
+                        stTime.innerText = data.time;
+                        stImg.src = data.img;
+                        tooltip.classList.add('active');
+                        
+                        const rect = term.getBoundingClientRect();
+                        tooltip.style.top = (rect.top + window.scrollY - 230) + 'px';
+                        tooltip.style.left = (rect.left + (rect.width/2)) + 'px';
+                    }
+                });
+                
+                term.addEventListener('mouseleave', () => {
+                    hideTimeout = setTimeout(() => {
+                         tooltip.classList.remove('active');
+                    }, 300);
+                });
             });
-            link.addEventListener('mouseleave', () => {
-                const targetId = link.getAttribute('data-target');
-                const target = document.getElementById(targetId);
-                if(target) target.classList.remove('highlight-target');
-            });
-        });
 
-        // 2. Visual Snippet Tooltips Logic with YouTube Support
-        const tooltip = document.getElementById('snippet-tooltip');
-        const stTitle = document.getElementById('st-title');
-        const stTime = document.getElementById('st-time');
-        const stVideoContainer = document.getElementById('st-container');
-        const stImg = document.getElementById('st-img');
-
-        let hideTimeout;
-
-        function showTooltip(term) {
-            clearTimeout(hideTimeout);
-            const id = term.dataset.id;
-            const data = snippetData[id];
-
-            if(data){
-                stTitle.innerText = data.title;
-                stTime.innerText = data.time + " Loop";
+            // Scroll Spy
+            window.addEventListener('scroll', () => {
+                const navPill = document.getElementById('nav-pill');
+                const articleView = document.getElementById('article-view');
                 
-                // Store video data on container
-                stVideoContainer.dataset.videoId = data.videoId || '';
-                stVideoContainer.dataset.start = data.start || '0';
-                
-                // Set Thumbnail
-                stImg.src = data.img;
-                stImg.style.display = 'block';
-                stVideoContainer.innerHTML = `<img id="st-img" src="${data.img}" style="width:100%; height:100%; object-fit:cover;">
-                                              <div class="st-play-overlay"><i class="fas fa-play"></i></div>`;
-
-                // Show tooltip
-                tooltip.classList.add('active');
-                
-                const rect = term.getBoundingClientRect();
-                const topPos = rect.top + window.scrollY - 230; 
-                const leftPos = rect.left + (rect.width/2);
-                
-                tooltip.style.top = topPos + 'px';
-                tooltip.style.left = leftPos + 'px';
-            }
-        }
-
-        function hideTooltip() {
-            hideTimeout = setTimeout(() => {
-                tooltip.classList.remove('active');
-                // Reset content
-                stVideoContainer.innerHTML = '';
-            }, 300); // 300ms bridge delay
-        }
-
-        document.querySelectorAll('.visual-snippet').forEach(term => {
-            term.addEventListener('mouseenter', () => showTooltip(term));
-            term.addEventListener('mouseleave', () => hideTooltip());
-        });
-
-        // Tooltip Hover Interaction
-        tooltip.addEventListener('mouseenter', () => clearTimeout(hideTimeout));
-        tooltip.addEventListener('mouseleave', () => hideTooltip());
-
-        // Video Interaction (YouTube Injection)
-        if(stVideoContainer) {
-            stVideoContainer.addEventListener('mouseenter', () => {
-                const vidId = stVideoContainer.dataset.videoId;
-                const start = stVideoContainer.dataset.start;
-                
-                if(vidId) {
-                    stVideoContainer.innerHTML = `<iframe width="100%" height="100%" 
-                        src="https://www.youtube.com/embed/${vidId}?start=${start}&autoplay=1&mute=1&controls=0&modestbranding=1&rel=0" 
-                        frameborder="0" allow="autoplay; encrypted-media"></iframe>`;
+                if(articleView && articleView.style.display !== 'none' && window.scrollY > 150) {
+                    if(navPill) navPill.classList.add('visible');
+                } else {
+                    if(navPill) navPill.classList.remove('visible');
                 }
             });
-            
-            stVideoContainer.addEventListener('mouseleave', () => {
-                // Revert to thumbnail on leave to stop video
-                const vidId = stVideoContainer.dataset.videoId;
-            });
-        }
-
-        // Scroll Spy
-        window.addEventListener('scroll', () => {
-            const navPill = document.getElementById('nav-pill');
-            const articleView = document.getElementById('article-view');
-            
-            if(articleView && articleView.style.display !== 'none' && window.scrollY > 150) {
-                if(navPill) navPill.classList.add('visible');
-            } else {
-                if(navPill) navPill.classList.remove('visible');
-            }
         });
     </script>
-
 </body>
 </html>
