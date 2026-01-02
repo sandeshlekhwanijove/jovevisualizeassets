@@ -515,6 +515,56 @@
             overflow: hidden;
         }
 
+        /* Steps Pill Bar - Segmented Control Style */
+        .wb-steps-bar {
+            width: 100%; max-width: 900px;
+            margin-bottom: 25px;
+            display: flex;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 100px; /* Large outer pill */
+            padding: 5px;
+            box-shadow: 0 4px 10px -2px rgba(0,0,0,0.03);
+            overflow-x: auto;
+            scrollbar-width: none;
+            gap: 5px; /* Small gap between segments */
+        }
+        .wb-steps-bar::-webkit-scrollbar { display: none; }
+
+        .step-pill {
+            flex: 1;
+            padding: 10px 20px;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-meta);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            border-radius: 100px; /* Fully rounded internal segments */
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .step-pill:hover {
+            color: var(--text-main);
+            background: #f8fafc;
+        }
+
+        .step-pill.active {
+            background: var(--jove-brand);
+            color: white;
+            box-shadow: 0 2px 8px rgba(33, 131, 237, 0.3);
+            font-weight: 700;
+        }
+        
+        .step-pill i { font-size: 0.8em; opacity: 0.7; }
+        .step-pill.active i { opacity: 1; }
+
         .wb-video-card {
             width: 100%;
             height: 100%;
@@ -539,7 +589,12 @@
             margin-top: 20px;
             padding: 0 10px;
             animation: slideUp 0.3s ease;
+            display: flex; /* Added flex */
+            justify-content: space-between; /* Space betwen title and nav */
+            align-items: flex-start;
+            gap: 20px;
         }
+        .wb-meta-text { flex: 1; } /* Wrapper for text */
         .wb-meta-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
         .wb-meta-title { font-family: 'Inter', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--text-main); margin: 0; line-height: 1.2; }
         .wb-meta-desc { font-family: 'Lora', serif; font-size: 1.1rem; color: var(--text-body); margin: 0; max-width: 800px; line-height: 1.6; }
@@ -547,6 +602,36 @@
             margin-top: 15px; padding: 12px 16px; background: #fef2f2; 
             border: 1px solid #fee2e2; border-radius: 8px; 
             color: #b91c1c; font-size: 0.95rem; display: flex; gap: 10px; align-items: center;
+        }
+
+         /* New Step Navigation Controls */
+        .wb-step-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            white-space: nowrap;
+            flex-shrink: 0;
+            height: fit-content;
+        }
+
+        .btn-step {
+            background: none; border: none; cursor: pointer;
+            color: var(--text-main); font-weight: 600; font-size: 0.9rem;
+            padding: 8px 16px; border-radius: 20px; transition: all 0.2s;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .btn-step:hover { background: #f1f5f9; color: var(--jove-brand); }
+        .btn-step:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .step-indicator {
+            font-size: 0.85rem; font-weight: 800; color: var(--text-meta);
+            border-left: 1px solid var(--border); border-right: 1px solid var(--border);
+            padding: 0 16px;
         }
 
         /* 3. BOTTOM: Playlist (Formerly Timeline) */
@@ -587,6 +672,8 @@
             padding: 0;
             box-shadow: none;
             overflow: visible;
+            cursor: pointer;
+            transition: all 0.2s;
         }
         .timeline-card:hover { transform: translateY(-3px); background: transparent; box-shadow: none; }
         .timeline-card.active { border: none; background: transparent; box-shadow: none; }
@@ -1048,7 +1135,7 @@
         
         <div class="workbench-grid">
             
-            <!-- 1. TOP: PREP BAR -->
+            <!-- 1. TOP: PREP BAR (Restored Large) -->
             <div class="wb-prep-bar">
                 <div class="prep-section-left">
                     <div class="prep-stat">
@@ -1061,7 +1148,6 @@
                     </div>
                 </div>
                 <div class="prep-section-right">
-                    <span class="prep-stat-label" style="display:block; margin-bottom:8px;">Required Materials</span>
                     <div id="wb-materials-list" class="prep-materials-list">
                         <!-- Dynamic Content -->
                     </div>
@@ -1070,6 +1156,12 @@
 
             <!-- 2. MIDDLE: MAIN VIDEO -->
             <div class="wb-main">
+                
+                <!-- Horizontal Steps Pill Bar -->
+                <div id="wb-steps-bar" class="wb-steps-bar">
+                    <!-- Dynamic Step Pills will be injected here -->
+                </div>
+
                 <div class="wb-video-card">
                     <div class="wb-video-stage">
                         <img id="wb-vid-img" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75" style="width:100%; height:100%; object-fit:cover; opacity:0.8;">
@@ -1077,14 +1169,23 @@
                     </div>
                 </div>
                 
-                <!-- Video Title & Description BELOW Player -->
+                <!-- UPDATED: Video Title & Nav BELOW Player -->
                 <div class="wb-video-meta">
-                    <div class="wb-meta-header">
-                        <h2 class="wb-meta-title" id="wb-step-title">Stereotactic Injection</h2>
+                    <div class="wb-meta-text">
+                        <div class="wb-meta-header">
+                            <h2 class="wb-meta-title" id="wb-step-title">Stereotactic Injection</h2>
+                        </div>
+                        <p class="wb-meta-desc" id="wb-step-desc">Precise intracranial injection of AAV6 vectors into the hippocampus or striatum of adult mice.</p>
+                        <div id="wb-alert-box" class="wb-alert-inline" style="display:none;">
+                            <i class="fas fa-exclamation-triangle"></i> <span></span>
+                        </div>
                     </div>
-                    <p class="wb-meta-desc" id="wb-step-desc">Precise intracranial injection of AAV6 vectors into the hippocampus or striatum of adult mice.</p>
-                    <div id="wb-alert-box" class="wb-alert-inline" style="display:none;">
-                        <i class="fas fa-exclamation-triangle"></i> <span></span>
+
+                    <!-- Added Missing Nav Controls -->
+                    <div class="wb-step-nav">
+                        <button class="btn-step" id="btn-prev" onclick="prevStep()"><i class="fas fa-chevron-left"></i> Prev</button>
+                        <span class="step-indicator" id="step-count">Step 1 of 2</span>
+                        <button class="btn-step" id="btn-next" onclick="nextStep()">Next <i class="fas fa-chevron-right"></i></button>
                     </div>
                 </div>
             </div>
@@ -1532,6 +1633,9 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            let currentStepId = 1;
+            const totalSteps = 2; // Based on AAV paper steps defined below
+
             // --- DATA ---
             const papers = {
                 'search': {
@@ -1742,35 +1846,58 @@
                 alert("Verification email sent! Profile updated to verified status for demo.");
             };
             
-            // Workbench Interaction
+            // --- WORKBENCH INTERACTION WITH NAV ---
+            window.prevStep = function() {
+                if(currentStepId > 1) {
+                    window.updateWorkbenchStep(currentStepId - 1);
+                }
+            };
+
+            window.nextStep = function() {
+                if(currentStepId < totalSteps) {
+                    window.updateWorkbenchStep(currentStepId + 1);
+                }
+            };
+
             window.updateWorkbenchStep = function(stepId) {
                 const data = workbenchSteps[stepId];
                 if(!data) return;
                 
-                // --- UPDATE TIMELINE (New Logic) ---
-                const tlContainer = document.getElementById('wb-timeline-container');
-                tlContainer.innerHTML = ''; // Clear existing
+                currentStepId = stepId;
+
+                // Update Nav Buttons
+                document.getElementById('btn-prev').disabled = (stepId === 1);
+                document.getElementById('btn-next').disabled = (stepId === totalSteps);
+                document.getElementById('step-count').innerText = `Step ${stepId} of ${totalSteps}`;
+                
+                // --- UPDATE STEP PILLS (Segmented Control) ---
+                const pillsContainer = document.getElementById('wb-steps-bar');
+                pillsContainer.innerHTML = '';
                 
                 Object.keys(workbenchSteps).forEach(key => {
                     const step = workbenchSteps[key];
                     const isActive = parseInt(key) === stepId;
                     
-                    const card = document.createElement('div');
-                    card.className = `timeline-card ${isActive ? 'active' : ''}`;
-                    card.onclick = () => window.updateWorkbenchStep(parseInt(key));
+                    const pill = document.createElement('div');
+                    pill.className = `step-pill ${isActive ? 'active' : ''}`;
                     
-                    card.innerHTML = `
-                        <div class="tc-thumb">
-                            <img src="${step.img}" style="width:100%; height:100%; object-fit:cover;">
-                            <div class="tc-overlay-icon"><i class="fas fa-play"></i></div>
-                            <div class="tc-time">${step.time}</div>
-                        </div>
-                        <div class="tc-content">
-                            <!-- Removed Step Label here as requested -->
-                            <div class="tc-title">${step.title.split(': ')[1]}</div>
-                        </div>
-                    `;
-                    tlContainer.appendChild(card);
+                    // Simple logic to show icon based on completed/active state
+                    const icon = isActive ? '<i class="fas fa-play-circle"></i>' : (parseInt(key) < stepId ? '<i class="fas fa-check-circle"></i>' : '<i class="far fa-circle"></i>');
+                    
+                    // Only show "Step X" text if space permits or simplifying to just label
+                    // Using the clean title from data or "Step X" if too long
+                    const label = `Step ${key}`; 
+                    
+                    pill.innerHTML = `${icon} ${label}`;
+                    pill.title = step.title; // Tooltip for full title
+                    pill.onclick = () => window.updateWorkbenchStep(parseInt(key));
+                    
+                    pillsContainer.appendChild(pill);
+                    
+                    // Auto-scroll to active pill
+                    if(isActive) {
+                        pill.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    }
                 });
 
                 // Update Main Content
@@ -1782,7 +1909,7 @@
                     vidImg.style.opacity = 0.8;
                 }, 200);
 
-                // UPDATED: Strip "Step X:" from title
+                // UPDATED: Strip "Step X:" from title for main display
                 const cleanTitle = data.title.includes(':') ? data.title.split(': ')[1] : data.title;
                 document.getElementById('wb-step-title').textContent = cleanTitle;
                 
@@ -1798,7 +1925,7 @@
                 
                 // Update Prep Station
                 document.getElementById('wb-temp').textContent = data.temp;
-                document.getElementById('wb-time').textContent = data.time.split('•')[1] || "N/A"; // Extract time part
+                document.getElementById('wb-time').textContent = data.time.split('•')[1] || "N/A"; 
                 
                 // Update Materials
                 const matContainer = document.getElementById('wb-materials-list');
@@ -1820,6 +1947,38 @@
                         </div>
                     `;
                     matContainer.appendChild(item);
+                });
+                
+                // --- UPDATE PLAYLIST (Related Videos) ---
+                // Populating playlist with all steps for context
+                const playlistContainer = document.getElementById('wb-timeline-container');
+                playlistContainer.innerHTML = '';
+                
+                Object.keys(workbenchSteps).forEach(key => {
+                    const step = workbenchSteps[key];
+                    const isActive = parseInt(key) === stepId;
+                    
+                    const card = document.createElement('div');
+                    card.className = `timeline-card ${isActive ? 'active' : ''}`;
+                    card.onclick = () => window.updateWorkbenchStep(parseInt(key));
+                    
+                    // Active badge logic
+                    const activeBadge = isActive ? '<div class="tc-status">NOW PLAYING</div>' : '';
+                    
+                    card.innerHTML = `
+                        <div class="tc-thumb">
+                            <img src="${step.img}" style="width:100%; height:100%; object-fit:cover;">
+                            <div class="tc-overlay-icon"><i class="fas fa-play"></i></div>
+                            <div class="tc-time">${step.time.split('•')[0]}</div>
+                            ${activeBadge}
+                        </div>
+                        <div class="tc-content">
+                            <!-- Restored Step Label -->
+                            <div class="tc-step">Step ${key}</div>
+                            <div class="tc-title">${step.title.split(': ')[1]}</div>
+                        </div>
+                    `;
+                    playlistContainer.appendChild(card);
                 });
             };
 
