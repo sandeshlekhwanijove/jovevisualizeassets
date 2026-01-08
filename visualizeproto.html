@@ -66,6 +66,7 @@
         .btn-primary:hover { background: var(--jove-brand-dark); box-shadow: 0 4px 12px rgba(33, 131, 237, 0.25); }
         .btn-secondary { background: white; border-color: var(--border); color: var(--text-main); }
         .btn-secondary:hover { border-color: var(--jove-brand); color: var(--jove-brand); }
+        .btn-secondary.active { background: var(--jove-brand); color: white; border-color: var(--jove-brand); }
         .btn-pubmed { background: #002f6c; color: white; border-color: #002f6c; padding: 6px 16px; font-size: 0.8rem; }
         .btn-pubmed:hover { background: #001d4a; }
         
@@ -142,6 +143,10 @@
             gap: 8px;
             z-index: 200;
         }
+        .article-header-block .share-popover {
+            top: 48px;
+            right: 0;
+        }
         .share-popover.visible { display: flex; }
         .share-option {
             display: flex;
@@ -202,6 +207,7 @@
             border-radius: 16px; overflow: hidden;
             box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08);
             display: flex; flex-direction: column;
+            margin: 0 auto;
         }
 
         .search-tabs { display: flex; border-bottom: 1px solid var(--border); background: #fcfcfc; }
@@ -261,6 +267,13 @@
 
         .col-text { grid-column: 2; position: relative; } 
         .col-wide { grid-column: 1 / -1; max-width: 1000px; margin: 0 auto; width: 100%; padding: 0; } 
+        
+        /* Ensure content views are hidden by default and don't show simultaneously */
+        #content-abstract,
+        #content-spermidine,
+        #content-spermidine-methods {
+            display: none;
+        }
 
         /* Header Block */
         .article-header-block {
@@ -283,14 +296,13 @@
         .journal-meta-row { display: flex; justify-content: flex-start; align-items: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
 
         .journal-label { 
-            font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 700; 
-            color: var(--jove-brand); text-transform: uppercase; letter-spacing: 1px;
-            display: inline-block; background: var(--jove-brand-light); padding: 6px 12px; border-radius: 20px;
+            font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 400; 
+            color: var(--text-meta);
         }
 
         h1 { 
             font-family: 'Lora', serif; 
-            font-size: clamp(2rem, 3vw, 2.4rem); 
+            font-size: clamp(1.5rem, 2.5vw, 1.8rem); 
             line-height: 1.25; 
             margin: 0 0 20px 0; 
             color: var(--text-main); 
@@ -362,8 +374,9 @@
             border-color: #047857;
         }
         .author-chip i { font-size: 0.9rem; }
-        .author-affil { font-size: 0.95rem; color: var(--text-meta); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .author-affil { font-size: 0.9rem; color: var(--text-meta); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-weight: 400; }
         .author-affil span { display: inline-flex; align-items: center; gap: 6px; }
+        .author-affil .author-chip { font-weight: 400; }
         .affil-link {
             border: none;
             background: none;
@@ -425,7 +438,7 @@
         .video-cta-text h3 {
             margin: 6px 0 10px;
             font-size: 1.5rem;
-            color: #065f46;
+            color: var(--jove-brand);
         }
         .video-cta-text p {
             margin: 0;
@@ -434,9 +447,48 @@
         }
         .cta-method-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 18px;
+            grid-template-columns: 1fr;
+            gap: 20px;
             width: 100%;
+        }
+        .cta-method-grid .method-card {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            grid-template-rows: auto auto;
+            gap: 18px;
+        }
+        .cta-method-grid .method-card .mc-content {
+            grid-column: 1;
+            grid-row: 1;
+        }
+        .cta-method-grid .method-card .mc-video-wrapper {
+            grid-column: 2;
+            grid-row: 1;
+        }
+        .cta-method-grid .method-card .mc-cta-row {
+            grid-column: 1 / -1;
+            grid-row: 2;
+            display: flex;
+            gap: 12px;
+            margin-top: 4px;
+        }
+        .method-card .mc-cta-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 4px;
+        }
+        .method-card .mc-cta-row .btn {
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
         .author-directory {
             padding: 80px 20px 60px;
@@ -1501,6 +1553,25 @@
         .cat-tab.active { color: var(--jove-brand); border-bottom-color: var(--jove-brand); }
 
         .pub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .pub-list { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+        }
+        .pub-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        .pub-list::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .pub-list::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .pub-list::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
 
         /* Footer */
         footer {
@@ -2269,7 +2340,7 @@
                     <div class="hero-stat">
                         <div class="stat-num">5</div>
                         <div class="stat-lab">Featured Authors</div>
-                    </div>
+                </div>
                 </div>
                 <div class="hero-cta-row">
                     <button class="btn btn-primary" onclick="loadSpermidineAbstract()"><i class="fas fa-flask"></i> &nbsp; View Spermidine paper</button>
@@ -2298,9 +2369,9 @@
                         <p style="margin:0;">Bring JoVE playlists into core facility onboarding.</p>
                         <div class="event-meta"><span><i class="fas fa-building"></i> Central Library</span><span><i class="fas fa-users"></i> 40 seats</span></div>
                     </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
         <div class="university-section">
             <h3>Flagship JoVE Publications</h3>
@@ -2350,7 +2421,7 @@
                     <button class="btn btn-secondary" onclick="openReproduction()"><i class="fas fa-play-circle"></i> Watch companion</button>
                 </div>
             </div>
-        </div>
+                </div>
 
         <div class="university-section">
             <h3>Featured Authors</h3>
@@ -2374,9 +2445,9 @@
                     <div style="font-size:0.9rem; color:var(--text-meta);">Metabolomics • 3 JoVE papers</div>
                     <button onclick="loadAuthor()"><i class="fas fa-arrow-right"></i> View profile</button>
                 </div>
-            </div>
-        </div>
-
+                    </div>
+                </div>
+                
         <div class="university-section">
             <h3>New Papers from the Department</h3>
             <p>Fresh publications ready for JoVE visualization and lab onboarding.</p>
@@ -2387,7 +2458,7 @@
                     <p>Highlights transporter kinetics and antioxidant dosing schema.</p>
                     <div class="event-meta" style="color:var(--text-meta);"><span><i class="fas fa-flask"></i> Gerontology</span><span><i class="fas fa-video"></i> JoVE ready</span></div>
                     <button class="btn btn-primary" onclick="loadSpermidineAbstract()">View abstract</button>
-                </div>
+                        </div>
                 <div class="new-paper-card">
                     <div class="paper-meta">Dec 2024 • Biochemistry Reports</div>
                     <h4>Membrane redox status in caloric restriction mimetics</h4>
@@ -2403,8 +2474,8 @@
                     <button class="btn btn-primary" onclick="loadSpermidineAbstract()">View abstract</button>
                 </div>
             </div>
-        </div>
-    </div>
+                        </div>
+                    </div>
 
     <!-- EXPERIMENT PLAN (WORKBENCH OVERLAY) -->
     <div id="repro-view" class="repro-overlay">
@@ -2441,8 +2512,8 @@
                     <p class="section-subtitle">Auto-curated from this JoVE protocol.</p>
                     <div class="materials-grid" id="wb-materials-list">
                         <!-- Dynamic -->
-                    </div>
                 </div>
+            </div>
             </div>
         </div>
         <div class="repro-bottom-row">
@@ -2481,16 +2552,6 @@
                 <a href="#">About</a>
             </div>
             <div class="nav-actions">
-                <div class="share-wrapper">
-                    <button class="icon-btn" id="header-share-btn" aria-label="Share article">
-                        <i class="fas fa-share-alt"></i>
-                    </button>
-                    <div class="share-popover" id="header-share-popover">
-                        <div class="share-option" data-channel="copy"><i class="fas fa-link"></i>Copy article link</div>
-                        <div class="share-option" data-channel="email"><i class="fas fa-envelope"></i>Email summary</div>
-                        <div class="share-option" data-channel="linkedin"><i class="fab fa-linkedin"></i>Share on LinkedIn</div>
-                    </div>
-                </div>
                 <button class="btn btn-secondary" onclick="goHome()"><i class="fas fa-search"></i> &nbsp; Search</button>
             </div>
         </div>
@@ -2508,25 +2569,16 @@
             <div class="ingest-container">
                 <div class="input-wrapper">
                     <div class="input-group">
-                        <input type="text" class="search-input" placeholder="Paste DOI, PubMed ID, or Keywords..." value="Cell Therapy Strategic Review">
+                        <input type="text" class="search-input" placeholder="Paste DOI, PubMed ID, or Keywords..." value="cellular redox">
                         <button class="btn btn-primary" onclick="loadAbstract()"><i class="fas fa-magic"></i> &nbsp; Visualize</button>
                     </div>
-                </div>
-            </div>
-
-            <div class="trend-grid">
-                <div class="paper-card" onclick="loadAbstract()">
-                    <span class="paper-tag">Regenerative Medicine</span>
-                    <div class="paper-head">Cell Therapy: A Strategic Review</div>
-                    <div class="paper-meta">Nature • 1998</div>
-                    <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
-                        View abstract
                     </div>
                 </div>
 
+            <div class="trend-grid">
                 <div class="paper-card" onclick="loadSpermidineAbstract()">
                     <span class="paper-tag">Gerontology</span>
-                    <div class="paper-head">Spermidine protects cellular redox status and ionic homeostasis...</div>
+                    <div class="paper-head">Spermidine protects cellular redox status and ionic homeostasis in D-galactose induced senescence and natural aging rat models</div>
                     <div class="paper-meta">Z. Naturforschung C • 2024</div>
                     <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
                         View abstract
@@ -2534,7 +2586,7 @@
                 </div>
                 <div class="paper-card" onclick="loadSpermidineMethods()">
                     <span class="paper-tag">Lab Methods</span>
-                    <div class="paper-head">Spermidine study methods capsule</div>
+                    <div class="paper-head">Spermidine protects cellular redox status and ionic homeostasis in D-galactose induced senescence and natural aging rat models</div>
                     <div class="paper-meta">3 core workflows • 6 min overview</div>
                     <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
                         View methods
@@ -2549,112 +2601,55 @@
         <div class="author-view-back">
             <button class="back-link" onclick="returnToArticle()"><i class="fas fa-arrow-left"></i> Back to article</button>
         </div>
-        <div class="author-toggle">
-            <span class="status-chip"><i class="fas fa-flask"></i> Prototype state</span>
-            <button class="toggle-btn active" data-state="unclaimed" onclick="setAuthorState('unclaimed')">Unclaimed profile</button>
-            <button class="toggle-btn" data-state="claimed" onclick="setAuthorState('claimed')">Claimed profile</button>
-        </div>
         <div class="author-hero">
             <div class="hero-left">
                 <div class="hero-header">
-                    <div class="author-avatar"><i class="fas fa-user"></i></div>
                     <div>
-                        <span class="status-chip"><i class="fas fa-satellite-dish"></i> Accepting consults</span>
-                        <h1 id="p-name" style="margin:0;">F H Gage</h1>
-                        <p class="author-tagline" id="author-tagline">Neural stem cell pioneer at Salk Institute focused on translational aging biology.</p>
-                    </div>
+                    <h1 id="p-name" style="margin:0;">F H Gage</h1>
                 </div>
-                <div class="unclaimed-alert unclaimed-only"><i class="fas fa-shield-alt"></i> This profile hasn’t been verified yet. Claim it to manage consults, update affiliation, and activate JoVE appointments.</div>
+                </div>
                 <div class="hero-summary">
                     <div class="hero-stat">
-                        <div class="stat-num" id="author-stat-videos">80+</div>
-                        <div class="stat-lab">Video Papers</div>
-                    </div>
-                    <div class="hero-stat">
-                        <div class="stat-num" id="author-stat-protocols">22</div>
-                        <div class="stat-lab">Protocols</div>
-                    </div>
-                    <div class="hero-stat">
-                        <div class="stat-num" id="author-stat-score">4.9★</div>
-                        <div class="stat-lab">Mentor Score</div>
+                        <div class="stat-num" id="author-stat-papers">102</div>
+                        <div class="stat-lab">Papers Published</div>
                     </div>
                 </div>
-                <div class="hero-cta-row unclaimed-only">
-                    <button class="btn btn-primary" onclick="openClaimModal()"><i class="fas fa-user-shield"></i> &nbsp; Claim this profile</button>
-                    <button class="btn btn-secondary" onclick="shareProfile('copy')"><i class="fas fa-link"></i> &nbsp; Share preview</button>
-                </div>
-                <div class="hero-cta-row claimed-only">
-                    <button class="btn btn-primary" onclick="openBooking('consult')"><i class="fas fa-calendar-check"></i> &nbsp; Request appointment</button>
-                    <span class="status-chip" style="background:rgba(16,185,129,0.25); color:#065f46;"><i class="fas fa-check-circle"></i> Verified Author</span>
-                </div>
-                <div class="author-share-actions">
-                    <div class="share-pill" onclick="shareProfile('copy')"><i class="fas fa-link"></i> Copy Link</div>
-                    <div class="share-pill" onclick="shareProfile('email')"><i class="fas fa-envelope"></i> Email</div>
-                    <div class="share-pill" onclick="shareProfile('linkedin')"><i class="fab fa-linkedin"></i> LinkedIn</div>
-                </div>
-            </div>
-            <div class="booking-card claimed-only">
-                <span class="booking-badge"><i class="fas fa-calendar-check"></i> Meeting Request</span>
-                <h3 style="margin:0;">Request a JoVE appointment</h3>
-                <p class="booking-note">Book a JoVE appointment to walk through your experiment.</p>
-                <label class="paper-select-label" for="paper-select"><i class="fas fa-bookmark"></i> &nbsp; Select research paper</label>
-                <select id="paper-select" class="paper-select">
-                    <option value="">Choose a publication...</option>
-                    <option>Cell Therapy: A Strategic Review (Nature)</option>
-                    <option>Spermidine protects cellular redox status (Z. Naturforschung C)</option>
-                    <option>Survival of adult neuronal progenitor cells (PNAS)</option>
-                    <option>Mobile elements: drivers of genome evolution (Science)</option>
-                </select>
-                <div class="booking-slot"><i class="fas fa-clock"></i> Next slot: Thu • 2:00 PM PST</div>
-                <button class="btn btn-primary" onclick="openBooking('consult')" style="width:100%;"><i class="fas fa-paper-plane"></i> &nbsp; Request meeting</button>
             </div>
         </div>
 
-        <div class="author-publications-note unclaimed-only">
-            <i class="fas fa-book"></i> Research papers published by this author remain discoverable while the profile is pending verification.
-        </div>
 
-        <!-- Domain Tabs -->
-        <div class="cat-tabs">
-            <div class="cat-tab active" data-filter="all">All Publications</div>
-            <div class="cat-tab" data-filter="neuroscience">Neuroscience</div>
-            <div class="cat-tab" data-filter="genetics">Genetics</div>
-            <div class="cat-tab" data-filter="stem">Stem Cells</div>
-            <div class="cat-tab" data-filter="gerontology">Gerontology</div>
-        </div>
-
-        <div class="pub-grid">
-            <div class="paper-card" data-cat="all regenerative stem" onclick="loadAbstract()">
-                <span class="paper-tag">Regenerative Medicine</span>
-                <div class="paper-head">Cell Therapy: A Strategic Review</div>
-                <div class="paper-meta">Nature • 1998</div>
-                <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
-                    View abstract
-                </div>
+        <!-- Sort Options -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="margin: 0; font-size: 1.3rem;">Publications</h2>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary active" id="sort-newest" onclick="sortPapers('newest')" style="font-size: 0.85rem; padding: 6px 16px;">Newest First</button>
+                <button class="btn btn-secondary" id="sort-oldest" onclick="sortPapers('oldest')" style="font-size: 0.85rem; padding: 6px 16px;">Oldest First</button>
             </div>
+        </div>
 
-            <div class="paper-card" data-cat="all neuroscience gerontology" onclick="loadSpermidineAbstract()">
+        <div class="pub-list" id="pub-list" style="max-height: 600px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;">
+            <div class="paper-card" data-year="2024" data-cat="all neuroscience gerontology" onclick="loadSpermidineAbstract()">
                 <span class="paper-tag">Gerontology</span>
-                <div class="paper-head">Spermidine protects cellular redox status and ionic homeostasis...</div>
+                <div class="paper-head">Spermidine protects cellular redox status and ionic homeostasis in D-galactose induced senescence and natural aging rat models</div>
                 <div class="paper-meta">Z. Naturforschung C • 2024</div>
                 <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
                     View abstract
                 </div>
             </div>
 
-            <div class="paper-card" data-cat="all stem neuroscience" onclick="loadAbstract()">
-                <span class="paper-tag">Stem Cells</span>
-                <div class="paper-head">Survival and differentiation of adult neuronal progenitor cells</div>
-                <div class="paper-meta">PNAS • 1995</div>
+            <div class="paper-card" data-year="2003" data-cat="all genetics" onclick="loadAbstract()">
+                <span class="paper-tag">Genetics</span>
+                <div class="paper-head">Mobile elements: drivers of genome evolution</div>
+                <div class="paper-meta">Science • 2003</div>
                 <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
                     View abstract
                 </div>
             </div>
-            
-            <div class="paper-card" data-cat="all genetics" onclick="loadAbstract()">
-                <span class="paper-tag">Genetics</span>
-                <div class="paper-head">Mobile elements: drivers of genome evolution</div>
-                <div class="paper-meta">Science • 2003</div>
+
+            <div class="paper-card" data-year="1995" data-cat="all stem neuroscience" onclick="loadAbstract()">
+                <span class="paper-tag">Stem Cells</span>
+                <div class="paper-head">Survival and differentiation of adult neuronal progenitor cells</div>
+                <div class="paper-meta">PNAS • 1995</div>
                 <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
                     View abstract
                 </div>
@@ -2684,20 +2679,38 @@
             
             <!-- HEADER SECTION -->
             <div class="col-wide article-header-block">
-                <div class="journal-meta-row">
-                    <span class="journal-label" id="art-journal">Nature • Published May 14, 1998</span>
+                <div class="breadcrumb-nav" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 0.85rem; color: var(--text-meta);">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <a href="#" onclick="goHome(); return false;" style="color: var(--jove-brand); text-decoration: none;">Home</a>
+                        <span style="margin: 0 8px; color: var(--text-meta);">></span>
+                        <span style="color: var(--text-meta);">...</span>
+                        <span style="margin: 0 8px; color: var(--text-meta);">></span>
+                        <span id="breadcrumb-title" style="color: var(--text-main);">Cell Therapy</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="share-wrapper">
+                            <button class="icon-btn" id="article-share-btn" aria-label="Share article">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                            <div class="share-popover" id="article-share-popover">
+                                <div class="share-option" data-channel="copy"><i class="fas fa-link"></i>Copy article link</div>
+                                <div class="share-option" data-channel="email"><i class="fas fa-envelope"></i>Email summary</div>
+                                <div class="share-option" data-channel="linkedin"><i class="fab fa-linkedin"></i>Share on LinkedIn</div>
+                            </div>
+                        </div>
                     <a id="art-pubmed" href="https://pubmed.ncbi.nlm.nih.gov/9579857/" target="_blank" class="header-btn"><i class="fas fa-book-medical"></i> View on PubMed</a>
+                    </div>
                 </div>
                 <h1 id="art-title">Cell Therapy</h1>
                 <div class="author-inline">
                     <div class="author-inline-left">
-                        <button class="author-chip" onclick="loadAuthor()">
-                            <i class="fas fa-user"></i>
-                            <span id="auth-link">F H Gage</span>
-                        </button>
+                        <div id="auth-link" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px;"></div>
+                        <div style="margin-bottom: 8px;">
+                            <span class="journal-label" id="art-journal">Nature • Published May 14, 1998</span>
+                        </div>
                         <div class="author-affil" id="auth-affil">
                             <i class="fas fa-building"></i> Laboratory of Genetics, The Salk Institute, La Jolla, California 92037, USA.
-                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -2707,13 +2720,10 @@
                 
                 <!-- === STRUCTURED ABSTRACT CONTENT (Search View) === -->
                 <div id="content-abstract">
-                    <div class="video-cta">
-                        <div class="video-cta-text">
-                            <div class="cta-label"><i class="fas fa-flask"></i> JoVE Protocol</div>
-                            <h3>Watch the JoVE experiment for this paper</h3>
-                            <p>See the full workflow, materials, and timing from JoVE’s verified protocol video.</p>
-                        </div>
-                        <button class="btn btn-primary" onclick="openReproduction()"><i class="fas fa-play"></i> Watch & Reproduce</button>
+                    <div style="margin: 30px 0 40px 0;">
+                        <button class="btn btn-primary" onclick="window.scrollToSection('sec-methods')" style="padding: 12px 28px; font-size: 1rem; display: inline-flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-play"></i> Jump to Main Methods
+                        </button>
                     </div>
                     <h2 id="sec-summary">Summary</h2>
                     <!-- UPDATED: Added visual snippet to 'Cell therapy', removed large video figure -->
@@ -2734,7 +2744,7 @@
                     <p>
                         To highlight the importance of cell source and function in tailoring cell therapy for specific diseases. To address the critical concerns hindering the widespread application of cell therapy. To emphasize the interdisciplinary approach required to overcome current limitations.
                     </p>
-                    
+
                     <h2 id="sec-methods">Main Methods</h2>
 
                     <!-- Method Card 1 -->
@@ -2745,16 +2755,19 @@
                             <p class="mc-desc">
                                 A strategic review of how specific cell types are selected based on disease pathology. This segment visualizes the decision matrix for autologous vs. allogenic sources.
                             </p>
-                        </div>
+                            </div>
                         <a class="mc-video-wrapper" target="_blank" href="https://app.jove.com/t/68726/sa-%CE%B2-galactosidase-based-screening-assay">
                             <img class="mc-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75">
                             <div class="mc-play-btn"><i class="fas fa-play"></i></div>
                             <span class="mc-duration">2:14</span>
                         </a>
-                        <div class="mc-reproduce-cta" onclick="openReproduction()">
-                            <div class="mc-cta-icon"><i class="fas fa-bolt"></i></div>
-                            <div class="mc-cta-text">Reproduce this method</div>
-                            <div class="mc-cta-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="mc-cta-row">
+                            <button class="btn btn-primary" style="flex: 1;">
+                                <i class="fas fa-file-alt"></i> &nbsp; View Full Text
+                            </button>
+                            <button class="btn btn-secondary" style="flex: 1;">
+                                <i class="fas fa-list"></i> &nbsp; View Materials list
+                            </button>
                         </div>
                     </div>
 
@@ -2766,16 +2779,19 @@
                             <p class="mc-desc">
                                 Direct visualization of safety advancements using viral vectors. This protocol demonstrates the injection site preparation and monitoring.
                             </p>
-                        </div>
+                            </div>
                         <a class="mc-video-wrapper" target="_blank" href="https://app.jove.com/t/68739/evaluation-of-injury-induced-senescence">
                             <img class="mc-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75">
                             <div class="mc-play-btn"><i class="fas fa-play"></i></div>
                             <span class="mc-duration">3:45</span>
                         </a>
-                        <div class="mc-reproduce-cta" onclick="openReproduction()">
-                            <div class="mc-cta-icon"><i class="fas fa-bolt"></i></div>
-                            <div class="mc-cta-text">Reproduce this method</div>
-                            <div class="mc-cta-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="mc-cta-row">
+                            <button class="btn btn-primary" style="flex: 1;">
+                                <i class="fas fa-file-alt"></i> &nbsp; View Full Text
+                            </button>
+                            <button class="btn btn-secondary" style="flex: 1;">
+                                <i class="fas fa-list"></i> &nbsp; View Materials list
+                            </button>
                         </div>
                     </div>
 
@@ -2857,37 +2873,35 @@
                                 <div>
                                     <strong>Clinical readiness of cell therapy protocols</strong>
                                     <span>Cell Reports • 2022</span>
-                                </div>
+                </div>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
                             <a class="related-paper" href="#" target="_blank">
                                 <div>
                                     <strong>Allogenic graft safety dashboards</strong>
                                     <span>Nature Medicine • 2021</span>
-                                </div>
+                        </div>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
                             <a class="related-paper" href="#" target="_blank">
                                 <div>
                                     <strong>Standardizing in vitro expansion QC</strong>
                                     <span>Biotech Advances • 2020</span>
-                                </div>
+                            </div>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
                         </div>
-                    </div>
-
+                        </div>
                 </div>
 
+                
+
                 <!-- === SPERMIDINE ABSTRACT VIEW === -->
-                <div id="content-spermidine" style="display:none;">
-                    <div class="video-cta">
-                        <div class="video-cta-text">
-                            <div class="cta-label"><i class="fas fa-flask"></i> JoVE Protocol</div>
-                            <h3>Watch the JoVE experiment for this paper</h3>
-                            <p>See the full workflow, materials, and timing from JoVE’s verified protocol video.</p>
-                        </div>
-                        <button class="btn btn-primary" onclick="openReproduction()"><i class="fas fa-play"></i> Watch & Reproduce</button>
+                <div id="content-spermidine">
+                    <div style="margin: 30px 0 40px 0;">
+                        <button class="btn btn-primary" onclick="window.scrollToSection('sec-methods')" style="padding: 12px 28px; font-size: 1rem; display: inline-flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-play"></i> Jump to Main Methods
+                        </button>
                     </div>
                     <h2 id="sec-summary">Summary</h2>
                     <p class="abstract-text">
@@ -2898,7 +2912,7 @@
                         <span class="area-tag">Gerontology</span>
                         <span class="area-tag">Biochemistry</span>
                         <span class="area-tag">Oxidative Stress Research</span>
-                    </div>
+                        </div>
 
                     <h2 id="sec-areas">Area Of Science</h2>
                     <div class="science-list">
@@ -2924,13 +2938,13 @@
                                 <div class="science-play"><i class="fas fa-play"></i></div>
                             </a>
                             <a class="science-link" target="_blank" href="https://app.jove.com/t/68739/evaluation-of-injury-induced-senescence">Related concepts <i class="fas fa-arrow-up-right-from-square"></i></a>
-                        </div>
+                    </div>
 
                         <div class="science-row">
                             <div class="science-copy">
                                 <span class="science-chip">Concept Focus</span>
                                 <h3>Oxidative Stress Research</h3>
-                            </div>
+                        </div>
                             <a class="science-video" target="_blank" href="https://app.jove.com/t/68150/techniques-to-induce-cellular-senescence">
                                 <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68150.jpg&w=828&q=75" alt="Oxidative stress concept video">
                                 <div class="science-play"><i class="fas fa-play"></i></div>
@@ -2938,7 +2952,7 @@
                             <a class="science-link" target="_blank" href="https://app.jove.com/t/68150/techniques-to-induce-cellular-senescence">Related concepts <i class="fas fa-arrow-up-right-from-square"></i></a>
                         </div>
                     </div>
-
+                    
                     <h2 id="sec-background">Background</h2>
                     <p>
                         Aging is characterized by impaired redox homeostasis and increased oxidative stress.
@@ -2967,16 +2981,19 @@
                             <p class="mc-desc">
                                 Utilized a D-galactose induced senescence model and naturally aged rats to study the effects of spermidine supplementation on aging processes.
                             </p>
-                        </div>
+                            </div>
                         <a class="mc-video-wrapper" target="_blank" href="https://app.jove.com/t/68726/sa-%CE%B2-galactosidase-based-screening-assay">
                             <img class="mc-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75">
                             <div class="mc-play-btn"><i class="fas fa-play"></i></div>
                             <span class="mc-duration">7:39</span>
                         </a>
-                        <div class="mc-reproduce-cta" onclick="openReproduction()">
-                            <div class="mc-cta-icon"><i class="fas fa-bolt"></i></div>
-                            <div class="mc-cta-text">Reproduce this method</div>
-                            <div class="mc-cta-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="mc-cta-row">
+                            <button class="btn btn-primary" style="flex: 1;">
+                                <i class="fas fa-file-alt"></i> &nbsp; View Full Text
+                            </button>
+                            <button class="btn btn-secondary" style="flex: 1;">
+                                <i class="fas fa-list"></i> &nbsp; View Materials list
+                            </button>
                         </div>
                     </div>
 
@@ -2988,16 +3005,19 @@
                             <p class="mc-desc">
                                 Supplemented rats with spermidine (SPD) orally for 6 weeks and measured reactive oxygen species, lipid peroxidation, protein oxidation, and antioxidant levels in erythrocytes.
                             </p>
-                        </div>
+                            </div>
                         <a class="mc-video-wrapper" target="_blank" href="https://app.jove.com/t/68739/evaluation-of-injury-induced-senescence">
                             <img class="mc-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75">
                             <div class="mc-play-btn"><i class="fas fa-play"></i></div>
                             <span class="mc-duration">9:14</span>
                         </a>
-                        <div class="mc-reproduce-cta" onclick="openReproduction()">
-                            <div class="mc-cta-icon"><i class="fas fa-bolt"></i></div>
-                            <div class="mc-cta-text">Reproduce this method</div>
-                            <div class="mc-cta-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="mc-cta-row">
+                            <button class="btn btn-primary" style="flex: 1;">
+                                <i class="fas fa-file-alt"></i> &nbsp; View Full Text
+                            </button>
+                            <button class="btn btn-secondary" style="flex: 1;">
+                                <i class="fas fa-list"></i> &nbsp; View Materials list
+                            </button>
                         </div>
                     </div>
 
@@ -3023,117 +3043,115 @@
                         Further research is needed to establish SPD's therapeutic role as an anti-aging strategy.
                     </p>
 
-                    <!-- Keywords Section -->
-                    <div style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--border);">
-                        <h3 style="font-family:'Inter', sans-serif; font-size:1.1rem; color:var(--text-main); margin-bottom:20px;">
-                            <i class="fas fa-tags" style="color:var(--jove-brand);"></i> &nbsp; Keywords
-                        </h3>
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <span class="area-tag">aging</span>
-                            <span class="area-tag">erythrocytes</span>
-                            <span class="area-tag">membrane transporters</span>
-                            <span class="area-tag">oxidative stress</span>
-                            <span class="area-tag">spermidine</span>
-                        </div>
+                    <h2 id="sec-keywords">Keywords</h2>
+                    <div class="area-tags">
+                        <span class="area-tag">aging</span>
+                        <span class="area-tag">erythrocytes</span>
+                        <span class="area-tag">membrane transporters</span>
+                        <span class="area-tag">oxidative stress</span>
+                        <span class="area-tag">spermidine</span>
                     </div>
+
                     <div class="engagement-section">
                         <h3><i class="fas fa-link"></i> &nbsp; Related Papers</h3>
                         <div class="related-list">
                             <a class="related-paper" href="#" target="_blank">
                                 <div>
-                                    <strong>Polyamine-driven anti-aging pathways</strong>
-                                    <span>Journal of Gerontology • 2023</span>
+                                    <strong>Clinical readiness of cell therapy protocols</strong>
+                                    <span>Cell Reports • 2022</span>
                                 </div>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
                             <a class="related-paper" href="#" target="_blank">
                                 <div>
-                                    <strong>Oxidative stress mitigation in erythrocytes</strong>
-                                    <span>Biochemistry Reports • 2022</span>
+                                    <strong>Allogenic graft safety dashboards</strong>
+                                    <span>Nature Medicine • 2021</span>
                                 </div>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
                             <a class="related-paper" href="#" target="_blank">
                                 <div>
-                                    <strong>Caloric restriction mimetics overview</strong>
-                                    <span>Nature Metabolism • 2021</span>
+                                    <strong>Standardizing in vitro expansion QC</strong>
+                                    <span>Biotech Advances • 2020</span>
                                 </div>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
                         </div>
                     </div>
-
                 </div>
 
                 <!-- === SPERMIDINE METHODS CAPSULE VIEW === -->
-                <div id="content-spermidine-methods" style="display:none;">
-                    <div class="video-cta video-cta-blue">
-                        <div class="video-cta-text">
-                            <div class="cta-label"><i class="fas fa-vial"></i> Methods Capsule</div>
-                            <h3>View the main methods within this article</h3>
-                            <p>Dive into the three core workflows underpinning the spermidine study and jump straight into the JoVE clips that matter.</p>
-                        </div>
-                        <div class="cta-method-grid">
-                            <div class="method-card">
-                                <span class="method-chip">JoVE Experiment Video</span>
-                                <div class="mc-content">
-                                    <h3 class="mc-title">D-galactose Induced Senescence Model</h3>
-                                    <p class="mc-desc">
-                                        Utilized a D-galactose induced senescence model and naturally aged rats to study the effects of spermidine supplementation on aging processes.
-                                    </p>
-                                </div>
-                                <a class="mc-video-wrapper" target="_blank" href="https://app.jove.com/t/68726/sa-%CE%B2-galactosidase-based-screening-assay">
-                                    <img class="mc-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75">
-                                    <div class="mc-play-btn"><i class="fas fa-play"></i></div>
-                                    <span class="mc-duration">7:39</span>
-                                </a>
-                                <div class="mc-reproduce-cta" onclick="openReproduction()">
-                                    <div class="mc-cta-icon"><i class="fas fa-bolt"></i></div>
-                                    <div class="mc-cta-text">Reproduce this method</div>
-                                    <div class="mc-cta-arrow"><i class="fas fa-arrow-right"></i></div>
-                                </div>
+                <div id="content-spermidine-methods">
+                    <h2 id="sec-methods-main">Main Methods within this article</h2>
+                    <p class="abstract-text">Dive into the core workflows underpinning the study and jump straight into the JoVE clips that matter.</p>
+                    <div class="cta-method-grid">
+                        <div class="method-card">
+                        <div class="mc-content">
+                                <h3 class="mc-title">D-galactose Induced Senescence Model</h3>
+                            <p class="mc-desc">
+                                    Utilized a D-galactose induced senescence model and naturally aged rats to study the effects of spermidine supplementation on aging processes.
+                                </p>
                             </div>
-                            <div class="method-card">
-                                <span class="method-chip">JoVE Experiment Video</span>
-                                <div class="mc-content">
-                                    <h3 class="mc-title">Spermidine Supplementation Protocol</h3>
-                                    <p class="mc-desc">
-                                        Supplemented rats with spermidine (SPD) orally for 6 weeks and measured reactive oxygen species, lipid peroxidation, protein oxidation, and antioxidant levels in erythrocytes.
-                                    </p>
-                                </div>
-                                <a class="mc-video-wrapper" target="_blank" href="https://app.jove.com/t/68739/evaluation-of-injury-induced-senescence">
-                                    <img class="mc-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75">
-                                    <div class="mc-play-btn"><i class="fas fa-play"></i></div>
-                                    <span class="mc-duration">9:14</span>
-                                </a>
-                                <div class="mc-reproduce-cta" onclick="openReproduction()">
-                                    <div class="mc-cta-icon"><i class="fas fa-bolt"></i></div>
-                                    <div class="mc-cta-text">Reproduce this method</div>
-                                    <div class="mc-cta-arrow"><i class="fas fa-arrow-right"></i></div>
-                                </div>
-                            </div>
-                            <div class="method-card">
-                                <span class="method-chip">JoVE Experiment Video</span>
-                                <div class="mc-content">
-                                    <h3 class="mc-title">Membrane Transport Activity Profiling</h3>
-                                    <p class="mc-desc">
-                                        Quantified erythrocyte membrane transporter activity and correlated transporter recovery with reduced oxidative damage after SPD treatment.
-                                    </p>
-                                </div>
-                                <a class="mc-video-wrapper" target="_blank" href="https://app.jove.com/t/68150/techniques-to-induce-cellular-senescence">
-                                    <img class="mc-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68150.jpg&w=828&q=75">
-                                    <div class="mc-play-btn"><i class="fas fa-play"></i></div>
-                                    <span class="mc-duration">6:05</span>
-                                </a>
-                                <div class="mc-reproduce-cta" onclick="openReproduction()">
-                                    <div class="mc-cta-icon"><i class="fas fa-bolt"></i></div>
-                                    <div class="mc-cta-text">Reproduce this method</div>
-                                    <div class="mc-cta-arrow"><i class="fas fa-arrow-right"></i></div>
-                                </div>
-                            </div>
+                            <a class="mc-video-wrapper" target="_blank" href="https://app.jove.com/t/68726/sa-%CE%B2-galactosidase-based-screening-assay">
+                                <img class="mc-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68726.jpg&w=828&q=75">
+                                <div class="mc-play-btn"><i class="fas fa-play"></i></div>
+                                <span class="mc-duration">7:39</span>
+                            </a>
+                            <div class="mc-cta-row">
+                                <button class="btn btn-primary" style="flex: 1;">
+                                    <i class="fas fa-file-alt"></i> &nbsp; View Full Text
+                                </button>
+                                <button class="btn btn-secondary" style="flex: 1;">
+                                    <i class="fas fa-list"></i> &nbsp; View Materials list
+                                </button>
                         </div>
                     </div>
-                    <h2 id="sec-summary">Summary</h2>
+                        <div class="method-card">
+                        <div class="mc-content">
+                                <h3 class="mc-title">Spermidine Supplementation Protocol</h3>
+                            <p class="mc-desc">
+                                    Supplemented rats with spermidine (SPD) orally for 6 weeks and measured reactive oxygen species, lipid peroxidation, protein oxidation, and antioxidant levels in erythrocytes.
+                                </p>
+                            </div>
+                            <a class="mc-video-wrapper" target="_blank" href="https://app.jove.com/t/68739/evaluation-of-injury-induced-senescence">
+                            <img class="mc-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75">
+                            <div class="mc-play-btn"><i class="fas fa-play"></i></div>
+                                <span class="mc-duration">9:14</span>
+                            </a>
+                            <div class="mc-cta-row">
+                                <button class="btn btn-primary" style="flex: 1;">
+                                    <i class="fas fa-file-alt"></i> &nbsp; View Full Text
+                                </button>
+                                <button class="btn btn-secondary" style="flex: 1;">
+                                    <i class="fas fa-list"></i> &nbsp; View Materials list
+                                </button>
+                        </div>
+                    </div>
+                        <div class="method-card">
+                        <div class="mc-content">
+                                <h3 class="mc-title">Membrane Transport Activity Profiling</h3>
+                            <p class="mc-desc">
+                                    Quantified erythrocyte membrane transporter activity and correlated transporter recovery with reduced oxidative damage after SPD treatment.
+                                </p>
+                            </div>
+                            <a class="mc-video-wrapper" target="_blank" href="https://app.jove.com/t/68150/techniques-to-induce-cellular-senescence">
+                            <img class="mc-thumb" src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68150.jpg&w=828&q=75">
+                            <div class="mc-play-btn"><i class="fas fa-play"></i></div>
+                                <span class="mc-duration">6:05</span>
+                            </a>
+                            <div class="mc-cta-row">
+                                <button class="btn btn-primary" style="flex: 1;">
+                                    <i class="fas fa-file-alt"></i> &nbsp; View Full Text
+                                </button>
+                                <button class="btn btn-secondary" style="flex: 1;">
+                                    <i class="fas fa-list"></i> &nbsp; View Materials list
+                                </button>
+                        </div>
+                    </div>
+                        </div>
+                    </div>
+
+                    <h2 id="sec-summary-methods">Summary</h2>
                     <p class="abstract-text">
                         This capsule highlights how spermidine (SPD) interventions are executed in vivo, from induction of aging phenotypes to readouts of erythrocyte stability and transport activity.
                     </p>
@@ -3142,9 +3160,9 @@
                         <span class="area-tag">Gerontology</span>
                         <span class="area-tag">Biochemistry</span>
                         <span class="area-tag">Oxidative Stress Research</span>
-                    </div>
+                        </div>
 
-                    <h2 id="sec-areas">Area Of Science</h2>
+                    <h2 id="sec-areas-methods">Area Of Science</h2>
                     <div class="science-list">
                         <div class="science-row">
                             <div class="science-copy">
@@ -3162,13 +3180,13 @@
                             <div class="science-copy">
                                 <span class="science-chip">Concept Focus</span>
                                 <h3>Biochemistry</h3>
-                            </div>
+                    </div>
                             <a class="science-video" target="_blank" href="https://app.jove.com/t/68739/evaluation-of-injury-induced-senescence">
                                 <img src="https://app.jove.com//_next/image?url=https://cloudfront.jove.com/CDNSource/teasers/68739.jpg&w=828&q=75" alt="Biochemistry concept video">
                                 <div class="science-play"><i class="fas fa-play"></i></div>
                             </a>
                             <a class="science-link" target="_blank" href="https://app.jove.com/t/68739/evaluation-of-injury-induced-senescence">Related concepts <i class="fas fa-arrow-up-right-from-square"></i></a>
-                        </div>
+                </div>
 
                         <div class="science-row">
                             <div class="science-copy">
@@ -3183,42 +3201,76 @@
                         </div>
                     </div>
 
-                    <h2 id="sec-background">Background</h2>
+                    <h2 id="sec-background-methods">Background</h2>
                     <p>
-                        This workflow bundle focuses on how spermidine combats redox imbalance in aging models, starting from the induction of senescence to downstream biochemical measurements.
+                        Aging is characterized by impaired redox homeostasis and increased oxidative stress.
+                    </p>
+                    <p>
+                        Caloric restriction mimetics (CRMs) are effective anti-aging interventions, but the role of spermidine (SPD) as a CRM is not fully understood.
+                    </p>
+                    <p>
+                        Oxidative damage to erythrocytes contributes to aging processes.
                     </p>
 
-                    <h2 id="sec-results">Main Results</h2>
+                    <h2 id="sec-purpose-methods">Purpose Of The Study</h2>
+                    <ul class="purpose-list">
+                        <li>Investigate the protective effects of spermidine (SPD) against aging-induced oxidative stress.</li>
+                        <li>Evaluate SPD's role as a caloric restriction mimetic (CRM) in modulating redox homeostasis.</li>
+                        <li>Assess SPD's impact on erythrocyte membrane integrity and function in aging models.</li>
+                    </ul>
+
+                    <h2 id="sec-results-methods">Main Results</h2>
                     <p>
-                        Each workflow feeds the cumulative finding: SPD suppresses oxidative markers, restores antioxidant reserves, and stabilizes membrane transport activity.
+                        SPD supplementation suppressed age-induced increases in reactive oxygen species, lipid peroxidation, and protein oxidation.
+                    </p>
+                    <p>
+                        SPD increased antioxidant levels and enhanced the plasma membrane redox system in erythrocytes.
+                    </p>
+                    <p>
+                        Erythrocyte membrane transporter activity correlated with susceptibility to oxidative damage, which was improved by SPD.
                     </p>
 
-                    <h2 id="sec-conclusions">Conclusions</h2>
+                    <h2 id="sec-conclusions-methods">Conclusions</h2>
                     <p>
-                        Combining these routines provides a lab-ready blueprint for translating spermidine interventions into oxidative stress studies.
+                        Spermidine (SPD) improves redox status and mitigates membrane impairments in erythrocytes of experimental and naturally aged rats.
                     </p>
+                    <p>
+                        SPD demonstrates potential as a caloric restriction mimetic (CRM) by combating oxidative stress during aging.
+                    </p>
+                    <p>
+                        Further research is needed to establish SPD's therapeutic role as an anti-aging strategy.
+                    </p>
+
+                    <h2 id="sec-keywords-methods">Keywords</h2>
+                    <div class="area-tags">
+                        <span class="area-tag">aging</span>
+                        <span class="area-tag">erythrocytes</span>
+                        <span class="area-tag">membrane transporters</span>
+                        <span class="area-tag">oxidative stress</span>
+                        <span class="area-tag">spermidine</span>
+                    </div>
 
                     <div class="engagement-section">
                         <h3><i class="fas fa-link"></i> &nbsp; Related Papers</h3>
                         <div class="related-list">
                             <a class="related-paper" href="#" target="_blank">
                                 <div>
-                                    <strong>Polyamine-driven anti-aging pathways</strong>
-                                    <span>Journal of Gerontology • 2023</span>
+                                    <strong>Clinical readiness of cell therapy protocols</strong>
+                                    <span>Cell Reports • 2022</span>
                                 </div>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
                             <a class="related-paper" href="#" target="_blank">
                                 <div>
-                                    <strong>Oxidative stress mitigation in erythrocytes</strong>
-                                    <span>Biochemistry Reports • 2022</span>
+                                    <strong>Allogenic graft safety dashboards</strong>
+                                    <span>Nature Medicine • 2021</span>
                                 </div>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
                             <a class="related-paper" href="#" target="_blank">
                                 <div>
-                                    <strong>Caloric restriction mimetics overview</strong>
-                                    <span>Nature Metabolism • 2021</span>
+                                    <strong>Standardizing in vitro expansion QC</strong>
+                                    <span>Biotech Advances • 2020</span>
                                 </div>
                                 <i class="fas fa-arrow-right"></i>
                             </a>
@@ -3272,6 +3324,14 @@
             let currentStepId = 1;
             const totalSteps = 2; // Based on AAV paper steps defined below
             window.currentArticleView = 'abstract';
+            
+            // Initialize content visibility - ensure only one view is visible
+            const contentAbstract = document.getElementById('content-abstract');
+            const contentSpermidine = document.getElementById('content-spermidine');
+            const contentMethods = document.getElementById('content-spermidine-methods');
+            if(contentAbstract) contentAbstract.style.display = 'none';
+            if(contentSpermidine) contentSpermidine.style.display = 'none';
+            if(contentMethods) contentMethods.style.display = 'none';
 
             const authorTabs = document.querySelectorAll('#author-view .cat-tab');
             const authorCards = document.querySelectorAll('#author-view .paper-card');
@@ -3287,29 +3347,30 @@
                 });
             });
 
-            const shareButton = document.getElementById('header-share-btn');
-            const sharePopover = document.getElementById('header-share-popover');
-            if (shareButton && sharePopover) {
-                shareButton.addEventListener('click', (event) => {
+            // Share button in article header
+            const articleShareButton = document.getElementById('article-share-btn');
+            const articleSharePopover = document.getElementById('article-share-popover');
+            if (articleShareButton && articleSharePopover) {
+                articleShareButton.addEventListener('click', (event) => {
                     event.stopPropagation();
-                    sharePopover.classList.toggle('visible');
+                    articleSharePopover.classList.toggle('visible');
                 });
-                sharePopover.querySelectorAll('.share-option').forEach(option => {
+                articleSharePopover.querySelectorAll('.share-option').forEach(option => {
                     option.addEventListener('click', (event) => {
                         event.stopPropagation();
                         const channel = option.dataset.channel;
                         window.shareArticle(channel);
-                        sharePopover.classList.remove('visible');
+                        articleSharePopover.classList.remove('visible');
                     });
                 });
                 document.addEventListener('click', (event) => {
-                    if (!sharePopover.contains(event.target) && !shareButton.contains(event.target)) {
-                        sharePopover.classList.remove('visible');
+                    if (!articleSharePopover.contains(event.target) && !articleShareButton.contains(event.target)) {
+                        articleSharePopover.classList.remove('visible');
                     }
                 });
                 document.addEventListener('keydown', (event) => {
                     if (event.key === 'Escape') {
-                        sharePopover.classList.remove('visible');
+                        articleSharePopover.classList.remove('visible');
                     }
                 });
             }
@@ -3331,26 +3392,24 @@
                     link: "https://pubmed.ncbi.nlm.nih.gov/"
                 },
                 'spermidine-methods': {
-                    title: "Spermidine methods capsule",
+                    title: "Spermidine protects cellular redox status and ionic homeostasis in D-galactose induced senescence and natural aging rat models",
                     authors: "Sandeep Singh, Avnish Kumar Verma, Geetika Garg +2",
                     affil: "Department of Biochemistry, University of Allahabad, Allahabad, 211002, India.",
-                    journal: "Workflow capsule • Methods focus",
+                    journal: "Zeitschrift Fur Naturforschung. C, Journal of Biosciences • October 22, 2024",
                     link: "https://pubmed.ncbi.nlm.nih.gov/"
                 }
             };
             const renderAffiliation = (text) => {
                 const deptRegex = /Department of Biochemistry/i;
                 if(!deptRegex.test(text)) {
-                    return `<span><i class="fas fa-building"></i> ${text}</span>`;
+                    return `<span>${text}</span>`;
                 }
                 const afterDept = text.replace(deptRegex, '').replace(/^,?\s*/, '');
                 const parts = afterDept.split(',');
                 const university = parts.shift()?.trim() || '';
-                const remainder = parts.join(',').trim();
                 const label = 'Department of Biochemistry';
-                const labChip = `<span class="author-chip lab-chip" style="cursor:default;"><i class="fas fa-building-columns"></i> ${label}</span>`;
-                const locationPart = remainder ? `<span><i class="fas fa-map-marker-alt"></i> ${remainder}</span>` : '';
-                return `${labChip}${locationPart}`;
+                const deptText = university ? `${label}, ${university}` : label;
+                return `<span>${deptText}</span>`;
             };
             
             const snippetData = {
@@ -3525,7 +3584,7 @@
                     ]
                 }
             };
-            
+
             // --- VIEW LOGIC ---
             window.shareProfile = function(channel) {
                 const profileUrl = `${window.location.origin}${window.location.pathname}#author`;
@@ -3562,19 +3621,83 @@
                 alert('Share options are currently limited on this prototype.');
             };
             
-            window.loadAbstract = () => showView('abstract');
+            window.loadAbstract = () => showView('spermidine');
             window.loadSpermidineAbstract = () => showView('spermidine');
             window.loadSpermidineMethods = () => showView('spermidine-methods');
-
+            
+            // Helper function to parse authors string and create clickable author chips
+            window.renderAuthors = function(authorsString) {
+                if (!authorsString) return '';
+                // Parse authors: "Sandeep Singh, Avnish Kumar Verma, Geetika Garg +2"
+                // Split by comma, handle "+2" or similar patterns
+                const parts = authorsString.split(',').map(s => s.trim());
+                const authorElements = [];
+                
+                parts.forEach((part, index) => {
+                    // Check if this part contains a "+X" pattern (additional authors count)
+                    const plusMatch = part.match(/^(.+?)\s*(\+\d+)$/);
+                    if (plusMatch) {
+                        // Has both author name and +X
+                        const authorName = plusMatch[1].trim();
+                        const plusCount = plusMatch[2];
+                        authorElements.push(`<button class="author-chip" onclick="loadAuthorByName('${authorName.replace(/'/g, "\\'")}')"><i class="fas fa-user"></i> ${authorName}</button>`);
+                        authorElements.push(`<span class="author-chip" style="cursor:default; opacity:0.7;">${plusCount}</span>`);
+                    } else if (part.match(/^\+\d+$/)) {
+                        // Just "+X" pattern
+                        authorElements.push(`<span class="author-chip" style="cursor:default; opacity:0.7;">${part}</span>`);
+                    } else {
+                        // Regular author name - make it clickable
+                        const escapedName = part.replace(/'/g, "\\'");
+                        authorElements.push(`<button class="author-chip" onclick="loadAuthorByName('${escapedName}')"><i class="fas fa-user"></i> ${part}</button>`);
+                    }
+                });
+                
+                return authorElements.join('');
+            };
+            
+            window.loadAuthorByName = function(authorName) {
+                // Set the author name on the author page
+                const authorNameEl = document.getElementById('p-name');
+                if (authorNameEl) {
+                    authorNameEl.textContent = authorName;
+                }
+                // Also update the claim modal
+                const claimModalText = document.querySelector('#claim-modal p strong');
+                if (claimModalText) {
+                    claimModalText.textContent = authorName;
+                }
+                // Load the author page
+                window.loadAuthor();
+            };
+            
             window.loadAuthor = function() {
+                // Get the current article's author data
+                const data = papers[window.currentArticleView] || papers.search;
+                const authorName = data ? data.authors.split(',')[0].trim() : 'F H Gage';
+                
                 document.getElementById('home-view').style.display = 'none';
                 document.getElementById('article-view').style.display = 'none';
                 document.getElementById('university-view').style.display = 'none';
                 document.getElementById('author-view').style.display = 'block';
                 document.getElementById('nav-pill').classList.remove('visible');
                 window.scrollTo(0,0);
+                
+                // Update author name on the page
+                const authorNameEl = document.getElementById('p-name');
+                if (authorNameEl) {
+                    authorNameEl.textContent = authorName;
+                }
+                // Update claim modal
+                const claimModalText = document.querySelector('#claim-modal p strong');
+                if (claimModalText) {
+                    claimModalText.textContent = authorName;
+                }
+                
                 setTimeout(() => { document.getElementById('author-view').style.opacity = '1'; }, 10);
-                window.setAuthorState('unclaimed');
+                // Initialize sort to newest
+                if(document.getElementById('sort-newest')) {
+                    sortPapers('newest');
+                }
             };
             window.loadUniversity = function() {
                 document.getElementById('home-view').style.display = 'none';
@@ -3601,14 +3724,17 @@
             };
 
             window.goHome = function() {
-                document.getElementById('article-view').style.display = 'none';
-                document.getElementById('author-view').style.display = 'none';
+                 document.getElementById('article-view').style.display = 'none';
+                 document.getElementById('author-view').style.display = 'none';
                 document.getElementById('university-view').style.display = 'none';
-                document.getElementById('home-view').style.display = 'flex';
-                document.getElementById('nav-pill').classList.remove('visible');
+                 document.getElementById('home-view').style.display = 'flex';
+                 document.getElementById('nav-pill').classList.remove('visible');
             };
             
             window.showView = function(type) {
+                // Scroll to top when opening article
+                window.scrollTo({ top: 0, behavior: 'instant' });
+                
                 document.getElementById('home-view').style.display = 'none';
                 document.getElementById('author-view').style.display = 'none';
                 document.getElementById('university-view').style.display = 'none';
@@ -3620,7 +3746,16 @@
                 const data = papers[window.currentArticleView] || papers.search;
                 
                 document.getElementById('art-title').textContent = data.title;
-                document.getElementById('auth-link').textContent = data.authors;
+                const breadcrumbTitle = document.getElementById('breadcrumb-title');
+                if (breadcrumbTitle) {
+                    // Truncate title if too long for breadcrumb
+                    const truncatedTitle = data.title.length > 50 ? data.title.substring(0, 47) + '...' : data.title;
+                    breadcrumbTitle.textContent = truncatedTitle;
+                }
+                const authLinkEl = document.getElementById('auth-link');
+                if (authLinkEl) {
+                    authLinkEl.innerHTML = renderAuthors(data.authors);
+                }
                 document.getElementById('auth-affil').innerHTML = renderAffiliation(data.affil);
                 document.getElementById('art-journal').textContent = data.journal;
                 document.getElementById('art-pubmed').href = data.link;
@@ -3630,10 +3765,63 @@
                 const contentFull = document.getElementById('content-full');
                 const contentMethods = document.getElementById('content-spermidine-methods');
 
-                if(contentAbstract) contentAbstract.style.display = (!isSpermidine && !isSpermidineMethods) ? 'block' : 'none';
-                if(contentSpermidine) contentSpermidine.style.display = isSpermidine ? 'block' : 'none';
-                if(contentMethods) contentMethods.style.display = isSpermidineMethods ? 'block' : 'none';
-                if(contentFull) contentFull.style.display = 'none';
+                // Ensure only one content view is visible at a time - explicitly hide all first
+                if(contentAbstract) {
+                    contentAbstract.style.display = 'none';
+                    contentAbstract.style.visibility = 'hidden';
+                }
+                if(contentSpermidine) {
+                    contentSpermidine.style.display = 'none';
+                    contentSpermidine.style.visibility = 'hidden';
+                }
+                if(contentMethods) {
+                    contentMethods.style.display = 'none';
+                    contentMethods.style.visibility = 'hidden';
+                }
+                if(contentFull) {
+                    contentFull.style.display = 'none';
+                    contentFull.style.visibility = 'hidden';
+                }
+                
+                // Then show only the correct one
+                if(!isSpermidine && !isSpermidineMethods) {
+                    if(contentAbstract) {
+                        contentAbstract.style.display = 'block';
+                        contentAbstract.style.visibility = 'visible';
+                    }
+                } else if(isSpermidine) {
+                    // Show spermidine abstract view
+                    if(contentSpermidine) {
+                        contentSpermidine.style.setProperty('display', 'block', 'important');
+                        contentSpermidine.style.visibility = 'visible';
+                    }
+                    // Explicitly ensure methods view is hidden - use important to override any CSS
+                    if(contentMethods) {
+                        contentMethods.style.setProperty('display', 'none', 'important');
+                        contentMethods.style.visibility = 'hidden';
+                    }
+                    // Also ensure abstract is hidden
+                    if(contentAbstract) {
+                        contentAbstract.style.setProperty('display', 'none', 'important');
+                        contentAbstract.style.visibility = 'hidden';
+                    }
+                } else if(isSpermidineMethods) {
+                    // Show spermidine methods view
+                    if(contentMethods) {
+                        contentMethods.style.setProperty('display', 'block', 'important');
+                        contentMethods.style.visibility = 'visible';
+                    }
+                    // Explicitly ensure spermidine abstract view is hidden - use important to override any CSS
+                    if(contentSpermidine) {
+                        contentSpermidine.style.setProperty('display', 'none', 'important');
+                        contentSpermidine.style.visibility = 'hidden';
+                    }
+                    // Also ensure abstract is hidden
+                    if(contentAbstract) {
+                        contentAbstract.style.setProperty('display', 'none', 'important');
+                        contentAbstract.style.visibility = 'hidden';
+                    }
+                }
 
                 const navPill = document.getElementById('nav-pill');
                 if(isSpermidine) {
@@ -3675,7 +3863,26 @@
                     btn.classList.toggle('active', btn.dataset.state === state);
                 });
             };
-
+            
+            window.sortPapers = function(order) {
+                const pubList = document.getElementById('pub-list');
+                if(!pubList) return;
+                
+                const papers = Array.from(pubList.querySelectorAll('.paper-card'));
+                
+                papers.sort((a, b) => {
+                    const yearA = parseInt(a.dataset.year) || 0;
+                    const yearB = parseInt(b.dataset.year) || 0;
+                    return order === 'newest' ? yearB - yearA : yearA - yearB;
+                });
+                
+                papers.forEach(paper => pubList.appendChild(paper));
+                
+                // Update button states
+                document.getElementById('sort-newest').classList.toggle('active', order === 'newest');
+                document.getElementById('sort-oldest').classList.toggle('active', order === 'oldest');
+            };
+            
             window.openReproduction = function() {
                 window.scrollTo(0,0);
                 document.body.classList.add('showing-repro');
@@ -3693,11 +3900,13 @@
                 const el = document.getElementById(id);
                 if(el) {
                     const offset = 100;
-                    const bodyRect = document.body.getBoundingClientRect().top;
-                    const elementRect = el.getBoundingClientRect().top;
-                    const elementPosition = elementRect - bodyRect;
-                    const offsetPosition = elementPosition - offset;
-                    window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+                    // Get the element's position relative to the document
+                    const rect = el.getBoundingClientRect();
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    const elementPosition = rect.top + scrollTop;
+                    window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
+                } else {
+                    console.log('Element with id "' + id + '" not found');
                 }
             };
             
@@ -3753,7 +3962,7 @@
                 document.getElementById('wb-step-title').textContent = data.title;
                 document.getElementById('wb-step-subtitle').textContent = data.subtitle || '';
                 document.getElementById('wb-step-desc').textContent = data.desc;
-
+                
                 const watchBtn = document.getElementById('watch-video-btn');
                 watchBtn.onclick = () => window.open(data.link, '_blank');
 
