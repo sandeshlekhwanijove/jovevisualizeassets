@@ -662,34 +662,886 @@
             }
         }
 
-        /* Area of Science Glass Blue Background - JoVE Brand Color */
+        /* Area of Science Section */
         .area-science-glass {
             margin-top: 40px;
-            padding: 28px;
-            background: linear-gradient(135deg, rgba(33, 131, 237, 0.08) 0%, rgba(33, 131, 237, 0.12) 50%, rgba(21, 101, 192, 0.08) 100%);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(33, 131, 237, 0.2);
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(33, 131, 237, 0.1);
+            padding: 0;
         }
         
         .area-science-glass h2 {
             color: var(--text-main);
-            border-left: none;
-            padding-left: 0;
+            border-left: 4px solid var(--jove-brand);
+            padding-left: 12px;
             margin-top: 0;
             margin-bottom: 20px;
         }
+
+        /* ========================================
+           MATERIALS LIST MODAL & EQUIPMENT DETAIL
+           ======================================== */
+        /* Materials List Page (Full Page View) */
+        .materials-page {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: #f8fafc;
+            z-index: 9998;
+            overflow-y: auto;
+        }
         
-        .area-science-glass .concept-card-v3 {
-            background: rgba(255, 255, 255, 0.9);
+        .materials-page.active {
+            display: block;
+        }
+        
+        .materials-page-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px 60px;
+        }
+        
+        .materials-page-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        
+        .materials-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-body);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .materials-back-btn:hover {
+            border-color: var(--jove-brand);
+            color: var(--jove-brand);
+        }
+        
+        .materials-page-title {
+            flex: 1;
+        }
+        
+        .materials-page-title h1 {
+            margin: 0;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .materials-page-title h1 i {
+            color: var(--jove-brand);
+        }
+        
+        .materials-page-title p {
+            margin: 6px 0 0;
+            font-size: 0.9rem;
+            color: var(--text-meta);
+        }
+        
+        .materials-page-body {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 28px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+        
+        .materials-category {
+            margin-bottom: 28px;
+        }
+        
+        .materials-category:last-child {
+            margin-bottom: 0;
+        }
+        
+        .materials-category-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-meta);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .material-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            background: #fafafa;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .material-item:hover {
+            background: white;
+            border-color: var(--jove-brand);
+            box-shadow: 0 4px 12px rgba(33, 131, 237, 0.1);
+        }
+        
+        .material-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--jove-brand) 0%, #1e6fd9 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(33, 131, 237, 0.25);
+        }
+        
+        .material-info {
+            flex: 1;
+        }
+        
+        .material-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 2px;
+        }
+        
+        .material-meta {
+            font-size: 0.8rem;
+            color: var(--text-meta);
+        }
+        
+        .material-arrow {
+            color: var(--text-meta);
+            font-size: 0.85rem;
+        }
+        
+        /* Equipment Detail Page */
+        #equipment-detail-view {
+            display: none;
+        }
+        
+        #equipment-detail-view.active {
+            display: block;
+        }
+        
+        .equipment-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 24px;
+        }
+        
+        .equipment-back-btn:hover {
+            background: #e2e8f0;
+        }
+        
+        .equipment-header {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .equipment-image {
+            width: 180px;
+            height: 180px;
+            background: linear-gradient(135deg, #e8f4fd 0%, #f0f7ff 100%);
+            border: 2px solid rgba(33, 131, 237, 0.2);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        
+        .equipment-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .equipment-image .equipment-icon {
+            font-size: 4.5rem;
+            color: var(--jove-brand);
+        }
+        
+        .equipment-info-header {
+            flex: 1;
+        }
+        
+        .equipment-category-tag {
+            display: inline-block;
+            background: var(--jove-brand-light);
+            color: var(--jove-brand);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .equipment-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+        
+        .equipment-vendor {
+            font-size: 0.95rem;
+            color: var(--text-meta);
+            margin-bottom: 16px;
+        }
+        
+        .equipment-specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        
+        .equipment-spec {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: var(--text-body);
+        }
+        
+        .equipment-spec i {
+            color: var(--jove-brand);
+        }
+        
+        .equipment-section {
+            margin-bottom: 32px;
+        }
+        
+        .equipment-section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--jove-brand);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .equipment-section-title i {
+            color: var(--jove-brand);
+        }
+        
+        .equipment-description {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-body);
+        }
+        
+        .used-in-videos {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .used-in-video-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s;
+        }
+        
+        .used-in-video-card:hover {
+            border-color: var(--jove-brand);
+            box-shadow: 0 4px 12px rgba(33, 131, 237, 0.1);
+        }
+        
+        .used-in-video-thumb {
+            width: 100px;
+            height: 60px;
+            border-radius: 6px;
+            overflow: hidden;
+            flex-shrink: 0;
+            position: relative;
+        }
+        
+        .used-in-video-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .used-in-video-thumb .play-icon {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            font-size: 1rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .used-in-video-card:hover .play-icon {
+            opacity: 1;
+        }
+        
+        .used-in-video-info {
+            flex: 1;
+        }
+        
+        .used-in-video-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+        
+        .used-in-video-meta {
+            font-size: 0.78rem;
+            color: var(--text-meta);
+        }
+        
+        /* Equipment Icon Styling */
+        .equipment-icon {
+            font-size: 4rem;
+            color: var(--jove-brand);
+        }
+        
+        /* Suppliers List */
+        .suppliers-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        
+        .supplier-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .supplier-card:hover {
+            border-color: var(--jove-brand);
+            box-shadow: 0 4px 12px rgba(33, 131, 237, 0.12);
+            transform: translateY(-2px);
+        }
+        
+        .supplier-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .supplier-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        
+        .supplier-name i {
+            color: var(--jove-brand);
+            margin-right: 6px;
+        }
+        
+        .supplier-price {
+            font-size: 0.85rem;
+            color: #059669;
+            font-weight: 600;
+        }
+        
+        .supplier-cta {
+            color: var(--jove-brand);
+            font-size: 0.9rem;
+        }
+        
+        /* New Video Cards - styled like Main Methods */
+        .used-in-video-card-v2 {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+        
+        .used-in-video-card-v2:hover {
+            border-color: var(--jove-brand);
+            box-shadow: 0 6px 20px rgba(33, 131, 237, 0.12);
+        }
+        
+        .used-video-left {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .used-video-thumb {
+            position: relative;
+            width: 160px;
+            height: 90px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .used-video-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .used-video-play {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .used-video-play i {
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .used-in-video-card-v2:hover .used-video-play {
+            opacity: 1;
+        }
+        
+        .used-video-metrics {
+            display: flex;
+            gap: 12px;
+            padding: 6px 10px;
+            background: rgba(248, 250, 252, 0.9);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--text-meta);
+        }
+        
+        .used-video-metrics span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .used-video-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 0;
+        }
+        
+        .used-video-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+        
+        .used-video-desc {
+            font-size: 0.85rem;
+            color: var(--text-body);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .used-video-cta {
+            margin-top: auto;
+            padding-top: 12px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .used-video-cta .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .used-video-cta .cta-btn.cta-primary {
+            background: linear-gradient(135deg, var(--jove-brand) 0%, #1a6fd1 100%);
+            color: white;
+            box-shadow: 0 4px 14px rgba(33, 131, 237, 0.35);
+        }
+        
+        .used-video-cta .cta-btn.cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(33, 131, 237, 0.45);
+        }
+        
+        .used-video-cta .cta-btn.cta-primary i {
+            font-size: 1rem;
+        }
+        
+        .used-video-cta .cta-btn.cta-secondary {
+            background: rgba(33, 131, 237, 0.1);
+            color: var(--jove-brand);
+            border: 1px solid rgba(33, 131, 237, 0.2);
+        }
+        
+        .used-video-cta .cta-btn.cta-secondary:hover {
+            background: rgba(33, 131, 237, 0.15);
+            border-color: var(--jove-brand);
+        }
+        
+        /* Equipment Video Cards - Main Methods Style */
+        .equipment-video-card {
+            display: flex;
+            align-items: stretch;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+        
+        .equipment-video-card:hover {
+            border-color: var(--jove-brand);
+            box-shadow: 0 6px 20px rgba(33, 131, 237, 0.12);
+            transform: translateY(-2px);
+        }
+        
+        .equipment-video-left {
+            display: flex;
+            flex-direction: column;
+            width: 180px;
+            min-width: 180px;
+            flex-shrink: 0;
+        }
+        
+        .equipment-video-thumb {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 100px;
+            overflow: hidden;
+        }
+        
+        .equipment-video-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .equipment-video-play {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .equipment-video-play i {
+            width: 44px;
+            height: 44px;
+            background: var(--jove-brand);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .equipment-video-card:hover .equipment-video-play {
+            opacity: 1;
+        }
+        
+        .equipment-video-duration {
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            background: rgba(0,0,0,0.75);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .equipment-video-meta-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 10px 12px;
+            background: linear-gradient(135deg, rgba(100, 116, 139, 0.08) 0%, rgba(148, 163, 184, 0.12) 100%);
+            font-size: 0.75rem;
+            color: var(--text-meta);
+        }
+        
+        .equipment-video-meta-bar span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .equipment-video-content {
+            flex: 1;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .equipment-video-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            line-height: 1.35;
+        }
+        
+        .equipment-video-desc {
+            font-size: 0.85rem;
+            color: var(--text-body);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .equipment-video-cta {
+            margin-top: auto;
+            padding-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .equipment-video-cta .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 9px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .equipment-video-cta .cta-primary {
+            background: linear-gradient(135deg, var(--jove-brand) 0%, #1a6fd1 100%);
+            color: white;
+            box-shadow: 0 3px 10px rgba(33, 131, 237, 0.3);
+        }
+        
+        .equipment-video-cta .cta-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 16px rgba(33, 131, 237, 0.4);
+        }
+        
+        .equipment-video-cta .cta-secondary {
+            background: rgba(33, 131, 237, 0.08);
+            color: var(--jove-brand);
             border: 1px solid rgba(33, 131, 237, 0.15);
         }
         
-        .area-science-glass .concept-card-v3:hover {
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 6px 20px rgba(33, 131, 237, 0.18);
+        .equipment-video-cta .cta-secondary:hover {
+            background: rgba(33, 131, 237, 0.12);
+            border-color: var(--jove-brand);
+        }
+        
+        /* Equipment Paper Cards - Vertical List Style */
+        .used-in-papers {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .equipment-paper-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 16px 18px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+        }
+        
+        .equipment-paper-card:hover {
+            border-color: var(--jove-brand);
+            box-shadow: 0 6px 18px rgba(33, 131, 237, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .equipment-paper-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .equipment-paper-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+            line-height: 1.4;
+        }
+        
+        .equipment-paper-meta {
+            font-size: 0.82rem;
+            color: var(--text-meta);
+        }
+        
+        .equipment-paper-arrow {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(33, 131, 237, 0.1);
+            color: var(--jove-brand);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        
+        .equipment-paper-card:hover .equipment-paper-arrow {
+            background: var(--jove-brand);
+            color: white;
+        }
+        
+        /* Show More / Pagination */
+        .list-pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .show-more-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(33, 131, 237, 0.08);
+            color: var(--jove-brand);
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(33, 131, 237, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .show-more-btn:hover {
+            background: rgba(33, 131, 237, 0.15);
+            border-color: var(--jove-brand);
+        }
+        
+        .pagination-info {
+            font-size: 0.82rem;
+            color: var(--text-meta);
+        }
+        
+        @media (max-width: 600px) {
+            .equipment-video-card {
+                flex-direction: column;
+            }
+            .equipment-video-left {
+                width: 100%;
+            }
+            .equipment-video-thumb {
+                height: 180px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .equipment-header {
+                flex-direction: column;
+            }
+            .equipment-image {
+                width: 100%;
+                height: 200px;
+            }
+            .used-in-video-card-v2 {
+                flex-direction: column;
+            }
+            .used-video-left {
+                width: 100%;
+            }
+            .used-video-thumb {
+                width: 100%;
+                height: 180px;
+            }
+            .suppliers-list {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Header Block */
@@ -3726,10 +4578,7 @@
                                 </a>
                             </div>
                             <div class="compact-video-info">
-                                <div class="compact-video-header">
-                                    <h3 class="compact-video-title">D-galactose Induced Senescence Model</h3>
-                                    <span class="compact-video-chip"><i class="fas fa-video"></i> Experiment Video</span>
-                                </div>
+                                <h3 class="compact-video-title">D-galactose Induced Senescence Model</h3>
                                 <p class="compact-video-desc">Utilized a D-galactose induced senescence model and naturally aged rats to study the effects of spermidine supplementation on aging processes.</p>
                                 <div class="compact-video-footer">
                                     <div class="compact-video-meta-inline">
@@ -3738,7 +4587,7 @@
                                     </div>
                                     <div class="compact-video-cta">
                                         <a href="#" class="cta-btn cta-primary"><i class="fas fa-file-alt"></i> View Full Text</a>
-                                        <a href="#" class="cta-btn cta-secondary"><i class="fas fa-list"></i> Materials List</a>
+                                        <a href="#" class="cta-btn cta-secondary" onclick="event.preventDefault(); openMaterialsPage();"><i class="fas fa-list"></i> Materials List</a>
                                     </div>
                                 </div>
                             </div>
@@ -3755,10 +4604,7 @@
                                 </a>
                             </div>
                             <div class="compact-video-info">
-                                <div class="compact-video-header">
-                                    <h3 class="compact-video-title">Spermidine Supplementation Protocol</h3>
-                                    <span class="compact-video-chip"><i class="fas fa-video"></i> Experiment Video</span>
-                                </div>
+                                <h3 class="compact-video-title">Spermidine Supplementation Protocol</h3>
                                 <p class="compact-video-desc">Supplemented rats with spermidine (SPD) orally for 6 weeks and measured reactive oxygen species, lipid peroxidation, and antioxidant levels.</p>
                                 <div class="compact-video-footer">
                                     <div class="compact-video-meta-inline">
@@ -3767,7 +4613,7 @@
                                     </div>
                                     <div class="compact-video-cta">
                                         <a href="#" class="cta-btn cta-primary"><i class="fas fa-file-alt"></i> View Full Text</a>
-                                        <a href="#" class="cta-btn cta-secondary"><i class="fas fa-list"></i> Materials List</a>
+                                        <a href="#" class="cta-btn cta-secondary" onclick="event.preventDefault(); openMaterialsPage();"><i class="fas fa-list"></i> Materials List</a>
                                     </div>
                                 </div>
                             </div>
@@ -3784,10 +4630,7 @@
                                 </a>
                             </div>
                             <div class="compact-video-info">
-                                <div class="compact-video-header">
-                                    <h3 class="compact-video-title">Oxidative Stress & ROS Measurement</h3>
-                                    <span class="compact-video-chip"><i class="fas fa-video"></i> Experiment Video</span>
-                                </div>
+                                <h3 class="compact-video-title">Oxidative Stress & ROS Measurement</h3>
                                 <p class="compact-video-desc">Techniques for measuring reactive oxygen species (ROS) and assessing oxidative damage markers in erythrocyte samples.</p>
                                 <div class="compact-video-footer">
                                     <div class="compact-video-meta-inline">
@@ -3796,7 +4639,7 @@
                                     </div>
                                     <div class="compact-video-cta">
                                         <a href="#" class="cta-btn cta-primary"><i class="fas fa-file-alt"></i> View Full Text</a>
-                                        <a href="#" class="cta-btn cta-secondary"><i class="fas fa-list"></i> Materials List</a>
+                                        <a href="#" class="cta-btn cta-secondary" onclick="event.preventDefault(); openMaterialsPage();"><i class="fas fa-list"></i> Materials List</a>
                                     </div>
                                 </div>
                             </div>
@@ -3912,6 +4755,176 @@
     <!-- FLOATING NAV PILL -->
     <div class="nav-pill" id="nav-pill"></div>
 
+    <!-- MATERIALS LIST PAGE (Full Page View) -->
+    <div class="materials-page" id="materials-page">
+        <div class="materials-page-container">
+            <div class="materials-page-header">
+                <button class="materials-back-btn" onclick="closeMaterialsPage()">
+                    <i class="fas fa-arrow-left"></i> Back to Article
+                </button>
+                <div class="materials-page-title">
+                    <h1><i class="fas fa-flask"></i> Materials & Equipment</h1>
+                    <p>All materials, reagents, and equipment used in this study</p>
+                </div>
+            </div>
+            
+            <div class="materials-page-body">
+                <!-- Equipment Category -->
+                <div class="materials-category">
+                    <div class="materials-category-title"><i class="fas fa-microscope"></i> &nbsp; Equipment</div>
+                    <div class="material-item" onclick="showEquipmentDetail('centrifuge')">
+                        <div class="material-icon"><i class="fas fa-cog"></i></div>
+                        <div class="material-info">
+                            <div class="material-name">Refrigerated Centrifuge</div>
+                            <div class="material-meta">Eppendorf 5804R • Used in 12 videos</div>
+                        </div>
+                        <div class="material-arrow"><i class="fas fa-chevron-right"></i></div>
+                    </div>
+                    <div class="material-item" onclick="showEquipmentDetail('spectrophotometer')">
+                        <div class="material-icon"><i class="fas fa-wave-square"></i></div>
+                        <div class="material-info">
+                            <div class="material-name">UV-Vis Spectrophotometer</div>
+                            <div class="material-meta">Thermo Scientific • Used in 8 videos</div>
+                        </div>
+                        <div class="material-arrow"><i class="fas fa-chevron-right"></i></div>
+                    </div>
+                    <div class="material-item" onclick="showEquipmentDetail('microplate-reader')">
+                        <div class="material-icon"><i class="fas fa-th"></i></div>
+                        <div class="material-info">
+                            <div class="material-name">Microplate Reader</div>
+                            <div class="material-meta">BioTek Synergy H1 • Used in 15 videos</div>
+                        </div>
+                        <div class="material-arrow"><i class="fas fa-chevron-right"></i></div>
+                    </div>
+                </div>
+                
+                <!-- Reagents Category -->
+                <div class="materials-category">
+                    <div class="materials-category-title"><i class="fas fa-vial"></i> &nbsp; Reagents & Chemicals</div>
+                    <div class="material-item" onclick="showEquipmentDetail('spermidine')">
+                        <div class="material-icon"><i class="fas fa-atom"></i></div>
+                        <div class="material-info">
+                            <div class="material-name">Spermidine trihydrochloride</div>
+                            <div class="material-meta">Sigma-Aldrich S2626 • Used in 6 videos</div>
+                        </div>
+                        <div class="material-arrow"><i class="fas fa-chevron-right"></i></div>
+                    </div>
+                    <div class="material-item" onclick="showEquipmentDetail('d-galactose')">
+                        <div class="material-icon"><i class="fas fa-candy-cane"></i></div>
+                        <div class="material-info">
+                            <div class="material-name">D-Galactose</div>
+                            <div class="material-meta">Sigma-Aldrich G0750 • Used in 9 videos</div>
+                        </div>
+                        <div class="material-arrow"><i class="fas fa-chevron-right"></i></div>
+                    </div>
+                    <div class="material-item" onclick="showEquipmentDetail('tbars')">
+                        <div class="material-icon"><i class="fas fa-flask"></i></div>
+                        <div class="material-info">
+                            <div class="material-name">TBARS Assay Kit</div>
+                            <div class="material-meta">Cayman Chemical 10009055 • Used in 11 videos</div>
+                        </div>
+                        <div class="material-arrow"><i class="fas fa-chevron-right"></i></div>
+                    </div>
+                </div>
+                
+                <!-- Consumables Category -->
+                <div class="materials-category">
+                    <div class="materials-category-title"><i class="fas fa-box"></i> &nbsp; Consumables</div>
+                    <div class="material-item" onclick="showEquipmentDetail('microtubes')">
+                        <div class="material-icon"><i class="fas fa-vials"></i></div>
+                        <div class="material-info">
+                            <div class="material-name">1.5 mL Microcentrifuge Tubes</div>
+                            <div class="material-meta">Eppendorf • Used in 45 videos</div>
+                        </div>
+                        <div class="material-arrow"><i class="fas fa-chevron-right"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EQUIPMENT DETAIL VIEW -->
+    <div id="equipment-detail-view">
+        <div class="container" style="max-width: 900px; margin: 0 auto; padding: 40px 20px;">
+            <button class="equipment-back-btn" onclick="closeEquipmentDetail()">
+                <i class="fas fa-arrow-left"></i> Back to Materials List
+            </button>
+            
+            <div class="equipment-header">
+                <div class="equipment-image" id="equipment-image-container">
+                    <i class="fas fa-flask equipment-icon" id="equipment-icon"></i>
+                    <img id="equipment-detail-image" src="" alt="Equipment" style="display:none;">
+                </div>
+                <div class="equipment-info-header">
+                    <span class="equipment-category-tag" id="equipment-detail-category">Equipment</span>
+                    <h1 class="equipment-title" id="equipment-detail-title">Refrigerated Centrifuge</h1>
+                    <div class="equipment-vendor" id="equipment-detail-vendor">Eppendorf 5804R</div>
+                    <div class="equipment-specs">
+                        <div class="equipment-spec"><i class="fas fa-video"></i> <span id="equipment-detail-video-count">Used in 12 videos</span></div>
+                        <div class="equipment-spec"><i class="fas fa-tag"></i> <span id="equipment-detail-catalog">Cat# 5805000010</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="equipment-section">
+                <div class="equipment-section-title"><i class="fas fa-info-circle"></i> Description</div>
+                <p class="equipment-description" id="equipment-detail-description">
+                    The Eppendorf 5804R is a high-performance refrigerated centrifuge designed for molecular biology and clinical applications. It features a maximum speed of 14,000 rpm and temperature control ranging from -9°C to 40°C, making it ideal for temperature-sensitive samples.
+                </p>
+            </div>
+            
+            <div class="equipment-section">
+                <div class="equipment-section-title"><i class="fas fa-video"></i> Used in These JoVE Videos</div>
+                <div class="used-in-videos" id="equipment-used-in-videos">
+                    <a class="used-in-video-card" href="https://app.jove.com/t/68726" target="_blank">
+                        <div class="used-in-video-thumb">
+                            <img src="https://cloudfront.jove.com/CDNSource/teasers/68726.jpg" alt="Video">
+                            <div class="play-icon"><i class="fas fa-play"></i></div>
+                        </div>
+                        <div class="used-in-video-info">
+                            <div class="used-in-video-title">SA-β-galactosidase Based Screening Assay</div>
+                            <div class="used-in-video-meta">JoVE Experiment • 7:39</div>
+                        </div>
+                    </a>
+                    <a class="used-in-video-card" href="https://app.jove.com/t/68739" target="_blank">
+                        <div class="used-in-video-thumb">
+                            <img src="https://cloudfront.jove.com/CDNSource/teasers/68739.jpg" alt="Video">
+                            <div class="play-icon"><i class="fas fa-play"></i></div>
+                        </div>
+                        <div class="used-in-video-info">
+                            <div class="used-in-video-title">Evaluation of Injury-Induced Senescence</div>
+                            <div class="used-in-video-meta">JoVE Experiment • 9:14</div>
+                        </div>
+                    </a>
+                    <a class="used-in-video-card" href="https://app.jove.com/t/68150" target="_blank">
+                        <div class="used-in-video-thumb">
+                            <img src="https://cloudfront.jove.com/CDNSource/teasers/68150.jpg" alt="Video">
+                            <div class="play-icon"><i class="fas fa-play"></i></div>
+                        </div>
+                        <div class="used-in-video-info">
+                            <div class="used-in-video-title">Techniques to Induce Cellular Senescence</div>
+                            <div class="used-in-video-meta">JoVE Experiment • 6:05</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="equipment-section">
+                <div class="equipment-section-title"><i class="fas fa-file-alt"></i> Used in These Papers</div>
+                <div class="used-in-papers" id="equipment-used-in-papers">
+                    <!-- Papers dynamically populated -->
+                </div>
+            </div>
+            
+            <div class="equipment-section">
+                <div class="equipment-section-title"><i class="fas fa-shopping-cart"></i> Where to Buy</div>
+                <div class="suppliers-list" id="equipment-suppliers">
+                    <!-- Suppliers dynamically populated -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <div class="footer-grid">
             <div>
@@ -3947,6 +4960,331 @@
     </footer>
 
     <script>
+        // ========================================
+        // MATERIALS MODAL & EQUIPMENT DETAIL
+        // ========================================
+        
+        // Equipment data with suppliers
+        const equipmentData = {
+            'centrifuge': {
+                category: 'Equipment',
+                title: 'Refrigerated Centrifuge',
+                vendor: 'Eppendorf 5804R',
+                catalog: 'Cat# 5805000010',
+                videoCount: 'Used in 12 videos',
+                icon: 'fa-cog',
+                description: 'The Eppendorf 5804R is a high-performance refrigerated centrifuge designed for molecular biology and clinical applications. It features a maximum speed of 14,000 rpm and temperature control ranging from -9°C to 40°C, making it ideal for temperature-sensitive samples including proteins, enzymes, and cell preparations.',
+                suppliers: [
+                    { name: 'Fisher Scientific', url: 'https://www.fishersci.com', price: '$8,500' },
+                    { name: 'VWR International', url: 'https://www.vwr.com', price: '$8,200' },
+                    { name: 'Eppendorf Direct', url: 'https://www.eppendorf.com', price: '$8,750' }
+                ],
+                videos: [
+                    { title: 'SA-β-galactosidase Based Screening Assay', desc: 'Screening for senescent cells using β-galactosidase activity staining', duration: '7:39', thumb: '68726' },
+                    { title: 'Evaluation of Injury-Induced Senescence', desc: 'Methods for assessing cellular senescence after tissue injury', duration: '9:14', thumb: '68739' },
+                    { title: 'Techniques to Induce Cellular Senescence', desc: 'Various approaches to trigger senescence in cell culture models', duration: '6:05', thumb: '68150' }
+                ],
+                papers: [
+                    { title: 'Spermidine delays aging in humans', journal: 'Nature Aging', year: '2024' },
+                    { title: 'Polyamine metabolism and cellular senescence', journal: 'Cell Reports', year: '2023' }
+                ]
+            },
+            'spectrophotometer': {
+                category: 'Equipment',
+                title: 'UV-Vis Spectrophotometer',
+                vendor: 'Thermo Scientific NanoDrop',
+                catalog: 'Cat# ND-2000',
+                videoCount: 'Used in 8 videos',
+                icon: 'fa-wave-square',
+                description: 'The NanoDrop UV-Vis Spectrophotometer enables accurate quantification of DNA, RNA, and proteins using just 1-2 μL of sample. Its pedestal design eliminates the need for cuvettes, reducing sample consumption and preparation time.',
+                suppliers: [
+                    { name: 'Thermo Fisher', url: 'https://www.thermofisher.com', price: '$9,995' },
+                    { name: 'Fisher Scientific', url: 'https://www.fishersci.com', price: '$10,200' }
+                ],
+                videos: [
+                    { title: 'ROS Measurement Techniques', desc: 'Spectrophotometric methods for reactive oxygen species detection', duration: '5:22', thumb: '68150' },
+                    { title: 'Lipid Peroxidation Assay', desc: 'Quantifying lipid oxidation products via absorbance measurements', duration: '8:45', thumb: '68739' }
+                ],
+                papers: [
+                    { title: 'Quantitative analysis of nucleic acid purity', journal: 'Analytical Biochemistry', year: '2023' },
+                    { title: 'Microvolume spectrophotometry applications', journal: 'Methods in Enzymology', year: '2022' }
+                ]
+            },
+            'microplate-reader': {
+                category: 'Equipment',
+                title: 'Microplate Reader',
+                vendor: 'BioTek Synergy H1',
+                catalog: 'Cat# SH1M2G-SN',
+                videoCount: 'Used in 15 videos',
+                icon: 'fa-th',
+                description: 'The Synergy H1 is a modular multi-mode microplate reader offering absorbance, fluorescence, and luminescence detection. Its hybrid technology combines filter-based and monochromator-based detection for maximum flexibility.',
+                suppliers: [
+                    { name: 'Agilent', url: 'https://www.agilent.com', price: '$25,000' },
+                    { name: 'Fisher Scientific', url: 'https://www.fishersci.com', price: '$24,500' },
+                    { name: 'VWR International', url: 'https://www.vwr.com', price: '$24,800' }
+                ],
+                videos: [
+                    { title: 'TBARS Assay Protocol', desc: 'Colorimetric detection of thiobarbituric acid reactive substances', duration: '6:30', thumb: '68726' },
+                    { title: 'Antioxidant Capacity Measurement', desc: 'Assessing total antioxidant capacity in biological samples', duration: '7:15', thumb: '68739' },
+                    { title: 'Cell Viability Assessment', desc: 'Multi-well format cell viability and cytotoxicity assays', duration: '5:45', thumb: '68150' }
+                ],
+                papers: [
+                    { title: 'High-throughput screening methodologies', journal: 'SLAS Discovery', year: '2024' },
+                    { title: 'Multimodal plate reader optimization', journal: 'Journal of Biomolecular Screening', year: '2023' }
+                ]
+            },
+            'spermidine': {
+                category: 'Reagent',
+                title: 'Spermidine trihydrochloride',
+                vendor: 'Sigma-Aldrich',
+                catalog: 'Cat# S2626',
+                videoCount: 'Used in 6 videos',
+                icon: 'fa-atom',
+                description: 'Spermidine is a polyamine compound found in all eukaryotic cells. It plays essential roles in cell growth, survival, and proliferation. As a caloric restriction mimetic, spermidine induces autophagy and has demonstrated anti-aging properties in various model organisms.',
+                suppliers: [
+                    { name: 'Sigma-Aldrich', url: 'https://www.sigmaaldrich.com', price: '$85/5g' },
+                    { name: 'Cayman Chemical', url: 'https://www.caymanchem.com', price: '$92/5g' },
+                    { name: 'TCI Chemicals', url: 'https://www.tcichemicals.com', price: '$78/5g' }
+                ],
+                videos: [
+                    { title: 'Spermidine Supplementation Protocol', desc: 'Oral administration and dosing protocols for rodent studies', duration: '9:14', thumb: '68739' },
+                    { title: 'Polyamine Extraction Methods', desc: 'Isolating polyamines from tissue samples for analysis', duration: '8:20', thumb: '68726' }
+                ],
+                papers: [
+                    { title: 'Spermidine in health and disease', journal: 'Science', year: '2024' },
+                    { title: 'Autophagy induction by polyamines', journal: 'Nature Cell Biology', year: '2023' },
+                    { title: 'Caloric restriction mimetics review', journal: 'Cell Metabolism', year: '2022' }
+                ]
+            },
+            'd-galactose': {
+                category: 'Reagent',
+                title: 'D-Galactose',
+                vendor: 'Sigma-Aldrich',
+                catalog: 'Cat# G0750',
+                videoCount: 'Used in 9 videos',
+                icon: 'fa-candy-cane',
+                description: 'D-Galactose is commonly used to induce aging models in rodents. Chronic administration leads to oxidative stress, neurodegeneration, and cognitive decline, mimicking natural aging processes. It serves as an established model for studying age-related pathologies.',
+                suppliers: [
+                    { name: 'Sigma-Aldrich', url: 'https://www.sigmaaldrich.com', price: '$45/100g' },
+                    { name: 'Fisher Scientific', url: 'https://www.fishersci.com', price: '$52/100g' },
+                    { name: 'VWR International', url: 'https://www.vwr.com', price: '$48/100g' }
+                ],
+                videos: [
+                    { title: 'D-galactose Induced Senescence Model', desc: 'Establishing the D-galactose aging model in rats', duration: '7:39', thumb: '68726' },
+                    { title: 'Aging Model Preparation', desc: 'Protocols for inducing accelerated aging phenotypes', duration: '6:50', thumb: '68150' }
+                ],
+                papers: [
+                    { title: 'D-galactose-induced aging mechanisms', journal: 'Aging Cell', year: '2024' },
+                    { title: 'Rodent models of accelerated aging', journal: 'GeroScience', year: '2023' }
+                ]
+            },
+            'tbars': {
+                category: 'Reagent',
+                title: 'TBARS Assay Kit',
+                vendor: 'Cayman Chemical',
+                catalog: 'Cat# 10009055',
+                videoCount: 'Used in 11 videos',
+                icon: 'fa-flask',
+                description: 'The TBARS (Thiobarbituric Acid Reactive Substances) Assay Kit measures malondialdehyde (MDA), a product of lipid peroxidation. It provides a colorimetric method to assess oxidative stress and lipid damage in biological samples.',
+                suppliers: [
+                    { name: 'Cayman Chemical', url: 'https://www.caymanchem.com', price: '$295/kit' },
+                    { name: 'Abcam', url: 'https://www.abcam.com', price: '$320/kit' },
+                    { name: 'Cell Biolabs', url: 'https://www.cellbiolabs.com', price: '$285/kit' }
+                ],
+                videos: [
+                    { title: 'Lipid Peroxidation Assessment', desc: 'Measuring MDA levels as oxidative stress biomarker', duration: '5:22', thumb: '68150' },
+                    { title: 'Oxidative Stress Markers', desc: 'Comprehensive panel for oxidative damage assessment', duration: '7:30', thumb: '68739' },
+                    { title: 'MDA Quantification', desc: 'Standard curve preparation and sample analysis', duration: '6:15', thumb: '68726' }
+                ],
+                papers: [
+                    { title: 'TBARS as oxidative stress biomarker', journal: 'Free Radical Biology and Medicine', year: '2024' },
+                    { title: 'Lipid peroxidation in disease states', journal: 'Antioxidants & Redox Signaling', year: '2023' }
+                ]
+            },
+            'microtubes': {
+                category: 'Consumable',
+                title: '1.5 mL Microcentrifuge Tubes',
+                vendor: 'Eppendorf',
+                catalog: 'Cat# 0030120086',
+                videoCount: 'Used in 45 videos',
+                icon: 'fa-vials',
+                description: 'Eppendorf Safe-Lock tubes feature a patented lid design that prevents accidental opening during centrifugation. Made from virgin polypropylene, these tubes are suitable for molecular biology applications and can withstand temperatures from -86°C to +100°C.',
+                suppliers: [
+                    { name: 'Eppendorf', url: 'https://www.eppendorf.com', price: '$85/500 tubes' },
+                    { name: 'Fisher Scientific', url: 'https://www.fishersci.com', price: '$78/500 tubes' },
+                    { name: 'VWR International', url: 'https://www.vwr.com', price: '$72/500 tubes' }
+                ],
+                videos: [
+                    { title: 'Sample Preparation Basics', desc: 'Fundamental techniques for sample handling', duration: '4:30', thumb: '68726' },
+                    { title: 'Centrifugation Protocols', desc: 'Optimal centrifugation settings for various applications', duration: '5:15', thumb: '68739' }
+                ],
+                papers: [
+                    { title: 'Best practices in sample handling', journal: 'Nature Protocols', year: '2024' },
+                    { title: 'Contamination prevention in molecular biology', journal: 'Nucleic Acids Research', year: '2023' }
+                ]
+            }
+        };
+        
+        function openMaterialsPage() {
+            // Hide other views
+            const homeView = document.getElementById('home-view');
+            const articleView = document.getElementById('article-view');
+            const authorView = document.getElementById('author-view');
+            const navPill = document.getElementById('nav-pill');
+            const header = document.querySelector('header');
+            
+            if (homeView) homeView.style.display = 'none';
+            if (articleView) articleView.style.display = 'none';
+            if (authorView) authorView.style.display = 'none';
+            if (navPill) navPill.style.display = 'none';
+            if (header) header.style.display = 'none';
+            
+            // Show materials page
+            document.getElementById('materials-page').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        
+        function closeMaterialsPage() {
+            document.getElementById('materials-page').classList.remove('active');
+            
+            // Restore views
+            const homeView = document.getElementById('home-view');
+            const articleView = document.getElementById('article-view');
+            const authorView = document.getElementById('author-view');
+            const navPill = document.getElementById('nav-pill');
+            const header = document.querySelector('header');
+            
+            if (homeView) homeView.style.display = '';
+            if (articleView) articleView.style.display = '';
+            if (authorView) authorView.style.display = '';
+            if (navPill) navPill.style.display = '';
+            if (header) header.style.display = '';
+        }
+        
+        function showEquipmentDetail(equipmentId) {
+            const data = equipmentData[equipmentId];
+            if (!data) return;
+            
+            // Close materials page
+            document.getElementById('materials-page').classList.remove('active');
+            
+            // Hide main content views
+            const homeView = document.getElementById('home-view');
+            const articleView = document.getElementById('article-view');
+            const authorView = document.getElementById('author-view');
+            const navPill = document.getElementById('nav-pill');
+            const header = document.querySelector('header');
+            
+            if (homeView) homeView.style.display = 'none';
+            if (articleView) articleView.style.display = 'none';
+            if (authorView) authorView.style.display = 'none';
+            if (navPill) navPill.style.display = 'none';
+            if (header) header.style.display = 'none';
+            
+            // Update equipment detail content
+            document.getElementById('equipment-detail-category').textContent = data.category;
+            document.getElementById('equipment-detail-title').textContent = data.title;
+            document.getElementById('equipment-detail-vendor').textContent = data.vendor;
+            document.getElementById('equipment-detail-catalog').textContent = data.catalog;
+            document.getElementById('equipment-detail-video-count').textContent = data.videoCount;
+            document.getElementById('equipment-detail-description').textContent = data.description;
+            
+            // Update icon for the equipment type
+            const iconEl = document.getElementById('equipment-icon');
+            iconEl.className = 'fas ' + (data.icon || 'fa-flask') + ' equipment-icon';
+            
+            // Update suppliers list
+            const suppliersContainer = document.getElementById('equipment-suppliers');
+            suppliersContainer.innerHTML = data.suppliers.map(s => `
+                <a class="supplier-card" href="${s.url}" target="_blank">
+                    <div class="supplier-info">
+                        <div class="supplier-name"><i class="fas fa-store"></i> ${s.name}</div>
+                        <div class="supplier-price">${s.price}</div>
+                    </div>
+                    <div class="supplier-cta"><i class="fas fa-external-link-alt"></i></div>
+                </a>
+            `).join('');
+            
+            // Update videos list - styled like Main Methods
+            const videosContainer = document.getElementById('equipment-used-in-videos');
+            const videoCards = data.videos.map(v => `
+                <div class="equipment-video-card">
+                    <div class="equipment-video-left">
+                        <div class="equipment-video-thumb">
+                            <img src="https://cloudfront.jove.com/CDNSource/teasers/${v.thumb}.jpg" alt="Video">
+                            <div class="equipment-video-play"><i class="fas fa-play"></i></div>
+                            <span class="equipment-video-duration"><i class="fas fa-clock"></i> ${v.duration}</span>
+                        </div>
+                        <div class="equipment-video-meta-bar">
+                            <span><i class="fas fa-eye"></i> 2.4k</span>
+                            <span><i class="fas fa-quote-right"></i> 18</span>
+                        </div>
+                    </div>
+                    <div class="equipment-video-content">
+                        <div class="equipment-video-title">${v.title}</div>
+                        <div class="equipment-video-desc">${v.desc}</div>
+                        <div class="equipment-video-cta">
+                            <a href="https://app.jove.com/t/${v.thumb}" target="_blank" class="cta-btn cta-primary"><i class="fas fa-play-circle"></i> Watch Video</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            const videosPagination = data.videos.length > 2 ? `
+                <div class="list-pagination">
+                    <span class="pagination-info">Showing ${Math.min(3, data.videos.length)} of ${data.videos.length} videos</span>
+                    <button class="show-more-btn"><i class="fas fa-chevron-down"></i> Show More</button>
+                </div>
+            ` : '';
+            videosContainer.innerHTML = videoCards + videosPagination;
+            
+            // Update papers list - vertical list, newest to oldest
+            const papersContainer = document.getElementById('equipment-used-in-papers');
+            const papers = (data.papers || []).sort((a, b) => parseInt(b.year) - parseInt(a.year));
+            const paperCards = papers.map(p => `
+                <a class="equipment-paper-card" href="#" target="_blank">
+                    <div class="equipment-paper-content">
+                        <div class="equipment-paper-title">${p.title}</div>
+                        <div class="equipment-paper-meta">${p.journal} • ${p.year}</div>
+                    </div>
+                    <div class="equipment-paper-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+            `).join('');
+            
+            const papersPagination = papers.length > 2 ? `
+                <div class="list-pagination">
+                    <span class="pagination-info">Showing ${Math.min(3, papers.length)} of ${papers.length} papers</span>
+                    <button class="show-more-btn"><i class="fas fa-chevron-down"></i> Show More</button>
+                </div>
+            ` : '';
+            papersContainer.innerHTML = paperCards + papersPagination;
+            
+            // Show equipment detail view
+            document.getElementById('equipment-detail-view').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        
+        function closeEquipmentDetail() {
+            document.getElementById('equipment-detail-view').classList.remove('active');
+            
+            // Go back to materials page
+            document.getElementById('materials-page').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        
+        // Close pages on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (document.getElementById('equipment-detail-view').classList.contains('active')) {
+                    closeEquipmentDetail();
+                } else if (document.getElementById('materials-page').classList.contains('active')) {
+                    closeMaterialsPage();
+                }
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             let currentStepId = 1;
             const totalSteps = 2; // Based on AAV paper steps defined below
