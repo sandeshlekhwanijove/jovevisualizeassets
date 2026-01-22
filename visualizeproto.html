@@ -44,6 +44,10 @@
         }
 
         * { box-sizing: border-box; }
+        
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             margin: 0;
@@ -2426,26 +2430,119 @@
         /* --- AUTHOR VIEW --- */
         #author-view {
             display: none; opacity: 0; transition: opacity 0.5s;
-            padding: 40px 20px 100px 20px;
-            max-width: 1100px; margin: 0 auto;
             width: 100%;
+            min-height: 100vh;
+            background: #fafbfc;
         }
 
-        .author-hero {
-            background: radial-gradient(circle at top, rgba(33,131,237,0.15), rgba(255,255,255,0.4) 55%), #0f172a;
-            border-radius: 32px;
-            padding: 40px;
-            color: white;
-            display: grid;
-            grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
-            gap: 30px;
-            margin-bottom: 40px;
-            box-shadow: 0 30px 60px -40px rgba(15,23,42,0.9);
+        /* Fixed header area (top bar + profile) */
+        .author-fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: white;
         }
-        .hero-left {
+        
+        /* Top bar */
+        .author-topbar {
+            height: 48px;
+            border-bottom: 1px solid var(--border);
             display: flex;
-            flex-direction: column;
-            gap: 20px;
+            align-items: center;
+            padding: 0 24px;
+        }
+        .author-topbar-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .back-link-topbar {
+            background: none;
+            border: none;
+            color: var(--text-meta);
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 6px;
+        }
+        .back-link-topbar:hover {
+            background: #f1f5f9;
+            color: var(--text-main);
+        }
+        .topbar-author-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        
+        /* Author profile header (fixed) */
+        .author-profile-header {
+            text-align: center;
+            padding: 24px 24px 20px 24px;
+            border-bottom: 1px solid var(--border);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Scrollable content area */
+        .author-page-content {
+            padding: 280px 24px 80px 24px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .author-profile-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0 0 8px 0;
+        }
+        .author-profile-institution {
+            font-size: 0.95rem;
+            color: var(--text-meta);
+            margin-bottom: 20px;
+        }
+        .author-profile-stats {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+        }
+        .author-profile-stat {
+            text-align: center;
+        }
+        .author-profile-stat-num {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--jove-brand);
+        }
+        .author-profile-stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-meta);
+            margin-top: 2px;
+        }
+        .author-profile-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        .author-profile-tag {
+            background: var(--jove-brand-light);
+            color: var(--jove-brand);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
         }
         .hero-header {
             display: flex;
@@ -2491,25 +2588,23 @@
         }
         .hero-summary {
             display: flex;
-            gap: 20px;
+            gap: 24px;
             flex-wrap: wrap;
         }
         .hero-stat {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 16px;
-            padding: 18px 22px;
-            min-width: 160px;
+            text-align: left;
         }
         .hero-stat .stat-num {
-            font-size: 1.5rem;
-            font-weight: 800;
+            font-size: 1.4rem;
+            font-weight: 700;
+            line-height: 1;
         }
         .hero-stat .stat-lab {
-            font-size: 0.8rem;
-            letter-spacing: 0.05em;
+            font-size: 0.7rem;
+            letter-spacing: 0.03em;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255,255,255,0.7);
+            margin-top: 4px;
         }
         .hero-cta-row {
             display: flex;
@@ -2560,6 +2655,925 @@
         #author-view .claimed-only { display: none; }
         #author-view.state-claimed .claimed-only { display: block; }
         #author-view.state-claimed .unclaimed-only { display: none; }
+
+        /* === ENHANCED AUTHOR PAGE === */
+        .author-page-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+        }
+        
+        /* Author Institution & ORCID */
+        .author-institution {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255,255,255,0.85);
+            font-size: 0.95rem;
+            margin-top: 8px;
+        }
+        .author-institution i {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+        
+        .orcid-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(166, 206, 57, 0.2);
+            border: 1px solid rgba(166, 206, 57, 0.4);
+            color: #a6ce39;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 12px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .orcid-badge:hover {
+            background: rgba(166, 206, 57, 0.3);
+            transform: translateY(-1px);
+        }
+        .orcid-badge img {
+            width: 16px;
+            height: 16px;
+        }
+        
+        /* Research Focus Tags */
+        .research-focus-section {
+            margin-top: 20px;
+        }
+        .research-focus-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 10px;
+        }
+        .mesh-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .mesh-tag {
+            background: rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.9);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        .mesh-tag:hover {
+            background: rgba(255,255,255,0.25);
+        }
+        .mesh-tag.primary {
+            background: rgba(33,131,237,0.3);
+            border-color: rgba(33,131,237,0.5);
+        }
+        
+        /* Author Page Tabs */
+        .author-tabs {
+            display: none; /* Hidden - using single page layout now */
+        }
+        .author-tab {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            color: var(--text-meta);
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .author-tab:hover {
+            color: var(--text-main);
+            background: rgba(255,255,255,0.5);
+        }
+        .author-tab.active {
+            background: white;
+            color: var(--jove-brand);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .author-tab .tab-count {
+            background: #e2e8f0;
+            color: var(--text-meta);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+        }
+        .author-tab.active .tab-count {
+            background: rgba(33,131,237,0.15);
+            color: var(--jove-brand);
+        }
+        
+        /* All sections now visible (single-page layout) */
+        .author-tab-content,
+        .author-section {
+            display: block;
+        }
+        
+        /* Section Styles */
+        .author-section {
+            margin-bottom: 40px;
+        }
+        .author-section-title {
+            position: sticky;
+            top: 48px;
+            z-index: 50;
+            background: #fafbfc;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0 0 20px 0;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-left: 3px solid var(--jove-brand);
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(to right, rgba(33, 131, 237, 0.04), #fafbfc);
+        }
+        .author-section-title i {
+            font-size: 0.9rem;
+            color: var(--jove-brand);
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Publications Filters */
+        .pub-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        .pub-filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .pub-filter-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-meta);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .pub-filter-select {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            background: white;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+        .pub-filter-select:focus {
+            outline: none;
+            border-color: var(--jove-brand);
+        }
+        .export-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 10px;
+            background: transparent;
+            color: var(--text-meta);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .export-btn:hover {
+            border-color: var(--text-meta);
+            color: var(--text-main);
+        }
+        
+        /* Enhanced Paper Card */
+        .paper-card-enhanced {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+        .paper-card-enhanced:hover {
+            border-color: var(--jove-brand);
+            box-shadow: 0 8px 24px rgba(33,131,237,0.1);
+        }
+        .paper-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+        }
+        .paper-card-main {
+            flex: 1;
+        }
+        .paper-card-badges {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .paper-type-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 3px 10px;
+            border-radius: 4px;
+        }
+        .paper-type-badge.research {
+            background: rgba(16,185,129,0.1);
+            color: #059669;
+        }
+        .paper-type-badge.review {
+            background: rgba(139,92,246,0.1);
+            color: #7c3aed;
+        }
+        .paper-type-badge.case-report {
+            background: rgba(245,158,11,0.1);
+            color: #d97706;
+        }
+        .pmc-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #059669;
+            background: rgba(16,185,129,0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        .paper-card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            line-height: 1.4;
+            margin-bottom: 6px;
+        }
+        .paper-card-journal {
+            font-size: 0.85rem;
+            color: var(--text-meta);
+        }
+        .paper-card-metrics {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-shrink: 0;
+        }
+        .paper-metric {
+            text-align: center;
+        }
+        .paper-metric-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .paper-metric-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-meta);
+        }
+        .paper-card-footer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+        .paper-coauthors {
+            font-size: 0.8rem;
+            color: var(--text-meta);
+        }
+        .paper-coauthors a {
+            color: var(--jove-brand);
+            text-decoration: none;
+        }
+        .paper-coauthors a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Co-Authors Section */
+        .coauthor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 12px;
+        }
+        .coauthor-card {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: white;
+            transition: border-color 0.2s;
+        }
+        .coauthor-card:hover {
+            border-color: var(--jove-brand);
+        }
+        .coauthor-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--jove-brand-light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--jove-brand);
+            font-size: 0.85rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .coauthor-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .coauthor-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+        .coauthor-affiliation {
+            font-size: 0.75rem;
+            color: var(--text-meta);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .coauthor-papers {
+            font-size: 0.7rem;
+            color: var(--jove-brand);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        
+        /* Visualizations Section */
+        .viz-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        .viz-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .viz-card-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .viz-card-title i {
+            color: var(--jove-brand);
+        }
+        
+        /* Pie Chart */
+        .pie-chart-container {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+        .pie-chart {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            flex-shrink: 0;
+        }
+        .pie-svg {
+            width: 100%;
+            height: 100%;
+        }
+        .pie-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        .pie-total {
+            display: block;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .pie-label {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-meta);
+        }
+        .pie-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .pie-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .pie-legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+        .pie-legend-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .pie-legend-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+        .pie-legend-value {
+            font-size: 0.75rem;
+            color: var(--text-meta);
+        }
+        
+        /* Publication Timeline (deprecated) */
+        .pub-timeline {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 150px;
+            padding-top: 10px;
+        }
+        .timeline-bar-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .timeline-bar {
+            width: 100%;
+            max-width: 40px;
+            background: linear-gradient(to top, var(--jove-brand), #60a5fa);
+            border-radius: 4px 4px 0 0;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .timeline-bar:hover {
+            background: linear-gradient(to top, #1a6bc9, var(--jove-brand));
+            transform: scaleY(1.05);
+        }
+        .timeline-bar-count {
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-main);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .timeline-bar:hover .timeline-bar-count {
+            opacity: 1;
+        }
+        .timeline-year {
+            font-size: 0.7rem;
+            color: var(--text-meta);
+            transform: rotate(-45deg);
+            white-space: nowrap;
+        }
+        
+        /* Journal Distribution */
+        .journal-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .journal-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .journal-name {
+            font-size: 0.85rem;
+            color: var(--text-main);
+            width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .journal-bar-bg {
+            flex: 1;
+            height: 24px;
+            background: #f1f5f9;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .journal-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--jove-brand), #60a5fa);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding-left: 8px;
+        }
+        .journal-count {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        /* Impact Metrics Section */
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .impact-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .impact-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1;
+        }
+        .impact-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-meta);
+            margin-top: 6px;
+        }
+        .impact-source {
+            font-size: 0.7rem;
+            color: var(--text-meta);
+            margin-top: 8px;
+            opacity: 0.7;
+        }
+        .impact-card.highlight {
+            background: linear-gradient(135deg, var(--jove-brand), #1e6fd9);
+            border: none;
+        }
+        .impact-card.highlight .impact-value,
+        .impact-card.highlight .impact-label,
+        .impact-card.highlight .impact-source {
+            color: white;
+        }
+        
+        /* Funding Section */
+        .funding-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .funding-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        .funding-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+        }
+        .funding-info {
+            flex: 1;
+        }
+        .funding-name {
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 0.9rem;
+        }
+        .funding-meta {
+            font-size: 0.8rem;
+            color: var(--text-meta);
+        }
+
+        /* Vertical Timeline Publications View */
+        .publications-timeline-container {
+            display: block;
+        }
+        
+        .timeline-nav {
+            display: none; /* Hidden - using inline year markers now */
+        }
+        
+        .timeline-nav-title {
+            display: none;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-meta);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .timeline-year-group {
+            margin-bottom: 16px;
+        }
+        
+        .timeline-year-header {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .timeline-year-count {
+            font-size: 0.7rem;
+            background: #e2e8f0;
+            color: var(--text-meta);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        
+        .timeline-month-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 8px 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-body);
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+            margin-bottom: 2px;
+        }
+        
+        .timeline-month-btn:hover {
+            background: #f1f5f9;
+            color: var(--text-main);
+        }
+        
+        .timeline-month-btn.active {
+            background: var(--jove-brand);
+            color: white;
+        }
+        
+        .timeline-month-btn .month-count {
+            float: right;
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+        
+        .timeline-content {
+            width: 100%;
+        }
+        
+        .timeline-content-header {
+            display: none;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .timeline-content-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .timeline-content-title i {
+            color: var(--jove-brand);
+        }
+        
+        .timeline-content-count {
+            font-size: 0.85rem;
+            color: var(--text-meta);
+        }
+        
+        /* Publication Cards */
+        .publications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        /* Collapsed state - show only first 4 */
+        .publications-list.collapsed .pub-card:nth-child(n+5) {
+            display: none;
+        }
+        
+        .pub-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .pub-card:hover {
+            border-color: var(--jove-brand);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+        .pub-card-year {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--jove-brand);
+            margin-bottom: 6px;
+        }
+        .pub-card-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-main);
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+        .pub-card-meta {
+            font-size: 0.8rem;
+            color: var(--text-meta);
+        }
+        
+        /* Show more button */
+        .show-more-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 16px;
+            background: transparent;
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            color: var(--text-meta);
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .show-more-btn:hover {
+            border-color: var(--jove-brand);
+            color: var(--jove-brand);
+        }
+        .show-more-btn i {
+            margin-left: 6px;
+            transition: transform 0.2s;
+        }
+        .show-more-btn.expanded i {
+            transform: rotate(180deg);
+        }
+        
+        /* Year Marker in Timeline */
+        .timeline-year-marker {
+            position: relative;
+            padding: 20px 0 12px 0;
+            margin: 0 0 4px -24px;
+            padding-left: 24px;
+            scroll-margin-top: 80px;
+        }
+        
+        .timeline-year-marker::before {
+            content: '';
+            position: absolute;
+            left: 1px;
+            top: 24px;
+            width: 7px;
+            height: 7px;
+            background: var(--jove-brand);
+            border-radius: 50%;
+        }
+        
+        .timeline-year-marker span {
+            display: inline-block;
+            color: var(--text-main);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+        
+        /* Smooth scroll behavior for timeline */
+        .timeline-content {
+            scroll-behavior: smooth;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: -21px;
+            top: 6px;
+            width: 5px;
+            height: 5px;
+            background: #cbd5e1;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .timeline-paper-item:hover .timeline-dot {
+            background: var(--jove-brand);
+        }
+        
+        .timeline-date {
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: var(--text-meta);
+            margin-bottom: 2px;
+        }
+        .timeline-date .month {
+            font-weight: 600;
+        }
+        
+        .timeline-paper-card {
+            cursor: pointer;
+        }
+        
+        .timeline-paper-card:hover .timeline-paper-title {
+            color: var(--jove-brand);
+        }
+        
+        .timeline-paper-badges {
+            display: none;
+        }
+        
+        .timeline-paper-title {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-main);
+            line-height: 1.4;
+        }
+        
+        .timeline-paper-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.75rem;
+            color: var(--text-meta);
+            margin-top: 2px;
+        }
+        
+        .timeline-paper-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .timeline-paper-stat i {
+            font-size: 0.7rem;
+        }
+        
+        @media (max-width: 768px) {
+            .publications-timeline-container {
+                flex-direction: column;
+            }
+            .timeline-nav {
+                width: 100%;
+                position: static;
+                max-height: none;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .timeline-year-group {
+                margin-bottom: 0;
+            }
+            .timeline-month-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+        }
 
         /* --- UNIVERSITY VIEW --- */
         #university-view {
@@ -3844,29 +4858,13 @@
                     </div>
                 </div>
 
-            <div class="trend-grid">
-                <div class="paper-card" onclick="loadSpermidineAbstract()">
-                    <span class="paper-tag">Gerontology</span>
-                    <div class="paper-head">Spermidine protects cellular redox status and ionic homeostasis in D-galactose induced senescence and natural aging rat models</div>
-                    <div class="paper-meta">Z. Naturforschung C • 2024</div>
-                    <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
-                        View abstract
-                    </div>
-                </div>
-                <div class="paper-card" onclick="loadSpermidineMethods()">
-                    <span class="paper-tag">Lab Methods</span>
-                    <div class="paper-head">Spermidine protects cellular redox status and ionic homeostasis in D-galactose induced senescence and natural aging rat models</div>
-                    <div class="paper-meta">3 core workflows • 6 min overview</div>
-                    <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
-                        View methods
-                    </div>
-                </div>
-                <div class="paper-card" onclick="loadSpermidineV3()">
+            <div class="trend-grid" style="justify-content: center;">
+                <div class="paper-card" style="max-width: 340px;" onclick="loadSpermidineV3()">
                     <span class="paper-tag" style="background: #ecfdf5; color: #059669;">AI Summary</span>
                     <div class="paper-head">Spermidine protects cellular redox status and ionic homeostasis in D-galactose induced senescence and natural aging rat models</div>
                     <div class="paper-meta">Compact view • Video-enriched</div>
                     <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
-                        View compact (V3)
+                        View article
                     </div>
                 </div>
             </div>
@@ -3875,62 +4873,263 @@
 
     <!-- === AUTHOR PROFILE VIEW === -->
     <div id="author-view" class="state-unclaimed">
-        <div class="author-view-back">
-            <button class="back-link" onclick="returnToArticle()"><i class="fas fa-arrow-left"></i> Back to article</button>
+        <!-- Fixed Header Area -->
+        <div class="author-fixed-header">
+            <!-- Top Bar -->
+            <div class="author-topbar">
+                <div class="author-topbar-inner">
+                    <button class="back-link-topbar" onclick="returnToArticle()">
+                        <i class="fas fa-arrow-left"></i> Back to article
+                    </button>
+                </div>
+            </div>
+            <!-- Profile Header -->
+            <div class="author-profile-header">
+                <h1 class="author-profile-name" id="p-name">F H Gage</h1>
+                <div class="author-profile-institution">The Salk Institute for Biological Studies, La Jolla, CA</div>
+                <div class="author-profile-stats">
+                    <div class="author-profile-stat">
+                        <div class="author-profile-stat-num" id="author-stat-papers">102</div>
+                        <div class="author-profile-stat-label">Publications</div>
+                    </div>
+                    <div class="author-profile-stat">
+                        <div class="author-profile-stat-num">48</div>
+                        <div class="author-profile-stat-label">Co-Authors</div>
+                    </div>
+                    <div class="author-profile-stat">
+                        <div class="author-profile-stat-num">34</div>
+                        <div class="author-profile-stat-label">Years Active</div>
+                    </div>
+                </div>
+                <div class="author-profile-tags">
+                    <span class="author-profile-tag">Neurogenesis</span>
+                    <span class="author-profile-tag">Stem Cells</span>
+                    <span class="author-profile-tag">Hippocampus</span>
+                    <span class="author-profile-tag">Gene Therapy</span>
+                    <span class="author-profile-tag">Aging</span>
+                </div>
+            </div>
         </div>
-        <div class="author-hero">
-            <div class="hero-left">
-                <div class="hero-header">
-                    <div>
-                    <h1 id="p-name" style="margin:0;">F H Gage</h1>
+
+        <!-- Scrollable Content -->
+        <div class="author-page-content">
+            <!-- Publications Section -->
+            <div class="author-section">
+                <h2 class="author-section-title"><i class="fas fa-file-alt"></i> Publications</h2>
+                
+                <div class="publications-list collapsed" id="publications-list">
+                    <div class="pub-card" onclick="loadSpermidineAbstract()">
+                        <div class="pub-card-year">2024</div>
+                        <div class="pub-card-title">Spermidine protects cellular redox status and ionic homeostasis in D-galactose induced senescence and natural aging rat models</div>
+                        <div class="pub-card-meta">Z. Naturforschung C</div>
+                    </div>
+                    <div class="pub-card" onclick="loadAbstract()">
+                        <div class="pub-card-year">2024</div>
+                        <div class="pub-card-title">Neural stem cell dynamics in the aging hippocampus: New insights from single-cell analysis</div>
+                        <div class="pub-card-meta">Cell Stem Cell</div>
+                    </div>
+                    <div class="pub-card" onclick="loadAbstract()">
+                        <div class="pub-card-year">2024</div>
+                        <div class="pub-card-title">Therapeutic applications of adult neurogenesis: Current progress and future directions</div>
+                        <div class="pub-card-meta">Nature Reviews Drug Discovery</div>
+                    </div>
+                    <div class="pub-card" onclick="loadAbstract()">
+                        <div class="pub-card-year">2023</div>
+                        <div class="pub-card-title">Environmental enrichment promotes adult neurogenesis through epigenetic mechanisms</div>
+                        <div class="pub-card-meta">Nature Neuroscience</div>
+                    </div>
+                    <div class="pub-card" onclick="loadAbstract()">
+                        <div class="pub-card-year">2023</div>
+                        <div class="pub-card-title">CRISPR-based gene therapy enhances neurogenesis in aged mice</div>
+                        <div class="pub-card-meta">Science</div>
+                    </div>
+                    <div class="pub-card" onclick="loadAbstract()">
+                        <div class="pub-card-year">2023</div>
+                        <div class="pub-card-title">Adult neurogenesis: A comprehensive review of neural stem cell regulation and therapeutic potential</div>
+                        <div class="pub-card-meta">Nature Reviews Neuroscience</div>
+                    </div>
+                    <div class="pub-card" onclick="loadAbstract()">
+                        <div class="pub-card-year">2022</div>
+                        <div class="pub-card-title">Single-cell transcriptomic atlas of adult neurogenesis in the mouse brain</div>
+                        <div class="pub-card-meta">Nature</div>
+                    </div>
+                    <div class="pub-card" onclick="loadAbstract()">
+                        <div class="pub-card-year">2021</div>
+                        <div class="pub-card-title">Wnt signaling regulates neural stem cell maintenance in the adult hippocampus</div>
+                        <div class="pub-card-meta">Neuron</div>
+                    </div>
+                    <div class="pub-card" onclick="loadAbstract()">
+                        <div class="pub-card-year">2018</div>
+                        <div class="pub-card-title">Decline in adult hippocampal neurogenesis during human lifespan</div>
+                        <div class="pub-card-meta">Nature</div>
+                    </div>
+                    <div class="pub-card" onclick="loadAbstract()">
+                        <div class="pub-card-year">1998</div>
+                        <div class="pub-card-title">Neurogenesis in the adult human hippocampus</div>
+                        <div class="pub-card-meta">Nature Medicine</div>
+                    </div>
                 </div>
-                </div>
-                <div class="hero-summary">
-                    <div class="hero-stat">
-                        <div class="stat-num" id="author-stat-papers">102</div>
-                        <div class="stat-lab">Papers Published</div>
+                <button class="show-more-btn" id="show-more-publications" onclick="togglePublications()">
+                    Show all 102 publications <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+
+            <!-- Co-Authors Section -->
+            <div class="author-section" style="margin-top: 32px;">
+                <h2 class="author-section-title"><i class="fas fa-users"></i> Frequent Collaborators</h2>
+                <div class="coauthor-grid">
+                    <div class="coauthor-card" onclick="showAuthorProfile('ray')">
+                        <div class="coauthor-avatar">JR</div>
+                        <div class="coauthor-info">
+                            <div class="coauthor-name">Jasodhara Ray</div>
+                            <div class="coauthor-affiliation">The Salk Institute</div>
+                            <div class="coauthor-papers">34 joint publications</div>
+                        </div>
+                    </div>
+                    <div class="coauthor-card" onclick="showAuthorProfile('peterson')">
+                        <div class="coauthor-avatar">DP</div>
+                        <div class="coauthor-info">
+                            <div class="coauthor-name">Daniel A Peterson</div>
+                            <div class="coauthor-affiliation">Rosalind Franklin University</div>
+                            <div class="coauthor-papers">28 joint publications</div>
+                        </div>
+                    </div>
+                    <div class="coauthor-card" onclick="showAuthorProfile('eriksson')">
+                        <div class="coauthor-avatar">PE</div>
+                        <div class="coauthor-info">
+                            <div class="coauthor-name">Peter S Eriksson</div>
+                            <div class="coauthor-affiliation">University of Gothenburg</div>
+                            <div class="coauthor-papers">21 joint publications</div>
+                        </div>
+                    </div>
+                    <div class="coauthor-card" onclick="showAuthorProfile('zhao')">
+                        <div class="coauthor-avatar">CZ</div>
+                        <div class="coauthor-info">
+                            <div class="coauthor-name">Chunmei Zhao</div>
+                            <div class="coauthor-affiliation">The Salk Institute</div>
+                            <div class="coauthor-papers">19 joint publications</div>
+                        </div>
+                    </div>
+                    <div class="coauthor-card" onclick="showAuthorProfile('ming')">
+                        <div class="coauthor-avatar">GM</div>
+                        <div class="coauthor-info">
+                            <div class="coauthor-name">Guo-li Ming</div>
+                            <div class="coauthor-affiliation">University of Pennsylvania</div>
+                            <div class="coauthor-papers">16 joint publications</div>
+                        </div>
+                    </div>
+                    <div class="coauthor-card" onclick="showAuthorProfile('song')">
+                        <div class="coauthor-avatar">HS</div>
+                        <div class="coauthor-info">
+                            <div class="coauthor-name">Hongjun Song</div>
+                            <div class="coauthor-affiliation">University of Pennsylvania</div>
+                            <div class="coauthor-papers">15 joint publications</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-
-        <!-- Sort Options -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0; font-size: 1.3rem;">Publications</h2>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn btn-secondary active" id="sort-newest" onclick="sortPapers('newest')" style="font-size: 0.85rem; padding: 6px 16px;">Newest First</button>
-                <button class="btn btn-secondary" id="sort-oldest" onclick="sortPapers('oldest')" style="font-size: 0.85rem; padding: 6px 16px;">Oldest First</button>
-            </div>
-        </div>
-
-        <div class="pub-list" id="pub-list" style="max-height: 600px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;">
-            <div class="paper-card" data-year="2024" data-cat="all neuroscience gerontology" onclick="loadSpermidineAbstract()">
-                <span class="paper-tag">Gerontology</span>
-                <div class="paper-head">Spermidine protects cellular redox status and ionic homeostasis in D-galactose induced senescence and natural aging rat models</div>
-                <div class="paper-meta">Z. Naturforschung C • 2024</div>
-                <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
-                    View abstract
+            <!-- Analytics Section -->
+            <div class="author-section" style="margin-top: 32px;">
+                <h2 class="author-section-title"><i class="fas fa-chart-bar"></i> Analytics</h2>
+                <div class="viz-grid">
+                    <!-- Publication Types Pie Chart -->
+                    <div class="viz-card">
+                        <div class="viz-card-title"><i class="fas fa-pie-chart"></i> Publication Types</div>
+                        <div class="pie-chart-container">
+                            <div class="pie-chart">
+                                <svg viewBox="0 0 100 100" class="pie-svg">
+                                    <!-- Original Research: 70% (252 degrees) -->
+                                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#10b981" stroke-width="20" 
+                                        stroke-dasharray="175.93 251.33" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+                                    <!-- Reviews: 24% (86.4 degrees) -->
+                                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#8b5cf6" stroke-width="20" 
+                                        stroke-dasharray="60.32 251.33" stroke-dashoffset="-175.93" transform="rotate(-90 50 50)"/>
+                                    <!-- Case Reports: 6% (21.6 degrees) -->
+                                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="#f59e0b" stroke-width="20" 
+                                        stroke-dasharray="15.08 251.33" stroke-dashoffset="-236.25" transform="rotate(-90 50 50)"/>
+                                </svg>
+                                <div class="pie-center">
+                                    <span class="pie-total">102</span>
+                                    <span class="pie-label">Total</span>
+                                </div>
+                            </div>
+                            <div class="pie-legend">
+                                <div class="pie-legend-item">
+                                    <div class="pie-legend-color" style="background: #10b981;"></div>
+                                    <div class="pie-legend-text">
+                                        <span class="pie-legend-name">Original Research</span>
+                                        <span class="pie-legend-value">72 (70%)</span>
+                                    </div>
+                                </div>
+                                <div class="pie-legend-item">
+                                    <div class="pie-legend-color" style="background: #8b5cf6;"></div>
+                                    <div class="pie-legend-text">
+                                        <span class="pie-legend-name">Reviews</span>
+                                        <span class="pie-legend-value">24 (24%)</span>
+                                    </div>
+                                </div>
+                                <div class="pie-legend-item">
+                                    <div class="pie-legend-color" style="background: #f59e0b;"></div>
+                                    <div class="pie-legend-text">
+                                        <span class="pie-legend-name">Case Reports</span>
+                                        <span class="pie-legend-value">6 (6%)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Journal Distribution -->
+                    <div class="viz-card">
+                        <div class="viz-card-title"><i class="fas fa-book"></i> Top Journals</div>
+                        <div class="journal-list">
+                            <div class="journal-item">
+                                <span class="journal-name">Nature</span>
+                                <div class="journal-bar-bg">
+                                    <div class="journal-bar" style="width: 100%;">
+                                        <span class="journal-count">18</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="journal-item">
+                                <span class="journal-name">Science</span>
+                                <div class="journal-bar-bg">
+                                    <div class="journal-bar" style="width: 78%;">
+                                        <span class="journal-count">14</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="journal-item">
+                                <span class="journal-name">Cell</span>
+                                <div class="journal-bar-bg">
+                                    <div class="journal-bar" style="width: 67%;">
+                                        <span class="journal-count">12</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="journal-item">
+                                <span class="journal-name">PNAS</span>
+                                <div class="journal-bar-bg">
+                                    <div class="journal-bar" style="width: 56%;">
+                                        <span class="journal-count">10</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="journal-item">
+                                <span class="journal-name">Neuron</span>
+                                <div class="journal-bar-bg">
+                                    <div class="journal-bar" style="width: 44%;">
+                                        <span class="journal-count">8</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="paper-card" data-year="2003" data-cat="all genetics" onclick="loadAbstract()">
-                <span class="paper-tag">Genetics</span>
-                <div class="paper-head">Mobile elements: drivers of genome evolution</div>
-                <div class="paper-meta">Science • 2003</div>
-                <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
-                    View abstract
-                </div>
-            </div>
 
-            <div class="paper-card" data-year="1995" data-cat="all stem neuroscience" onclick="loadAbstract()">
-                <span class="paper-tag">Stem Cells</span>
-                <div class="paper-head">Survival and differentiation of adult neuronal progenitor cells</div>
-                <div class="paper-meta">PNAS • 1995</div>
-                <div style="margin-top:12px; font-size:0.8rem; color:var(--jove-brand); font-weight:600;">
-                    View abstract
-                </div>
-            </div>
         </div>
     </div>
 
@@ -5692,9 +6891,78 @@
                 document.getElementById('author-view').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('author-view').style.display = 'none';
-                    showView(window.currentArticleView === 'spermidine' ? 'spermidine' : 'abstract');
+                    showView('spermidine-v3');
                 }, 200);
             };
+            
+            // Author page tab switching
+            window.switchAuthorTab = function(tabId) {
+                // Update tab buttons
+                document.querySelectorAll('.author-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                event.target.closest('.author-tab').classList.add('active');
+                
+                // Update tab content
+                document.querySelectorAll('.author-tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById('author-tab-' + tabId).classList.add('active');
+            };
+            
+            // Export citations functionality
+            window.exportCitations = function() {
+                const exportOptions = `
+                    <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;" onclick="this.remove()">
+                        <div style="background:white;padding:30px;border-radius:16px;max-width:400px;width:90%;box-shadow:0 25px 50px rgba(0,0,0,0.25);" onclick="event.stopPropagation()">
+                            <h3 style="margin:0 0 20px 0;font-size:1.2rem;">Export Citations</h3>
+                            <p style="color:#64748b;font-size:0.9rem;margin-bottom:20px;">Choose a format to export the selected publications.</p>
+                            <div style="display:flex;flex-direction:column;gap:10px;">
+                                <button onclick="downloadCitations('bibtex');this.closest('div[style*=fixed]').remove();" style="padding:12px 20px;border:1px solid #e2e8f0;border-radius:8px;background:white;cursor:pointer;text-align:left;font-size:0.9rem;display:flex;align-items:center;gap:10px;">
+                                    <i class="fas fa-file-code" style="color:#2183ed;"></i> BibTeX (.bib)
+                                </button>
+                                <button onclick="downloadCitations('ris');this.closest('div[style*=fixed]').remove();" style="padding:12px 20px;border:1px solid #e2e8f0;border-radius:8px;background:white;cursor:pointer;text-align:left;font-size:0.9rem;display:flex;align-items:center;gap:10px;">
+                                    <i class="fas fa-file-alt" style="color:#2183ed;"></i> RIS (.ris)
+                                </button>
+                                <button onclick="downloadCitations('csv');this.closest('div[style*=fixed]').remove();" style="padding:12px 20px;border:1px solid #e2e8f0;border-radius:8px;background:white;cursor:pointer;text-align:left;font-size:0.9rem;display:flex;align-items:center;gap:10px;">
+                                    <i class="fas fa-file-csv" style="color:#2183ed;"></i> CSV (.csv)
+                                </button>
+                            </div>
+                            <button onclick="this.closest('div[style*=fixed]').remove();" style="margin-top:20px;padding:10px 20px;border:none;background:#f1f5f9;border-radius:8px;cursor:pointer;font-size:0.9rem;width:100%;">Cancel</button>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', exportOptions);
+            };
+            
+            // Download citations in various formats
+            window.downloadCitations = function(format) {
+                // Simulate download
+                const filename = 'citations_f_h_gage.' + (format === 'bibtex' ? 'bib' : format);
+                alert('Downloading ' + filename + '\n\nIn production, this would generate and download the citation file in ' + format.toUpperCase() + ' format.');
+            };
+            
+            // Show author profile (for co-authors)
+            window.showAuthorProfile = function(authorId) {
+                alert('Loading profile for: ' + authorId + '\n\nThis would navigate to the selected co-author\'s profile page.');
+            };
+            
+            // Toggle publications list
+            window.togglePublications = function() {
+                const list = document.getElementById('publications-list');
+                const btn = document.getElementById('show-more-publications');
+                
+                if (list.classList.contains('collapsed')) {
+                    list.classList.remove('collapsed');
+                    btn.classList.add('expanded');
+                    btn.innerHTML = '<i class="fas fa-chevron-up"></i> Show less';
+                } else {
+                    list.classList.add('collapsed');
+                    btn.classList.remove('expanded');
+                    btn.innerHTML = 'Show all 102 publications <i class="fas fa-chevron-down"></i>';
+                }
+            };
+            
             window.returnFromHub = function() {
                 document.getElementById('university-view').style.opacity = '0';
                 setTimeout(() => {
@@ -6026,5 +7294,8 @@
             });
         });
     </script>
+</body>
+</html>
+
 </body>
 </html>
