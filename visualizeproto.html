@@ -2547,17 +2547,23 @@
         
         /* Author profile header (fixed) */
         .author-profile-header {
-            text-align: center;
+            display: flex;
+            gap: 32px;
+            align-items: flex-start;
             padding: 24px 24px 20px 24px;
             border-bottom: 1px solid var(--border);
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
+        }
+        .author-profile-info {
+            flex: 1;
+            text-align: left;
         }
         
         /* Scrollable content area */
         .author-page-content {
-            padding: 280px 24px 80px 24px;
-            max-width: 800px;
+            padding: 320px 24px 80px 24px;
+            max-width: 900px;
             margin: 0 auto;
         }
         .author-profile-name {
@@ -2573,8 +2579,8 @@
         }
         .author-profile-stats {
             display: flex;
-            justify-content: center;
-            gap: 32px;
+            justify-content: flex-start;
+            gap: 28px;
         }
         .author-profile-stat {
             text-align: center;
@@ -2593,10 +2599,10 @@
         }
         .author-profile-tags {
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             flex-wrap: wrap;
             gap: 8px;
-            margin-top: 20px;
+            margin-top: 16px;
         }
         .author-profile-tag {
             background: var(--jove-brand-light);
@@ -2606,6 +2612,138 @@
             font-size: 0.75rem;
             font-weight: 500;
         }
+        
+        /* Author Featured Video */
+        .author-featured-video {
+            flex-shrink: 0;
+            width: 360px;
+        }
+        .author-featured-video-container {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #0a0a0a;
+            aspect-ratio: 16/9;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+        .author-featured-video-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .author-featured-video-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--jove-brand);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .author-featured-video-label i {
+            font-size: 0.7rem;
+        }
+        
+        /* Related JoVE Videos Grid */
+        .jove-videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .jove-video-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .jove-video-card:hover {
+            border-color: var(--jove-brand);
+            box-shadow: 0 4px 16px rgba(33, 131, 237, 0.12);
+            transform: translateY(-2px);
+        }
+        .jove-video-thumb {
+            position: relative;
+            aspect-ratio: 16/9;
+            background: #1a1a2e;
+            overflow: hidden;
+        }
+        .jove-video-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .jove-video-play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .jove-video-card:hover .jove-video-play-overlay {
+            opacity: 1;
+        }
+        .jove-video-play-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--jove-brand);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(33, 131, 237, 0.4);
+        }
+        .jove-video-duration {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .jove-video-info {
+            padding: 12px;
+        }
+        .jove-video-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            line-height: 1.4;
+            margin-bottom: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .jove-video-meta {
+            font-size: 0.75rem;
+            color: var(--text-meta);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .jove-video-meta .jove-badge {
+            background: var(--jove-brand);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+        
         .hero-header {
             display: flex;
             gap: 20px;
@@ -3535,13 +3673,20 @@
             background: white;
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 16px 20px;
+            padding: 14px 16px;
             cursor: pointer;
             transition: all 0.2s;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
         }
         .pub-card:hover {
             border-color: var(--jove-brand);
             box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+        .pub-card-content {
+            flex: 1;
+            min-width: 0;
         }
         .pub-card-year {
             font-size: 0.7rem;
@@ -3550,15 +3695,383 @@
             margin-bottom: 6px;
         }
         .pub-card-title {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 500;
             color: var(--text-main);
             line-height: 1.4;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .pub-card-meta {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--text-meta);
+        }
+        
+        /* Publication Video Thumbnail */
+        .pub-video-thumb {
+            flex-shrink: 0;
+            width: 140px;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--jove-brand) 0%, #3b82f6 100%);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pub-video-thumb:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 16px rgba(33, 131, 237, 0.25);
+        }
+        .pub-video-thumb img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        .pub-video-thumb:hover img {
+            transform: scale(1.08);
+        }
+        .pub-video-thumb .play-icon {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(33,131,237,0.7) 0%, rgba(59,130,246,0.5) 100%);
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        .pub-video-thumb:hover .play-icon {
+            opacity: 1;
+        }
+        .pub-video-thumb .play-icon i {
+            color: white;
+            font-size: 1.6rem;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+            animation: pulse-play 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse-play {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .pub-video-thumb .jove-label {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            background: linear-gradient(135deg, var(--jove-brand) 0%, #3b82f6 100%);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            box-shadow: 0 2px 6px rgba(33, 131, 237, 0.4);
+            text-transform: uppercase;
+        }
+        .pub-video-thumb .video-duration {
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            font-family: 'SF Mono', 'Monaco', monospace;
+        }
+        
+        /* View Mode Toggle */
+        .view-mode-toggle {
+            display: flex;
+            gap: 4px;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 8px;
+            margin-left: auto;
+        }
+        .view-mode-btn {
+            padding: 6px 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-meta);
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .view-mode-btn:hover {
+            color: var(--text-main);
+        }
+        .view-mode-btn.active {
+            background: white;
+            color: var(--jove-brand);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* Variant B: Grouped View - Combined Publications with Videos */
+        .related-videos-section {
+            display: none;
+        }
+        .author-view.view-grouped .related-videos-section {
+            display: none;
+        }
+        .author-view.view-grouped .pub-video-thumb {
+            display: none;
+        }
+        .author-view.view-grouped .pub-card {
+            flex-direction: column;
+            gap: 12px;
+        }
+        .author-view.view-grouped .pub-related-videos {
+            display: flex;
+        }
+        .author-view.view-inline .pub-related-videos {
+            display: none;
+        }
+        
+        /* Publication Related Videos (Grouped View) */
+        .pub-related-videos {
+            display: none;
+            gap: 10px;
+            padding-top: 12px;
+            border-top: 1px solid #f1f5f9;
+            margin-top: 4px;
+            overflow-x: auto;
+        }
+        .pub-related-videos-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-meta);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .pub-related-videos-label i {
+            color: var(--jove-brand);
+        }
+        
+        .cited-video-group {
+            margin-bottom: 24px;
+        }
+        .cited-video-pub {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            padding-left: 12px;
+            border-left: 3px solid var(--jove-brand);
+            line-height: 1.4;
+        }
+        .cited-video-pub-meta {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: var(--text-meta);
+            margin-top: 4px;
+        }
+        .cited-videos-row {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+        
+        /* Mini Video Card for Grouped View */
+        .mini-video-card {
+            flex-shrink: 0;
+            width: 160px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .mini-video-card:hover {
+            border-color: var(--jove-brand);
+            box-shadow: 0 4px 12px rgba(33, 131, 237, 0.15);
+            transform: translateY(-1px);
+        }
+        .mini-video-thumb {
+            position: relative;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, var(--jove-brand) 0%, #3b82f6 100%);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mini-video-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .mini-video-thumb::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--jove-brand) 0%, #3b82f6 100%);
+            z-index: 0;
+        }
+        .mini-video-thumb img {
+            z-index: 1;
+        }
+        .mini-video-card:hover .mini-video-thumb img {
+            transform: scale(1.05);
+        }
+        .mini-video-thumb .mini-play {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(33,131,237,0.6) 0%, rgba(59,130,246,0.4) 100%);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .mini-video-card:hover .mini-play {
+            opacity: 1;
+        }
+        .mini-video-thumb .mini-play i {
+            color: white;
+            font-size: 1.2rem;
+        }
+        .mini-video-thumb .mini-jove {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: var(--jove-brand);
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.55rem;
+            font-weight: 700;
+        }
+        .mini-video-thumb .mini-duration {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 0.6rem;
+            font-weight: 600;
+        }
+        .mini-video-title {
+            padding: 8px;
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: var(--text-main);
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .cited-video-card {
+            flex-shrink: 0;
+            width: 200px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .cited-video-card:hover {
+            border-color: var(--jove-brand);
+            box-shadow: 0 4px 16px rgba(33, 131, 237, 0.15);
+            transform: translateY(-2px);
+        }
+        .cited-video-thumb {
+            position: relative;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            overflow: hidden;
+        }
+        .cited-video-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .cited-video-card:hover .cited-video-thumb img {
+            transform: scale(1.05);
+        }
+        .cited-video-thumb .play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(33,131,237,0.6) 0%, rgba(59,130,246,0.4) 100%);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .cited-video-card:hover .play-overlay {
+            opacity: 1;
+        }
+        .cited-video-thumb .play-overlay i {
+            color: white;
+            font-size: 1.8rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        .cited-video-thumb .jove-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: linear-gradient(135deg, var(--jove-brand) 0%, #3b82f6 100%);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            box-shadow: 0 2px 6px rgba(33, 131, 237, 0.4);
+        }
+        .cited-video-thumb .duration-badge {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            font-family: 'SF Mono', monospace;
+        }
+        .cited-video-info {
+            padding: 10px 12px;
+        }
+        .cited-video-title {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-main);
+            line-height: 1.35;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
         
         /* Show more button */
@@ -5102,7 +5615,7 @@
     </div>
 
     <!-- === AUTHOR PROFILE VIEW === -->
-    <div id="author-view" class="state-unclaimed">
+    <div id="author-view" class="state-unclaimed author-view view-inline">
         <!-- Fixed Header Area -->
         <div class="author-fixed-header">
             <!-- Top Bar -->
@@ -5114,108 +5627,404 @@
                 </div>
             </div>
             <!-- Profile Header -->
-        <div class="author-profile-header">
-                <h1 class="author-profile-name" id="p-name">F H Gage</h1>
-                <div class="author-profile-institution">The Salk Institute for Biological Studies, La Jolla, CA</div>
-                <div class="author-profile-stats">
-                    <div class="author-profile-stat">
-                        <div class="author-profile-stat-num" id="author-stat-papers">102</div>
-                        <div class="author-profile-stat-label">Publications</div>
+            <div class="author-profile-header">
+                <!-- Author Info (Left) -->
+                <div class="author-profile-info">
+                    <h1 class="author-profile-name" id="p-name">F H Gage</h1>
+                    <div class="author-profile-institution">The Salk Institute for Biological Studies, La Jolla, CA</div>
+                    <div class="author-profile-stats">
+                        <div class="author-profile-stat">
+                            <div class="author-profile-stat-num" id="author-stat-papers">102</div>
+                            <div class="author-profile-stat-label">Publications</div>
+                        </div>
+                        <div class="author-profile-stat">
+                            <div class="author-profile-stat-num">48</div>
+                            <div class="author-profile-stat-label">Co-Authors</div>
+                        </div>
+                        <div class="author-profile-stat">
+                            <div class="author-profile-stat-num">34</div>
+                            <div class="author-profile-stat-label">Years Active</div>
+                        </div>
+                    </div>
+                    <div class="author-profile-tags">
+                        <span class="author-profile-tag">Neurogenesis</span>
+                        <span class="author-profile-tag">Stem Cells</span>
+                        <span class="author-profile-tag">Hippocampus</span>
+                        <span class="author-profile-tag">Gene Therapy</span>
+                        <span class="author-profile-tag">Aging</span>
+                    </div>
                 </div>
-                    <div class="author-profile-stat">
-                        <div class="author-profile-stat-num">48</div>
-                        <div class="author-profile-stat-label">Co-Authors</div>
+                
+                <!-- Featured JoVE Video (Right) -->
+                <div class="author-featured-video">
+                    <div class="author-featured-video-label">
+                        <i class="fas fa-play-circle"></i> Featured JoVE Video
+                    </div>
+                    <div class="author-featured-video-container">
+                        <iframe src="https://www.jove.com/embed/player?id=50164&access=qTucnEnT&t=1" allowfullscreen></iframe>
+                    </div>
                 </div>
-                    <div class="author-profile-stat">
-                        <div class="author-profile-stat-num">34</div>
-                        <div class="author-profile-stat-label">Years Active</div>
             </div>
         </div>
-                <div class="author-profile-tags">
-                    <span class="author-profile-tag">Neurogenesis</span>
-                    <span class="author-profile-tag">Stem Cells</span>
-                    <span class="author-profile-tag">Hippocampus</span>
-                    <span class="author-profile-tag">Gene Therapy</span>
-                    <span class="author-profile-tag">Aging</span>
-        </div>
-                </div>
-            </div>
 
         <!-- Scrollable Content -->
         <div class="author-page-content">
             <!-- Publications Section -->
             <div class="author-section">
-                <h2 class="author-section-title"><i class="fas fa-file-alt"></i> Publications</h2>
+                <div style="display: flex; align-items: center; margin-bottom: 16px;">
+                    <h2 class="author-section-title" style="margin-bottom: 0;"><i class="fas fa-file-alt"></i> Publications</h2>
+                    <div class="view-mode-toggle">
+                        <button class="view-mode-btn active" onclick="setAuthorViewMode('inline')" id="view-inline-btn">
+                            <i class="fas fa-th-list"></i> Inline
+                        </button>
+                        <button class="view-mode-btn" onclick="setAuthorViewMode('grouped')" id="view-grouped-btn">
+                            <i class="fas fa-layer-group"></i> Grouped
+                        </button>
+                    </div>
+                </div>
                 
                 <div class="publications-list collapsed" id="publications-list">
                     <div class="pub-card-wrapper">
                         <div class="pub-timeline-date"><span class="month">Dec</span> <span class="year">2024</span></div>
                         <div class="pub-card" onclick="loadSpermidineAbstract()">
-                            <div class="pub-card-title">Spermidine protects cellular redox status and ionic homeostasis in D-galactose induced senescence and natural aging rat models</div>
-                            <div class="pub-card-meta">Z. Naturforschung C</div>
-                </div>
-            </div>
+                            <div class="pub-card-content">
+                                <div class="pub-card-title">Spermidine protects cellular redox status and ionic homeostasis in D-galactose induced senescence and natural aging rat models</div>
+                                <div class="pub-card-meta">Z. Naturforschung C</div>
+                            </div>
+                            <div class="pub-video-thumb" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/50164', '_blank')">
+                                <img src="https://www.jove.com/files/media/ftp_upload/50164/50164fig2.jpg" alt="Related JoVE Video" onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, var(--jove-brand) 0%, #3b82f6 100%)'">
+                                <div class="play-icon"><i class="fas fa-play"></i></div>
+                                <span class="jove-label">JoVE</span>
+                            </div>
+                            <div class="pub-related-videos">
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/50164', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/50164/50164fig2.jpg" alt="JoVE" onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, var(--jove-brand) 0%, #3b82f6 100%)'">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">12:34</span>
+                                    </div>
+                                    <div class="mini-video-title">Isolation of Adult Neural Stem Cells</div>
+                                </div>
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/51757', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/51757/51757fig1.jpg" alt="JoVE" onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, var(--jove-brand) 0%, #3b82f6 100%)'">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">9:45</span>
+                                    </div>
+                                    <div class="mini-video-title">BrdU Labeling Protocol</div>
+                                </div>
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/4080', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/4080/4080fig1.jpg" alt="JoVE" onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, var(--jove-brand) 0%, #3b82f6 100%)'">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">11:08</span>
+                                    </div>
+                                    <div class="mini-video-title">Hippocampal Slice Preparation</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="pub-card-wrapper">
                         <div class="pub-timeline-date"><span class="month">Aug</span> <span class="year">2024</span></div>
                         <div class="pub-card" onclick="loadAbstract()">
-                            <div class="pub-card-title">Neural stem cell dynamics in the aging hippocampus: New insights from single-cell analysis</div>
-                            <div class="pub-card-meta">Cell Stem Cell</div>
-                </div>
+                            <div class="pub-card-content">
+                                <div class="pub-card-title">Neural stem cell dynamics in the aging hippocampus: New insights from single-cell analysis</div>
+                                <div class="pub-card-meta">Cell Stem Cell</div>
+                            </div>
+                            <div class="pub-video-thumb" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/50164', '_blank')">
+                                <img src="https://www.jove.com/files/media/ftp_upload/50164/50164fig1.jpg" alt="Related JoVE Video">
+                                <div class="play-icon"><i class="fas fa-play"></i></div>
+                                <span class="jove-label">JoVE</span>
+                            </div>
+                            <div class="pub-related-videos">
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/50164', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/50164/50164fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">12:34</span>
+                                    </div>
+                                    <div class="mini-video-title">Neural Stem Cell Isolation</div>
+                                </div>
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/51757', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/51757/51757fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">9:45</span>
+                                    </div>
+                                    <div class="mini-video-title">BrdU Labeling Protocol</div>
+                                </div>
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/4080', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/4080/4080fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">11:08</span>
+                                    </div>
+                                    <div class="mini-video-title">Hippocampal Slice Preparation</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="pub-card-wrapper">
                         <div class="pub-timeline-date"><span class="month">Mar</span> <span class="year">2024</span></div>
                         <div class="pub-card" onclick="loadAbstract()">
-                            <div class="pub-card-title">Therapeutic applications of adult neurogenesis: Current progress and future directions</div>
-                            <div class="pub-card-meta">Nature Reviews Drug Discovery</div>
+                            <div class="pub-card-content">
+                                <div class="pub-card-title">Therapeutic applications of adult neurogenesis: Current progress and future directions</div>
+                                <div class="pub-card-meta">Nature Reviews Drug Discovery</div>
+                            </div>
+                            <div class="pub-video-thumb" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/52419', '_blank')">
+                                <img src="https://www.jove.com/files/media/ftp_upload/52419/52419fig1.jpg" alt="Related JoVE Video">
+                                <div class="play-icon"><i class="fas fa-play"></i></div>
+                                <span class="jove-label">JoVE</span>
+                            </div>
+                            <div class="pub-related-videos">
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/52419', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/52419/52419fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">15:22</span>
+                                    </div>
+                                    <div class="mini-video-title">Stereotaxic Injection</div>
+                                </div>
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/50164', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/50164/50164fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">12:34</span>
+                                    </div>
+                                    <div class="mini-video-title">Neural Stem Cell Culture</div>
+                                </div>
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/4080', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/4080/4080fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">11:08</span>
+                                    </div>
+                                    <div class="mini-video-title">Hippocampal Slice Electrophysiology</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="pub-card-wrapper">
                         <div class="pub-timeline-date"><span class="month">Nov</span> <span class="year">2023</span></div>
                         <div class="pub-card" onclick="loadAbstract()">
-                            <div class="pub-card-title">Environmental enrichment promotes adult neurogenesis through epigenetic mechanisms</div>
-                            <div class="pub-card-meta">Nature Neuroscience</div>
+                            <div class="pub-card-content">
+                                <div class="pub-card-title">Environmental enrichment promotes adult neurogenesis through epigenetic mechanisms</div>
+                                <div class="pub-card-meta">Nature Neuroscience</div>
+                            </div>
+                            <div class="pub-video-thumb" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/4080', '_blank')">
+                                <img src="https://www.jove.com/files/media/ftp_upload/4080/4080fig1.jpg" alt="Related JoVE Video">
+                                <div class="play-icon"><i class="fas fa-play"></i></div>
+                                <span class="jove-label">JoVE</span>
+                            </div>
+                            <div class="pub-related-videos">
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/4080', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/4080/4080fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">11:08</span>
+                                    </div>
+                                    <div class="mini-video-title">Hippocampal Slice Preparation</div>
+                                </div>
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/51757', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/51757/51757fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">9:45</span>
+                                    </div>
+                                    <div class="mini-video-title">BrdU Labeling Protocol</div>
+                                </div>
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/50164', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/50164/50164fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">12:34</span>
+                                    </div>
+                                    <div class="mini-video-title">Neural Stem Cell Culture</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="pub-card-wrapper">
                         <div class="pub-timeline-date"><span class="month">Aug</span> <span class="year">2023</span></div>
                         <div class="pub-card" onclick="loadAbstract()">
-                            <div class="pub-card-title">CRISPR-based gene therapy enhances neurogenesis in aged mice</div>
-                            <div class="pub-card-meta">Science</div>
+                            <div class="pub-card-content">
+                                <div class="pub-card-title">CRISPR-based gene therapy enhances neurogenesis in aged mice</div>
+                                <div class="pub-card-meta">Science</div>
+                            </div>
+                            <div class="pub-video-thumb" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/52419', '_blank')">
+                                <img src="https://www.jove.com/files/media/ftp_upload/52419/52419fig1.jpg" alt="Related JoVE Video">
+                                <div class="play-icon"><i class="fas fa-play"></i></div>
+                                <span class="jove-label">JoVE</span>
+                            </div>
+                            <div class="pub-related-videos">
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/52419', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/52419/52419fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">15:22</span>
+                                    </div>
+                                    <div class="mini-video-title">Stereotaxic Injection</div>
+                                </div>
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/50164', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/50164/50164fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">12:34</span>
+                                    </div>
+                                    <div class="mini-video-title">Neural Stem Cell Culture</div>
+                                </div>
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/51757', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/51757/51757fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">9:45</span>
+                                    </div>
+                                    <div class="mini-video-title">BrdU Labeling Protocol</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="pub-card-wrapper">
                         <div class="pub-timeline-date"><span class="month">Feb</span> <span class="year">2023</span></div>
                         <div class="pub-card" onclick="loadAbstract()">
-                            <div class="pub-card-title">Adult neurogenesis: A comprehensive review of neural stem cell regulation and therapeutic potential</div>
-                            <div class="pub-card-meta">Nature Reviews Neuroscience</div>
+                            <div class="pub-card-content">
+                                <div class="pub-card-title">Adult neurogenesis: A comprehensive review of neural stem cell regulation and therapeutic potential</div>
+                                <div class="pub-card-meta">Nature Reviews Neuroscience</div>
+                            </div>
+                            <div class="pub-video-thumb" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/51757', '_blank')">
+                                <img src="https://www.jove.com/files/media/ftp_upload/51757/51757fig1.jpg" alt="Related JoVE Video">
+                                <div class="play-icon"><i class="fas fa-play"></i></div>
+                                <span class="jove-label">JoVE</span>
+                            </div>
+                            <div class="pub-related-videos">
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/51757', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/51757/51757fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">9:45</span>
+                                    </div>
+                                    <div class="mini-video-title">BrdU Incorporation Assay</div>
+                                </div>
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/50164', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/50164/50164fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">12:34</span>
+                                    </div>
+                                    <div class="mini-video-title">Neural Stem Cell Culture</div>
+                                </div>
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/4080', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/4080/4080fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">11:08</span>
+                                    </div>
+                                    <div class="mini-video-title">Hippocampal Slice Preparation</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="pub-card-wrapper">
                         <div class="pub-timeline-date"><span class="month">Oct</span> <span class="year">2022</span></div>
                         <div class="pub-card" onclick="loadAbstract()">
-                            <div class="pub-card-title">Single-cell transcriptomic atlas of adult neurogenesis in the mouse brain</div>
-                            <div class="pub-card-meta">Nature</div>
+                            <div class="pub-card-content">
+                                <div class="pub-card-title">Single-cell transcriptomic atlas of adult neurogenesis in the mouse brain</div>
+                                <div class="pub-card-meta">Nature</div>
+                            </div>
+                            <div class="pub-video-thumb" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/50164', '_blank')">
+                                <img src="https://www.jove.com/files/media/ftp_upload/50164/50164fig1.jpg" alt="Related JoVE Video">
+                                <div class="play-icon"><i class="fas fa-play"></i></div>
+                                <span class="jove-label">JoVE</span>
+                            </div>
+                            <div class="pub-related-videos">
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/50164', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/50164/50164fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">12:34</span>
+                                    </div>
+                                    <div class="mini-video-title">Neural Stem Cell Isolation</div>
+                                </div>
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/51757', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/51757/51757fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">9:45</span>
+                                    </div>
+                                    <div class="mini-video-title">BrdU Labeling Protocol</div>
+                                </div>
+                                <div class="mini-video-card" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/4080', '_blank')">
+                                    <div class="mini-video-thumb">
+                                        <img src="https://www.jove.com/files/media/ftp_upload/4080/4080fig1.jpg" alt="JoVE">
+                                        <div class="mini-play"><i class="fas fa-play"></i></div>
+                                        <span class="mini-jove">JoVE</span>
+                                        <span class="mini-duration">11:08</span>
+                                    </div>
+                                    <div class="mini-video-title">Hippocampal Slice Preparation</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="pub-card-wrapper">
                         <div class="pub-timeline-date"><span class="month">Sep</span> <span class="year">2021</span></div>
                         <div class="pub-card" onclick="loadAbstract()">
-                            <div class="pub-card-title">Wnt signaling regulates neural stem cell maintenance in the adult hippocampus</div>
-                            <div class="pub-card-meta">Neuron</div>
+                            <div class="pub-card-content">
+                                <div class="pub-card-title">Wnt signaling regulates neural stem cell maintenance in the adult hippocampus</div>
+                                <div class="pub-card-meta">Neuron</div>
+                            </div>
+                            <div class="pub-video-thumb" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/4080', '_blank')">
+                                <img src="https://www.jove.com/files/media/ftp_upload/4080/4080fig1.jpg" alt="Related JoVE Video">
+                                <div class="play-icon"><i class="fas fa-play"></i></div>
+                                <span class="jove-label">JoVE</span>
+                            </div>
                         </div>
                     </div>
                     <div class="pub-card-wrapper">
                         <div class="pub-timeline-date"><span class="month">Apr</span> <span class="year">2018</span></div>
                         <div class="pub-card" onclick="loadAbstract()">
-                            <div class="pub-card-title">Decline in adult hippocampal neurogenesis during human lifespan</div>
-                            <div class="pub-card-meta">Nature</div>
+                            <div class="pub-card-content">
+                                <div class="pub-card-title">Decline in adult hippocampal neurogenesis during human lifespan</div>
+                                <div class="pub-card-meta">Nature</div>
+                            </div>
+                            <div class="pub-video-thumb" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/50164', '_blank')">
+                                <img src="https://www.jove.com/files/media/ftp_upload/50164/50164fig2.jpg" alt="Related JoVE Video">
+                                <div class="play-icon"><i class="fas fa-play"></i></div>
+                                <span class="jove-label">JoVE</span>
+                            </div>
                         </div>
                     </div>
                     <div class="pub-card-wrapper">
                         <div class="pub-timeline-date"><span class="month">Nov</span> <span class="year">1998</span></div>
                         <div class="pub-card" onclick="loadAbstract()">
-                            <div class="pub-card-title">Neurogenesis in the adult human hippocampus</div>
-                            <div class="pub-card-meta">Nature Medicine</div>
+                            <div class="pub-card-content">
+                                <div class="pub-card-title">Neurogenesis in the adult human hippocampus</div>
+                                <div class="pub-card-meta">Nature Medicine</div>
+                            </div>
+                            <div class="pub-video-thumb" onclick="event.stopPropagation(); window.open('https://www.jove.com/v/51757', '_blank')">
+                                <img src="https://www.jove.com/files/media/ftp_upload/51757/51757fig1.jpg" alt="Related JoVE Video">
+                                <div class="play-icon"><i class="fas fa-play"></i></div>
+                                <span class="jove-label">JoVE</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -6352,6 +7161,27 @@
     </footer>
 
     <script>
+        // ========================================
+        // AUTHOR VIEW MODE TOGGLE
+        // ========================================
+        function setAuthorViewMode(mode) {
+            const authorView = document.getElementById('author-view');
+            const inlineBtn = document.getElementById('view-inline-btn');
+            const groupedBtn = document.getElementById('view-grouped-btn');
+            
+            if (mode === 'inline') {
+                authorView.classList.remove('view-grouped');
+                authorView.classList.add('view-inline');
+                inlineBtn.classList.add('active');
+                groupedBtn.classList.remove('active');
+            } else {
+                authorView.classList.remove('view-inline');
+                authorView.classList.add('view-grouped');
+                groupedBtn.classList.add('active');
+                inlineBtn.classList.remove('active');
+            }
+        }
+        
         // ========================================
         // MATERIALS MODAL & EQUIPMENT DETAIL
         // ========================================
