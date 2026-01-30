@@ -1,0 +1,499 @@
+import React, { useState, useMemo, useRef } from 'react';
+import { 
+  Calendar, 
+  AlertCircle, 
+  ChevronLeft, 
+  ChevronRight, 
+  Target,
+  Layers,
+  Diamond,
+  ExternalLink
+} from 'lucide-react';
+
+const RAW_DATA = [
+  // SEO Workstream
+  { 
+    id: 1, 
+    category: 'SEO', 
+    task: '120M Translations', 
+    subtext: '~700K Done',
+    status: 'In Progress', 
+    start: '2025-01-03', 
+    duration: 20, 
+    unit: 'weeks', 
+    color: 'bg-blue-600',
+    metric: { label: 'Coverage', value: '0.58%', target: '120M' },
+    milestones: [
+      { offset: 5, label: 'First 20M' },
+      { offset: 12, label: 'Mid-Review' },
+      { offset: 18, label: 'Final QA' }
+    ]
+  },
+  { 
+    id: 2, 
+    category: 'SEO', 
+    task: 'Improving LCP Parameter (Mobile)', 
+    status: 'Pending', 
+    start: '2025-02-10', 
+    duration: 2, 
+    unit: 'weeks', 
+    color: 'bg-blue-500',
+    metric: { label: 'Mobile LCP', value: '1.7s', target: '1.0s' },
+    milestones: [
+      { offset: 1, label: 'Code Freeze' }
+    ]
+  },
+  { 
+    id: 3, 
+    category: 'SEO', 
+    task: 'Interlinking SEO Strategy', 
+    link: 'https://docs.google.com/spreadsheets/d/1lUJzFR4XJpwiw14-2Mua2n33yRHVoKKsz9ngVrtvgnU/edit?usp=sharing',
+    subtext: 'Author Pages (~350k Indexation Opp.)',
+    status: 'Pending', 
+    start: '2025-02-10', 
+    duration: 3, 
+    unit: 'weeks', 
+    color: 'bg-blue-500',
+    metric: { label: 'Crawl Hits', value: '1.5M', target: 'Unblock' },
+    milestones: [
+      { offset: 1.5, label: 'Indexation Check' }
+    ]
+  },
+  { 
+    id: 4, 
+    category: 'SEO', 
+    task: 'Baidu SEO Expansion', 
+    status: 'Pending', 
+    start: '2025-02-17', 
+    duration: 3, 
+    unit: 'weeks', 
+    color: 'bg-blue-400',
+    metric: null,
+    milestones: [
+      { offset: 2, label: 'Sitemap Submit' }
+    ]
+  },
+  { 
+    id: 5, 
+    category: 'SEO', 
+    task: 'AIO (AI Overviews) Strategy', 
+    link: 'https://docs.google.com/document/d/1BXQrcX1bkxBo4SehS2qjGxiwuWxKZFaTguSiIJTblyM/edit?usp=sharing',
+    status: 'Pending', 
+    start: '2025-02-03', 
+    duration: 4, 
+    unit: 'weeks', 
+    color: 'bg-indigo-500',
+    metric: null,
+    milestones: [
+      { offset: 2, label: 'Snippet Analysis' }
+    ]
+  },
+  { 
+    id: 6, 
+    category: 'SEO', 
+    task: 'Visualize as Video-first pages', 
+    status: 'Alignment Pending', 
+    start: '2025-03-10', 
+    duration: 4, 
+    unit: 'weeks', 
+    color: 'bg-blue-300',
+    metric: null,
+    milestones: [
+      { offset: 3, label: 'Rollout' }
+    ]
+  },
+  
+  // Mapping Workstream
+  { 
+    id: 7, 
+    category: 'Mapping', 
+    task: 'Improve Mapping Accuracy', 
+    subtext: 'Using Abstract & Title for Fetching',
+    status: 'Alignment Pending', 
+    start: '2025-03-07', 
+    duration: 2, 
+    unit: 'weeks', 
+    color: 'bg-orange-500',
+    metric: null,
+    milestones: [
+      { offset: 1, label: 'Validation' }
+    ]
+  },
+  { 
+    id: 8, 
+    category: 'Mapping', 
+    task: 'Improve Speed of Mapping', 
+    status: 'Pending', 
+    start: '2025-03-03', 
+    duration: 2, 
+    unit: 'weeks', 
+    color: 'bg-orange-400',
+    metric: null,
+    milestones: [
+      { offset: 1.5, label: 'Load Test' }
+    ]
+  },
+  
+  // Functionality Workstream
+  { 
+    id: 9, 
+    category: 'Functionality', 
+    task: 'PDF & SOP Upload System', 
+    status: 'Alignment Pending', 
+    start: '2025-03-03', 
+    duration: 6, 
+    unit: 'weeks', 
+    color: 'bg-purple-500',
+    metric: null,
+    milestones: [
+      { offset: 2, label: 'UI Mockups' },
+      { offset: 5, label: 'Backend Ready' }
+    ]
+  },
+  { 
+    id: 10, 
+    category: 'Functionality', 
+    task: 'Custom train LLM (Exp. Planner)', 
+    status: 'Pending', 
+    start: '2025-03-03', 
+    duration: 30, 
+    unit: 'weeks', 
+    color: 'bg-purple-600',
+    metric: null,
+    milestones: [
+      { offset: 8, label: 'Data Prep' },
+      { offset: 16, label: 'Training V1' },
+      { offset: 24, label: 'Fine-tuning' }
+    ]
+  },
+  { 
+    id: 11, 
+    category: 'Functionality', 
+    task: 'AI Search on Visualize', 
+    status: 'Pending', 
+    start: '2025-03-03', 
+    duration: 10, 
+    unit: 'weeks', 
+    color: 'bg-purple-400',
+    metric: null,
+    milestones: [
+      { offset: 5, label: 'Beta' }
+    ]
+  },
+  
+  // Design Workstream
+  { 
+    id: 13, 
+    category: 'Design', 
+    task: 'CTR Improvements Phase 1', 
+    status: 'Pending', 
+    start: '2025-03-24', 
+    duration: 4, 
+    unit: 'weeks', 
+    color: 'bg-emerald-400',
+    metric: { label: 'CTR', value: '5.8%', target: '10%' },
+    milestones: [
+      { offset: 2, label: 'A/B Test Start' },
+      { offset: 3.5, label: 'Results' }
+    ]
+  },
+];
+
+const CATEGORY_LINKS = {
+  'Functionality': 'https://docs.google.com/spreadsheets/d/1I5ffdZWwBkhVzRqlCPAOGDDZt41iCJlB5peS3qlcGj0/edit?gid=1722574451#gid=1722574451&range=A1'
+};
+
+const App = () => {
+  const [filter, setFilter] = useState('All');
+  const scrollContainerRef = useRef(null);
+
+  const scroll = (direction) => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 400;
+      scrollContainerRef.current.scrollBy({ 
+        left: direction === 'left' ? -scrollAmount : scrollAmount, 
+        behavior: 'smooth' 
+      });
+    }
+  };
+
+  const timelineData = useMemo(() => {
+    return RAW_DATA.map(item => {
+      const start = new Date(item.start);
+      const end = new Date(start);
+      end.setDate(start.getDate() + (item.duration * 7));
+      return { ...item, startDate: start, endDate: end };
+    });
+  }, []);
+
+  const categories = ['All', ...new Set(RAW_DATA.map(d => d.category))];
+  const activeCategories = filter === 'All' 
+    ? [...new Set(RAW_DATA.map(d => d.category))] 
+    : [filter];
+
+  // Config for Weekly View
+  const pixelsPerDay = 12; 
+  const chartStart = new Date('2025-01-03'); 
+
+  // Calculate dynamic chart duration based on longest component
+  const maxEndDate = useMemo(() => {
+    const dates = timelineData.map(d => d.endDate.getTime());
+    return Math.max(...dates);
+  }, [timelineData]);
+
+  const totalDays = Math.ceil((maxEndDate - chartStart.getTime()) / (1000 * 60 * 60 * 24));
+  const weeksToDisplay = Math.ceil(totalDays / 7) + 1;
+
+  const getOffset = (date) => {
+    const diff = (date - chartStart) / (1000 * 60 * 60 * 24);
+    return diff * pixelsPerDay;
+  };
+
+  const timelineHeader = [];
+  for (let i = 0; i < weeksToDisplay; i++) {
+    const d = new Date(chartStart);
+    d.setDate(chartStart.getDate() + (i * 7));
+    
+    // Format: "3 Jan"
+    const label = `${d.getDate()} ${d.toLocaleString('default', { month: 'short' })}`;
+    
+    timelineHeader.push({
+      name: label,
+      offset: i * 7 * pixelsPerDay,
+      width: 7 * pixelsPerDay
+    });
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-900">
+      <div className="max-w-7xl mx-auto">
+        <header className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-2">
+              <Layers className="text-blue-600" />
+              Strategic Roadmap 2025
+            </h1>
+            <p className="text-slate-500 mt-1">Unified View with Integrated Milestones</p>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <button onClick={() => scroll('left')} className="p-2 bg-white border rounded-full hover:bg-slate-50 shadow-sm text-slate-600 transition-colors">
+              <ChevronLeft size={20} />
+            </button>
+            <button onClick={() => scroll('right')} className="p-2 bg-white border rounded-full hover:bg-slate-50 shadow-sm text-slate-600 transition-colors">
+              <ChevronRight size={20} />
+            </button>
+          </div>
+        </header>
+
+        {/* Filters */}
+        <div className="mb-6 flex items-center gap-2 overflow-x-auto pb-2">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setFilter(cat)}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all whitespace-nowrap border ${
+                filter === cat 
+                  ? 'bg-slate-800 text-white border-slate-800 shadow-md' 
+                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Gantt Chart Area */}
+        <div className="bg-white rounded-2xl shadow-xl border overflow-hidden relative">
+          <div 
+            ref={scrollContainerRef}
+            className="overflow-x-auto scroll-smooth custom-scrollbar"
+            style={{ scrollbarWidth: 'thin' }}
+          >
+            <div className="min-w-fit">
+              {/* Timeline Header (Freezed/Sticky) */}
+              <div className="flex border-bottom bg-slate-100 border-b sticky top-0 z-50">
+                <div className="w-96 flex-shrink-0 p-4 font-bold text-slate-600 border-r bg-slate-100 sticky left-0 z-50 shadow-[2px_0_5px_rgba(0,0,0,0.05)]">
+                  Task & Metrics
+                </div>
+                <div className="relative h-12 bg-slate-100" style={{ width: weeksToDisplay * 7 * pixelsPerDay }}>
+                  {timelineHeader.map((m, i) => (
+                    <div 
+                      key={i}
+                      className="absolute top-0 h-full border-r border-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-500 uppercase"
+                      style={{ left: m.offset, width: m.width }}
+                    >
+                      {m.name}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Rows Grouped by Category */}
+              <div className="relative">
+                {activeCategories.map((cat) => {
+                  const categoryTasks = timelineData.filter(t => t.category === cat);
+                  if (categoryTasks.length === 0) return null;
+
+                  return (
+                    <React.Fragment key={cat}>
+                      {/* Header Row */}
+                      <div className="flex bg-slate-50/80 border-b sticky left-0 z-10">
+                        <div className="w-96 sticky left-0 z-20 bg-slate-50 p-2 px-4 border-r border-b font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                           {CATEGORY_LINKS[cat] ? (
+                            <a 
+                              href={CATEGORY_LINKS[cat]} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline cursor-pointer group/catlink"
+                            >
+                              <span className={`w-2 h-2 rounded-full ${categoryTasks[0].color}`}></span>
+                              {cat}
+                              <ExternalLink size={10} className="text-blue-600 group-hover/catlink:text-blue-800" />
+                            </a>
+                           ) : (
+                             <>
+                              <span className={`w-2 h-2 rounded-full ${categoryTasks[0].color}`}></span>
+                              {cat}
+                             </>
+                           )}
+                        </div>
+                        <div className="relative bg-slate-50/50 border-b" style={{ width: weeksToDisplay * 7 * pixelsPerDay }}>
+                           {/* Extend grid lines through header */}
+                           {timelineHeader.map((m, i) => (
+                            <div 
+                              key={i} 
+                              className="absolute top-0 bottom-0 border-r border-slate-200/50 pointer-events-none" 
+                              style={{ left: m.offset, width: m.width }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Task Rows */}
+                      {categoryTasks.map((item) => {
+                        // Calculate bar position
+                        const startPx = getOffset(item.startDate);
+                        const endPx = getOffset(item.endDate);
+                        
+                        const left = Math.max(0, startPx);
+                        const width = endPx - left;
+                        
+                        // If task ends before start of chart, don't show bar (or show clipped)
+                        if (endPx < 0) return null;
+
+                        return (
+                          <div key={item.id} className="flex border-b hover:bg-slate-50 transition-colors bg-white group/row">
+                            {/* Sticky Task Info Column */}
+                            <div className="w-96 flex-shrink-0 p-4 border-r flex flex-col justify-center sticky left-0 z-20 bg-inherit shadow-[2px_0_5px_rgba(0,0,0,0.05)] relative">
+                              {/* Task Name & Status */}
+                              <div className="mb-2">
+                                {item.link ? (
+                                  <a 
+                                    href={item.link} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    className="text-sm font-bold text-blue-700 hover:underline leading-tight flex items-center gap-1 group/link"
+                                  >
+                                    {item.task}
+                                    <ExternalLink size={10} className="text-blue-400 group-hover/link:text-blue-700" />
+                                  </a>
+                                ) : (
+                                  <h4 className="text-sm font-bold text-slate-800 leading-tight">{item.task}</h4>
+                                )}
+                                {item.subtext && <p className="text-xs text-slate-500 mt-0.5 max-w-[90%]">{item.subtext}</p>}
+                              </div>
+
+                              {/* Embedded Metrics */}
+                              <div className="flex items-center gap-3 mt-1">
+                                {item.metric ? (
+                                  <div className="flex items-center gap-2 bg-slate-100 px-2 py-1 rounded border border-slate-200 w-full">
+                                    <Target size={12} className="text-slate-500" />
+                                    <div className="text-[10px] flex gap-1 items-center w-full">
+                                      <span className="font-semibold text-slate-600 whitespace-nowrap">{item.metric.label}:</span>
+                                      <span className="font-bold text-slate-800">{item.metric.value}</span>
+                                      <div className="flex-grow"></div>
+                                      <span className="text-slate-400 text-[9px] whitespace-nowrap">Goal: {item.metric.target}</span>
+                                    </div>
+                                  </div>
+                                ) : (
+                                   <div className="h-6"></div> 
+                                )}
+                              </div>
+
+                              {/* Needs Align Tag at Bottom Right */}
+                              {item.status === 'Alignment Pending' && (
+                                <div className="absolute bottom-2 right-2 bg-orange-50 text-orange-600 border border-orange-200 px-1.5 py-0.5 rounded text-[9px] font-bold flex items-center gap-1 shadow-sm">
+                                  <AlertCircle size={8} /> Needs Alignment
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Timeline Column */}
+                            <div className="relative h-28" style={{ width: weeksToDisplay * 7 * pixelsPerDay }}>
+                              {/* Grid Lines */}
+                              {timelineHeader.map((m, i) => (
+                                <div 
+                                  key={i} 
+                                  className="absolute top-0 bottom-0 border-r border-slate-100 pointer-events-none" 
+                                  style={{ left: m.offset, width: m.width }}
+                                />
+                              ))}
+                              
+                              {/* Gantt Bar */}
+                              {width > 0 && (
+                                <div 
+                                  className={`absolute top-10 h-8 rounded-md shadow-sm ${item.color} transition-all cursor-pointer flex items-center px-3 hover:shadow-md hover:-translate-y-0.5 group-hover/row:brightness-95`}
+                                  style={{ 
+                                    left: left, 
+                                    width: width
+                                  }}
+                                >
+                                  <div className="text-[10px] font-bold text-white whitespace-nowrap overflow-hidden text-ellipsis opacity-95">
+                                    {item.duration}w
+                                  </div>
+
+                                  {/* Milestones on Bar */}
+                                  {item.milestones && item.milestones.map((ms, idx) => {
+                                      // ms.offset is in weeks relative to task start
+                                      const msPx = ms.offset * 7 * pixelsPerDay;
+                                      
+                                      return (
+                                        <div 
+                                          key={idx}
+                                          className="absolute top-1/2 -translate-y-1/2 group/ms"
+                                          style={{ left: msPx }}
+                                        >
+                                          <Diamond size={12} className="text-white fill-white stroke-slate-800 stroke-1" />
+                                          {/* Milestone Tooltip */}
+                                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover/ms:block z-40 whitespace-nowrap">
+                                            <div className="bg-black/80 text-white text-[9px] px-2 py-1 rounded">
+                                              {ms.label}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      )
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="mt-4 text-center text-slate-400 text-xs">
+          Scroll horizontally to view full timeline
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
