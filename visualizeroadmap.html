@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Roadmap 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Scrollbar Styles to match the React implementation */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* Hide scrollbar for filter container but allow scrolling */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-900 min-h-screen">
+
+    <div id="app" class="p-4 md:p-8">
+        <div class="max-w-7xl mx-auto">
+            
+            <!-- Header Section -->
+            <header class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-slate-800 flex items-center gap-2">
+                        <span id="icon-layers"></span>
+                        Strategic Roadmap 2026
+                    </h1>
+                    <p class="text-slate-500 mt-1">Unified View with Integrated Milestones</p>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    <button id="scroll-left" class="p-2 bg-white border rounded-full hover:bg-slate-50 shadow-sm text-slate-600 transition-colors">
+                        <!-- Icon injected by JS -->
+                    </button>
+                    <button id="scroll-right" class="p-2 bg-white border rounded-full hover:bg-slate-50 shadow-sm text-slate-600 transition-colors">
+                        <!-- Icon injected by JS -->
+                    </button>
+                </div>
+            </header>
+
+            <!-- Filters Section -->
+            <div id="filters-container" class="mb-6 flex items-center gap-2 overflow-x-auto pb-2 hide-scrollbar">
+                <!-- Filters injected by JS -->
+            </div>
+
+            <!-- Gantt Chart Container -->
+            <div class="bg-white rounded-2xl shadow-xl border overflow-hidden relative">
+                <div id="gantt-scroll-container" class="overflow-x-auto scroll-smooth custom-scrollbar">
+                    <div id="gantt-inner-container" class="min-w-fit">
+                        
+                        <!-- Timeline Header (Sticky) -->
+                        <div id="timeline-header" class="flex border-bottom bg-slate-100 border-b sticky top-0 z-50">
+                            <!-- Injected by JS -->
+                        </div>
+
+                        <!-- Rows Container -->
+                        <div id="gantt-rows" class="relative">
+                            <!-- Rows injected by JS -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center text-slate-400 text-xs">
+                Scroll horizontally to view full timeline
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Icons (SVG Strings) ---
+        const icons = {
+            layers: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`,
+            chevronLeft: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>`,
+            chevronRight: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>`,
+            alertCircle: `<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+            target: `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`,
+            diamond: `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="white" stroke="#1e293b" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"/></svg>`,
+            externalLink: `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`
+        };
+
+        // --- Data ---
+        const RAW_DATA = [
+            // SEO Workstream
+            { 
+                id: 1, 
+                category: 'SEO', 
+                task: '120M Translations', 
+                subtext: '~700K Done',
+                status: 'In Progress', 
+                start: '2026-01-03', 
+                duration: 20, 
+                unit: 'weeks', 
+                color: 'bg-blue-600',
+                metric: { label: 'Coverage', value: '0.58%', target: '120M' },
+                milestones: [
+                { offset: 5, label: 'First 20M' },
+                { offset: 12, label: 'Mid-Review' },
+                { offset: 18, label: 'Final QA' }
+                ]
+            },
+            { 
+                id: 2, 
+                category: 'SEO', 
+                task: 'Improving LCP Parameter (Mobile)', 
+                status: 'Pending', 
+                start: '2026-02-10', 
+                duration: 2, 
+                unit: 'weeks', 
+                color: 'bg-blue-500',
+                metric: { label: 'Mobile LCP', value: '1.7s', target: '1.0s' },
+                milestones: [
+                { offset: 1, label: 'Code Freeze' }
+                ]
+            },
+            { 
+                id: 3, 
+                category: 'SEO', 
+                task: 'Interlinking SEO Strategy', 
+                link: 'https://docs.google.com/spreadsheets/d/1lUJzFR4XJpwiw14-2Mua2n33yRHVoKKsz9ngVrtvgnU/edit?usp=sharing',
+                subtext: 'Author Pages (~350k Indexation Opp.)',
+                status: 'Pending', 
+                start: '2026-02-10', 
+                duration: 3, 
+                unit: 'weeks', 
+                color: 'bg-blue-500',
+                metric: { label: 'Crawl Hits', value: '1.5M', target: 'Unblock' },
+                milestones: [
+                { offset: 1.5, label: 'Indexation Check' }
+                ]
+            },
+            { 
+                id: 4, 
+                category: 'SEO', 
+                task: 'Baidu SEO Expansion', 
+                status: 'Pending', 
+                start: '2026-02-17', 
+                duration: 3, 
+                unit: 'weeks', 
+                color: 'bg-blue-400',
+                metric: null,
+                milestones: [
+                { offset: 2, label: 'Sitemap Submit' }
+                ]
+            },
+            { 
+                id: 5, 
+                category: 'SEO', 
+                task: 'AIO (AI Overviews) Strategy', 
+                link: 'https://docs.google.com/document/d/1BXQrcX1bkxBo4SehS2qjGxiwuWxKZFaTguSiIJTblyM/edit?usp=sharing',
+                status: 'Pending', 
+                start: '2026-02-03', 
+                duration: 4, 
+                unit: 'weeks', 
+                color: 'bg-indigo-500',
+                metric: null,
+                milestones: [
+                { offset: 2, label: 'Snippet Analysis' }
+                ]
+            },
+            { 
+                id: 6, 
+                category: 'SEO', 
+                task: 'Visualize as Video-first pages', 
+                status: 'Alignment Pending', 
+                start: '2026-03-10', 
+                duration: 4, 
+                unit: 'weeks', 
+                color: 'bg-blue-300',
+                metric: null,
+                milestones: [
+                { offset: 3, label: 'Rollout' }
+                ]
+            },
+            
+            // Mapping Workstream
+            { 
+                id: 7, 
+                category: 'Mapping', 
+                task: 'Improve Mapping Accuracy', 
+                subtext: 'Using Abstract & Title for Fetching',
+                status: 'Alignment Pending', 
+                start: '2026-03-07', 
+                duration: 2, 
+                unit: 'weeks', 
+                color: 'bg-orange-500',
+                metric: null,
+                milestones: [
+                { offset: 1, label: 'Validation' }
+                ]
+            },
+            { 
+                id: 8, 
+                category: 'Mapping', 
+                task: 'Improve Speed of Mapping', 
+                status: 'Pending', 
+                start: '2026-03-03', 
+                duration: 2, 
+                unit: 'weeks', 
+                color: 'bg-orange-400',
+                metric: null,
+                milestones: [
+                { offset: 1.5, label: 'Load Test' }
+                ]
+            },
+            
+            // Functionality Workstream
+            { 
+                id: 9, 
+                category: 'Functionality', 
+                task: 'PDF & SOP Upload System', 
+                status: 'Pending', 
+                start: '2026-03-03', 
+                duration: 6, 
+                unit: 'weeks', 
+                color: 'bg-purple-500',
+                metric: null,
+                milestones: [
+                { offset: 2, label: 'UI Mockups' },
+                { offset: 5, label: 'Backend Ready' }
+                ]
+            },
+            { 
+                id: 10, 
+                category: 'Functionality', 
+                task: 'Custom train LLM (Exp. Planner)', 
+                status: 'Pending', 
+                start: '2026-03-03', 
+                duration: 30, 
+                unit: 'weeks', 
+                color: 'bg-purple-600',
+                metric: null,
+                milestones: [
+                { offset: 8, label: 'Data Prep' },
+                { offset: 16, label: 'Training V1' },
+                { offset: 24, label: 'Fine-tuning' }
+                ]
+            },
+            { 
+                id: 11, 
+                category: 'Functionality', 
+                task: 'AI Search on Visualize', 
+                status: 'Pending', 
+                start: '2026-03-03', 
+                duration: 10, 
+                unit: 'weeks', 
+                color: 'bg-purple-400',
+                metric: null,
+                milestones: [
+                { offset: 5, label: 'Beta' }
+                ]
+            },
+            
+            // Design Workstream
+            { 
+                id: 13, 
+                category: 'Design', 
+                task: 'CTR Improvements Phase 1', 
+                status: 'Pending', 
+                start: '2026-03-24', 
+                duration: 4, 
+                unit: 'weeks', 
+                color: 'bg-emerald-400',
+                metric: { label: 'CTR', value: '5.8%', target: '10%' },
+                milestones: [
+                { offset: 2, label: 'A/B Test Start' },
+                { offset: 3.5, label: 'Results' }
+                ]
+            },
+        ];
+
+        const CATEGORY_LINKS = {
+            'Functionality': 'https://docs.google.com/spreadsheets/d/1I5ffdZWwBkhVzRqlCPAOGDDZt41iCJlB5peS3qlcGj0/edit?gid=1722574451#gid=1722574451&range=A1'
+        };
+
+        // --- Config ---
+        const CHART_START = new Date('2026-01-03');
+        const PIXELS_PER_DAY = 12;
+        let activeFilter = 'All';
+
+        // --- State Processing ---
+        
+        // Enhance data with calculated dates
+        const processedData = RAW_DATA.map(item => {
+            const start = new Date(item.start);
+            const end = new Date(start);
+            end.setDate(start.getDate() + (item.duration * 7));
+            return { ...item, startDate: start, endDate: end };
+        });
+
+        // Get Categories
+        const categories = ['All', ...new Set(RAW_DATA.map(d => d.category))];
+
+        // Determine Chart Width
+        const dates = processedData.map(d => d.endDate.getTime());
+        const maxEndDate = Math.max(...dates);
+        const totalDays = Math.ceil((maxEndDate - CHART_START.getTime()) / (1000 * 60 * 60 * 24));
+        const weeksToDisplay = Math.ceil(totalDays / 7) + 1;
+        const totalChartWidth = weeksToDisplay * 7 * PIXELS_PER_DAY;
+
+        // --- DOM Elements ---
+        const iconLayersEl = document.getElementById('icon-layers');
+        const scrollLeftBtn = document.getElementById('scroll-left');
+        const scrollRightBtn = document.getElementById('scroll-right');
+        const filtersContainer = document.getElementById('filters-container');
+        const timelineHeader = document.getElementById('timeline-header');
+        const ganttRows = document.getElementById('gantt-rows');
+        const scrollContainer = document.getElementById('gantt-scroll-container');
+        
+        // --- Helper Functions ---
+        function getOffset(date) {
+            const diff = (date - CHART_START) / (1000 * 60 * 60 * 24);
+            return diff * PIXELS_PER_DAY;
+        }
+
+        // --- Render Functions ---
+
+        function renderIcons() {
+            iconLayersEl.innerHTML = icons.layers;
+            scrollLeftBtn.innerHTML = icons.chevronLeft;
+            scrollRightBtn.innerHTML = icons.chevronRight;
+        }
+
+        function renderFilters() {
+            filtersContainer.innerHTML = '';
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = `px-4 py-1.5 rounded-full text-sm font-medium transition-all whitespace-nowrap border ${
+                    activeFilter === cat 
+                    ? 'bg-slate-800 text-white border-slate-800 shadow-md' 
+                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                }`;
+                btn.textContent = cat;
+                btn.onclick = () => {
+                    activeFilter = cat;
+                    renderFilters(); // Re-render to update active state styles
+                    renderGanttRows();
+                };
+                filtersContainer.appendChild(btn);
+            });
+        }
+
+        function renderTimelineHeader() {
+            // Sticky Label Column
+            const stickyCol = document.createElement('div');
+            stickyCol.className = 'w-96 flex-shrink-0 p-4 font-bold text-slate-600 border-r bg-slate-100 sticky left-0 z-50 shadow-[2px_0_5px_rgba(0,0,0,0.05)]';
+            stickyCol.textContent = 'Task & Metrics';
+            timelineHeader.appendChild(stickyCol);
+
+            // Timeline Dates Container
+            const datesContainer = document.createElement('div');
+            datesContainer.className = 'relative h-12 bg-slate-100';
+            datesContainer.style.width = `${totalChartWidth}px`;
+
+            for (let i = 0; i < weeksToDisplay; i++) {
+                const d = new Date(CHART_START);
+                d.setDate(CHART_START.getDate() + (i * 7));
+                
+                const labelText = `${d.getDate()} ${d.toLocaleString('default', { month: 'short' })}`;
+                const offset = i * 7 * PIXELS_PER_DAY;
+                const width = 7 * PIXELS_PER_DAY;
+
+                const dateCell = document.createElement('div');
+                dateCell.className = 'absolute top-0 h-full border-r border-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-500 uppercase';
+                dateCell.style.left = `${offset}px`;
+                dateCell.style.width = `${width}px`;
+                dateCell.textContent = labelText;
+                
+                datesContainer.appendChild(dateCell);
+            }
+            timelineHeader.appendChild(datesContainer);
+        }
+
+        function renderGanttRows() {
+            ganttRows.innerHTML = '';
+            
+            const catsToShow = activeFilter === 'All' 
+                ? [...new Set(RAW_DATA.map(d => d.category))] 
+                : [activeFilter];
+
+            catsToShow.forEach(cat => {
+                const categoryTasks = processedData.filter(t => t.category === cat);
+                if (categoryTasks.length === 0) return;
+
+                // --- 1. Category Header Row ---
+                const headerRow = document.createElement('div');
+                headerRow.className = 'flex bg-slate-50/80 border-b sticky left-0 z-10';
+
+                // Sticky Label
+                const headerLabel = document.createElement('div');
+                headerLabel.className = 'w-96 sticky left-0 z-20 bg-slate-50 p-2 px-4 border-r border-b font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center gap-2';
+                
+                // Color Dot
+                const dot = document.createElement('span');
+                dot.className = `w-2 h-2 rounded-full ${categoryTasks[0].color}`;
+                
+                headerLabel.appendChild(dot);
+
+                // Category Link Logic
+                if (CATEGORY_LINKS[cat]) {
+                    const link = document.createElement('a');
+                    link.href = CATEGORY_LINKS[cat];
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+                    link.className = 'flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline cursor-pointer group/catlink';
+                    link.innerHTML = `${cat} <span class="text-blue-600 group-hover/catlink:text-blue-800">${icons.externalLink}</span>`;
+                    headerLabel.appendChild(link);
+                } else {
+                    headerLabel.appendChild(document.createTextNode(cat));
+                }
+
+                headerRow.appendChild(headerLabel);
+
+                // Grid Lines container for header
+                const headerGrid = document.createElement('div');
+                headerGrid.className = 'relative bg-slate-50/50 border-b';
+                headerGrid.style.width = `${totalChartWidth}px`;
+                
+                for (let i = 0; i < weeksToDisplay; i++) {
+                    const line = document.createElement('div');
+                    line.className = 'absolute top-0 bottom-0 border-r border-slate-200/50 pointer-events-none';
+                    line.style.left = `${i * 7 * PIXELS_PER_DAY}px`;
+                    line.style.width = `${7 * PIXELS_PER_DAY}px`;
+                    headerGrid.appendChild(line);
+                }
+                headerRow.appendChild(headerGrid);
+                ganttRows.appendChild(headerRow);
+
+
+                // --- 2. Task Rows ---
+                categoryTasks.forEach(item => {
+                    const startPx = getOffset(item.startDate);
+                    const endPx = getOffset(item.endDate);
+                    const left = Math.max(0, startPx);
+                    const width = endPx - left;
+
+                    // If task is completely before start, skip
+                    if (endPx < 0) return;
+
+                    const row = document.createElement('div');
+                    row.className = 'flex border-b hover:bg-slate-50 transition-colors bg-white group/row';
+
+                    // Sticky Info Column
+                    const infoCol = document.createElement('div');
+                    infoCol.className = 'w-96 flex-shrink-0 p-4 border-r flex flex-col justify-center sticky left-0 z-20 bg-inherit shadow-[2px_0_5px_rgba(0,0,0,0.05)] relative';
+                    
+                    // Task Title
+                    const titleContainer = document.createElement('div');
+                    titleContainer.className = 'mb-2';
+                    
+                    if (item.link) {
+                        const taskLink = document.createElement('a');
+                        taskLink.href = item.link;
+                        taskLink.target = '_blank';
+                        taskLink.rel = 'noopener noreferrer';
+                        taskLink.className = 'text-sm font-bold text-blue-700 hover:underline leading-tight flex items-center gap-1 group/link';
+                        taskLink.innerHTML = `${item.task} <span class="text-blue-400 group-hover/link:text-blue-700">${icons.externalLink}</span>`;
+                        titleContainer.appendChild(taskLink);
+                    } else {
+                        const taskTitle = document.createElement('h4');
+                        taskTitle.className = 'text-sm font-bold text-slate-800 leading-tight';
+                        taskTitle.textContent = item.task;
+                        titleContainer.appendChild(taskTitle);
+                    }
+
+                    if (item.subtext) {
+                        const sub = document.createElement('p');
+                        sub.className = 'text-xs text-slate-500 mt-0.5 max-w-[90%]';
+                        sub.textContent = item.subtext;
+                        titleContainer.appendChild(sub);
+                    }
+                    infoCol.appendChild(titleContainer);
+
+                    // Metrics
+                    const metricsContainer = document.createElement('div');
+                    metricsContainer.className = 'flex items-center gap-3 mt-1';
+                    
+                    if (item.metric) {
+                        const badge = document.createElement('div');
+                        badge.className = 'flex items-center gap-2 bg-slate-100 px-2 py-1 rounded border border-slate-200 w-full';
+                        badge.innerHTML = `
+                            <span class="text-slate-500">${icons.target}</span>
+                            <div class="text-[10px] flex gap-1 items-center w-full">
+                                <span class="font-semibold text-slate-600 whitespace-nowrap">${item.metric.label}:</span>
+                                <span class="font-bold text-slate-800">${item.metric.value}</span>
+                                <div class="flex-grow"></div>
+                                <span class="text-slate-400 text-[9px] whitespace-nowrap">Goal: ${item.metric.target}</span>
+                            </div>
+                        `;
+                        metricsContainer.appendChild(badge);
+                    } else {
+                        const spacer = document.createElement('div');
+                        spacer.className = 'h-6';
+                        metricsContainer.appendChild(spacer);
+                    }
+                    infoCol.appendChild(metricsContainer);
+
+                    // Needs Align Tag
+                    if (item.status === 'Alignment Pending') {
+                        const alignTag = document.createElement('div');
+                        alignTag.className = 'absolute bottom-2 right-2 bg-orange-50 text-orange-600 border border-orange-200 px-1.5 py-0.5 rounded text-[9px] font-bold flex items-center gap-1 shadow-sm';
+                        alignTag.innerHTML = `${icons.alertCircle} Needs Alignment`;
+                        infoCol.appendChild(alignTag);
+                    }
+
+                    row.appendChild(infoCol);
+
+                    // Timeline Column
+                    const timelineCol = document.createElement('div');
+                    timelineCol.className = 'relative h-28';
+                    timelineCol.style.width = `${totalChartWidth}px`;
+
+                    // Grid Lines
+                    for (let i = 0; i < weeksToDisplay; i++) {
+                        const line = document.createElement('div');
+                        line.className = 'absolute top-0 bottom-0 border-r border-slate-100 pointer-events-none';
+                        line.style.left = `${i * 7 * PIXELS_PER_DAY}px`;
+                        line.style.width = `${7 * PIXELS_PER_DAY}px`;
+                        timelineCol.appendChild(line);
+                    }
+
+                    // Gantt Bar
+                    if (width > 0) {
+                        const bar = document.createElement('div');
+                        bar.className = `absolute top-10 h-8 rounded-md shadow-sm ${item.color} transition-all cursor-pointer flex items-center px-3 hover:shadow-md hover:-translate-y-0.5 group-hover/row:brightness-95`;
+                        bar.style.left = `${left}px`;
+                        bar.style.width = `${width}px`;
+                        bar.innerHTML = `<div class="text-[10px] font-bold text-white whitespace-nowrap overflow-hidden text-ellipsis opacity-95">${item.duration}w</div>`;
+
+                        // Milestones
+                        if (item.milestones) {
+                            item.milestones.forEach(ms => {
+                                const msPx = ms.offset * 7 * PIXELS_PER_DAY;
+                                const msEl = document.createElement('div');
+                                msEl.className = 'absolute top-1/2 -translate-y-1/2 group/ms';
+                                msEl.style.left = `${msPx}px`;
+                                msEl.innerHTML = `
+                                    <div class="text-white fill-white stroke-slate-800 stroke-1">${icons.diamond}</div>
+                                    <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover/ms:block z-40 whitespace-nowrap">
+                                        <div class="bg-black/80 text-white text-[9px] px-2 py-1 rounded">
+                                            ${ms.label}
+                                        </div>
+                                    </div>
+                                `;
+                                bar.appendChild(msEl);
+                            });
+                        }
+                        timelineCol.appendChild(bar);
+                    }
+
+                    row.appendChild(timelineCol);
+                    ganttRows.appendChild(row);
+                });
+            });
+        }
+
+        // --- Initialization & Event Listeners ---
+        
+        scrollLeftBtn.onclick = () => {
+            scrollContainer.scrollBy({ left: -400, behavior: 'smooth' });
+        };
+        
+        scrollRightBtn.onclick = () => {
+            scrollContainer.scrollBy({ left: 400, behavior: 'smooth' });
+        };
+
+        // Init
+        renderIcons();
+        renderFilters();
+        renderTimelineHeader();
+        renderGanttRows();
+
+    </script>
+</body>
+</html>
