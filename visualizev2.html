@@ -6,13 +6,10 @@
     <title>Visualize | JoVE</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.css" rel="stylesheet">
     <style>
-        /* VISUALIZE / JOVE THEME */
         :root {
-            --primary: #1174bc; /* JoVE Blue */
+            --primary: #1174bc;
             --primary-hover: #0d5a94;
-            --jove-orange: #ff5722; 
             --bg-body: #fafbfd;
-            --bg-input: #ffffff;
             --text-main: #1f2937;
             --text-sub: #6b7280;
             --border: #e5e7eb;
@@ -25,957 +22,804 @@
         }
 
         * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+        body { background: var(--bg-body); color: var(--text-main); margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
 
-        /* --- HEADER (JoVE Visualize Style) --- */
+        /* Header */
         header {
-            background: white;
+            background: #fff;
             border-bottom: 1px solid var(--border);
-            height: 70px;
-            padding: 0 40px;
+            height: 64px;
+            padding: 0 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
-        
-        .logo { 
-            font-weight: 800; 
-            font-size: 1.5rem; 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-            letter-spacing: -0.02em; 
-            color: var(--text-main);
-        }
-        .logo span { 
-            color: var(--primary); /* Blue */
-            opacity: 1;
-            font-weight: 600;
-        }
-        
-        .nav-links { display: flex; gap: 32px; font-size: 0.95rem; color: #374151; font-weight: 500; align-items: center; }
+        .logo { font-weight: 800; font-size: 1.35rem; display: flex; align-items: center; gap: 6px; letter-spacing: -0.02em; color: var(--text-main); }
+        .logo span { color: var(--primary); font-weight: 600; }
+        .nav-links { display: flex; gap: 28px; font-size: 0.9rem; color: #374151; font-weight: 500; align-items: center; }
         .nav-item { cursor: pointer; transition: color 0.2s; }
         .nav-item:hover { color: var(--primary); }
-        
         .btn-header {
             border: 1px solid #d1d5db;
-            background: white;
-            padding: 8px 16px;
-            border-radius: 6px;
+            background: #fff;
+            padding: 8px 14px;
+            border-radius: 8px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             cursor: pointer;
             transition: all 0.2s;
         }
-        .btn-header:hover { border-color: var(--text-main); color: black; }
-        .btn-header.primary {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
+        .btn-header:hover { border-color: var(--text-main); color: #000; }
+        .btn-header.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
         .btn-header.primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
 
-        /* --- MAIN CONTAINER --- */
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 3rem 1.5rem;
-            width: 100%;
-            flex-grow: 1;
-        }
+        /* Main */
+        main { width: 100%; flex-grow: 1; padding: 2rem 1.25rem; }
+        .above-fold { max-width: 800px; margin: 0 auto 0 auto; }
 
-        /* --- HERO & SEARCH SECTION --- */
-        .hero { text-align: center; margin-bottom: 2.5rem; }
-        h1 { 
-            font-size: 2.5rem; 
-            margin-bottom: 1rem; 
-            letter-spacing: -0.02em; 
-            color: #111827;
-            font-weight: 800;
-        }
-        h1 span { color: var(--primary); }
-        
-        .subtext { color: var(--text-sub); font-size: 1.1rem; margin-bottom: 2rem; max-width: 650px; margin-left: auto; margin-right: auto; line-height: 1.6;}
+        /* Hero */
+        .hero { text-align: center; margin-bottom: 1.75rem; }
+        .hero h1 { font-size: 2rem; margin-bottom: 0.5rem; letter-spacing: -0.02em; color: #111827; font-weight: 800; }
+        .hero h1 span { color: var(--primary); }
+        .hero .subtext { color: var(--text-sub); font-size: 0.95rem; max-width: 480px; margin: 0 auto; line-height: 1.5; }
 
-        /* Floating Input */
-        .input-wrapper {
-            background: var(--bg-input);
-            border: 1px solid #d1d5db;
+        /* Single search card (SciSpace-style) */
+        .search-card {
+            background: #fff;
+            border: 1px solid var(--border);
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-float);
-            padding: 16px;
-            max-width: 800px;
-            margin: 0 auto 3rem auto;
-            position: relative;
-            transition: all 0.2s ease;
+            padding: 0;
+            overflow: hidden;
         }
-        .input-wrapper:focus-within {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(17, 116, 188, 0.1);
-        }
-        textarea {
-            width: 100%;
-            border: none;
-            resize: none;
-            height: 70px;
-            font-size: 1.1rem;
-            outline: none;
-            color: var(--text-main);
-            padding: 8px;
-            background: transparent;
-            line-height: 1.5;
-            font-family: 'Inter', sans-serif;
-        }
-        textarea::placeholder { color: #9ca3af; }
-        
-        .input-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 4px 0 4px;
-            border-top: 1px solid #f3f4f6;
-            margin-top: 8px;
-        }
-        .attachments { 
-            display: flex; gap: 12px; font-size: 0.85rem; color: var(--text-sub); 
-            font-weight: 500;
-        }
-        .attach-pill {
-            display: flex; align-items: center; gap: 6px;
-            padding: 6px 10px; border-radius: 6px;
-            transition: background 0.1s; cursor: pointer;
-        }
-        .attach-pill:hover { background: #f3f4f6; color: var(--text-main); }
-        
-        .btn-visualize {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 4px 6px -1px rgba(17, 116, 188, 0.2);
-        }
-        .btn-visualize:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
-
-        /* --- SCAFFOLD SECTION (Columns) --- */
-        .scaffold-section {
+        .search-card:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(17, 116, 188, 0.1); }
+        .search-columns {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            align-items: start;
+            gap: 1.25rem;
+            padding: 1.5rem 1.75rem;
+            border-bottom: 1px solid #f3f4f6;
         }
-        @media (max-width: 768px) { .scaffold-section { grid-template-columns: 1fr; } }
-
-        .scaffold-col {
-            background: #f3f4f6;
-            border-radius: 16px;
-            padding: 1.25rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            height: 100%;
-        }
-
-        .col-header {
-            font-size: 0.85rem;
+        @media (max-width: 640px) { .search-columns { grid-template-columns: 1fr; } }
+        .search-col { display: flex; flex-direction: column; gap: 0.6rem; }
+        .search-col-header {
+            font-size: 0.72rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #4b5563;
+            letter-spacing: 0.06em;
+            color: var(--text-sub);
             font-weight: 700;
-            padding-bottom: 0.5rem;
-            padding-left: 0.25rem;
+            margin-bottom: 2px;
         }
-        
-        .card-grid { display: flex; flex-direction: column; gap: 0.75rem; }
-        
-        .option-card {
-            background: white;
-            border: 1px solid transparent;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s;
+        .search-col .option-card {
             display: flex;
             align-items: center;
-            gap: 12px;
-            color: #374151;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: 1px solid transparent;
+            background: #f9fafb;
+            color: var(--text-main);
             font-weight: 500;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
-        .option-card:hover { 
-            border-color: #cbd5e1; 
-            transform: translateY(-1px); 
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
-        }
-        .option-card.selected {
+        .search-col .option-card:hover { background: #f3f4f6; border-color: #e5e7eb; }
+        .search-col .option-card.selected {
+            background: #eff6ff;
             border-color: var(--primary);
-            background: #eef2ff;
             color: var(--primary);
             font-weight: 600;
-            box-shadow: 0 0 0 1px var(--primary);
         }
-        
-        .option-card.jove-card.selected {
-            background: #f0f4ff; 
-            border-color: var(--primary);
+        .search-col .card-icon { font-size: 1rem; display: inline-flex; align-items: center; }
+.search-col .card-icon svg { flex-shrink: 0; }
+.attach-pill { display: inline-flex; align-items: center; gap: 6px; }
+.attach-pill svg { flex-shrink: 0; }
+        .search-prompt-wrap {
+            padding: 1rem 1.5rem 1.25rem;
         }
-        
-        .option-card.disabled {
-            opacity: 0.4;
-            pointer-events: none;
-            background: #e5e7eb;
-            color: #9ca3af;
-            box-shadow: none;
-            border-color: transparent;
+        .search-prompt-wrap .prompt-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-sub);
+            font-weight: 700;
+            margin-bottom: 6px;
         }
-        
-        .card-icon {
-            font-size: 1.2rem;
-            min-width: 24px;
+        .prompt-sentence {
             display: flex;
             align-items: center;
-            justify-content: center;
-        }
-
-        /* JoVE Logo SVG for Card */
-        .jove-logo-svg {
-            height: 20px;
-            width: auto;
-        }
-
-        /* --- WORKSPACE --- */
-        .workspace-container {
-            display: none;
-            margin-top: 1rem;
-            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .workspace-tabs {
-            display: flex;
-            gap: 24px;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid var(--border);
-            padding-left: 4px;
-        }
-        .tab {
-            padding-bottom: 10px;
-            color: var(--text-sub);
-            cursor: pointer;
-            font-weight: 500;
+            flex-wrap: wrap;
+            gap: 0;
             font-size: 0.95rem;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+        .prompt-sentence .prompt-before,
+        .prompt-sentence .prompt-after { color: #0f3d6b; }
+        .prompt-sentence .topic-input-wrap {
+            flex: 1;
+            min-width: 140px;
+            max-width: 320px;
+            margin: 0 4px;
             position: relative;
         }
-        .tab:hover { color: var(--text-main); }
-        .tab.active { color: var(--primary); font-weight: 600; }
-        .tab.active::after {
+        .prompt-sentence .topic-input {
+            width: 100%;
+            margin: 0;
+            padding: 8px 0 10px 0;
+            border: none;
+            border-bottom: 2px solid rgba(17, 116, 188, 0.25);
+            border-radius: 0;
+            font-size: 0.95rem;
+            font-family: inherit;
+            color: #0f3d6b;
+            background: transparent;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .prompt-sentence .topic-input::placeholder { color: #6b8fb5; }
+        .prompt-sentence .topic-input:focus { border-bottom-color: var(--primary); }
+        .prompt-sentence .topic-input-wrap::after {
             content: '';
             position: absolute;
-            bottom: -1px;
+            bottom: -2px;
             left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--primary);
-            border-radius: 2px 2px 0 0;
+            right: 0;
+            height: 3px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, transparent 0%, rgba(17, 116, 188, 0.2) 25%, rgba(17, 116, 188, 0.85) 50%, rgba(17, 116, 188, 0.2) 75%, transparent 100%);
+            background-size: 55% 100%;
+            background-repeat: no-repeat;
+            animation: underlineGlow 2.5s ease-in-out infinite;
+            pointer-events: none;
         }
-
-        .canvas-area {
-            display: grid;
-            grid-template-columns: 2fr 1.2fr;
-            gap: 1.5rem;
-            height: 700px;
+        .prompt-sentence .topic-input-wrap:focus-within::after { animation: none; opacity: 0.4; }
+        .topic-suggestions {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--text-sub);
         }
-        
-        @media (max-width: 768px) { .canvas-area { grid-template-columns: 1fr; height: auto; } }
-
-        .graph-view {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow-card);
-            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
-            background-size: 24px 24px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .node {
-            position: absolute;
-            background: white;
-            border: 1px solid #d1d5db;
-            padding: 8px 16px;
+        .topic-suggestions span { margin-right: 4px; }
+        .topic-suggestions .suggest-label { font-weight: 500; margin-right: 8px; }
+        .topic-suggestions .suggest-chip {
+            display: inline-block;
+            padding: 4px 10px;
+            margin: 2px 4px 2px 0;
             border-radius: 100px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background: #f3f4f6;
+            color: var(--text-main);
             cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #374151;
-            transition: all 0.2s;
-            z-index: 2;
-            display: flex; align-items: center; gap: 6px;
+            transition: background 0.2s, color 0.2s;
         }
-        .node:hover { border-color: var(--primary); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .node.active { 
-            border-color: var(--primary); 
-            background: var(--primary); 
-            color: white; 
-            z-index: 3; 
+        .topic-suggestions .suggest-chip:hover { background: #e5e7eb; color: var(--primary); }
+        @keyframes underlineGlow {
+            0% { background-position: 0% 0; }
+            50% { background-position: 100% 0; }
+            100% { background-position: 0% 0; }
         }
-        
-        .connector-line {
-            position: absolute;
-            background: #cbd5e1;
-            height: 1px;
-            transform-origin: left center;
-            z-index: 1;
-            display: none;
-        }
-
-        .jove-panel {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 12px;
+        .search-actions {
             display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: var(--shadow-card);
-            height: 100%;
-        }
-        
-        .panel-header {
-            padding: 14px 16px;
-            background: white;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 12px 20px 18px;
+            border-top: 1px solid #f3f4f6;
         }
-        .copilot-brand {
-            display: flex; align-items: center; gap: 8px;
-            font-weight: 700; color: #111827; font-size: 0.95rem;
+        .search-actions .attach-pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; color: var(--text-sub);
+            font-weight: 500; cursor: pointer; transition: background 0.15s;
         }
-        .copilot-icon { width: 20px; height: 20px; fill: var(--primary); }
+        .search-actions .attach-pill:hover { background: #f3f4f6; color: var(--text-main); }
+        .btn-visualize {
+            background: var(--primary); color: #fff; border: none;
+            padding: 10px 22px; border-radius: 8px; font-weight: 600; font-size: 0.9rem;
+            cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+            box-shadow: 0 2px 4px rgba(17, 116, 188, 0.2);
+            transition: background 0.2s, transform 0.2s, opacity 0.2s;
+        }
+        .btn-visualize:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        .btn-visualize:disabled {
+            opacity: 0.5; cursor: not-allowed; background: #94a3b8;
+        }
+        .btn-visualize:disabled:hover { transform: none; background: #94a3b8; }
 
-        .panel-content { 
-            padding: 0; 
-            flex-grow: 1; 
-            display: flex; 
-            flex-direction: column; 
-            background: #f9fafb;
-        }
-        
-        .chat-bubble {
-            background: white;
-            padding: 16px;
-            border-bottom: 1px solid var(--border);
-            animation: fadeIn 0.3s;
-        }
-        .chat-label { font-size: 0.75rem; color: var(--text-sub); margin-bottom: 6px; font-weight: 600; text-transform: uppercase;}
-        .chat-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; color: #111827; }
-        .chat-desc { font-size: 0.9rem; color: #4b5563; line-height: 1.5; }
+        /* Workspace */
+        .workspace-container { display: none; margin-top: 2rem; padding: 0 1.25rem 1.5rem; max-width: 1100px; margin-left: auto; margin-right: auto; animation: slideUp 0.5s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-        .video-container {
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .video-placeholder {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: radial-gradient(circle at 30% 50%, rgba(17, 116, 188, 0.8) 0%, #111827 60%),
-                        repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 10px);
-            border-radius: 8px;
+        .journey-strip {
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            position: relative;
-            cursor: pointer;
-            overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            border: 1px solid #374151;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 14px 20px;
+            margin-bottom: 1.5rem;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: #166534;
         }
-        .video-placeholder::after {
-            content: 'JoVE';
-            position: absolute;
-            bottom: 10px; right: 10px;
-            font-size: 0.8rem; font-weight: 800; opacity: 0.7;
-            letter-spacing: 0.05em;
+        .journey-strip .step { font-weight: 600; }
+        .journey-strip .arrow { color: #86efac; font-weight: bold; }
+        .journey-strip .result { color: #15803d; font-weight: 700; }
+
+        .workspace-tabs { display: none; }
+        .output-heading {
+            font-size: 1rem; font-weight: 700; color: var(--text-main);
+            margin: 0 0 1.25rem 0; display: flex; align-items: center; gap: 8px;
         }
-        .play-btn {
-            width: 44px; height: 44px; background: rgba(255,255,255,0.2);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            backdrop-filter: blur(4px);
-            transition: transform 0.2s;
-            border: 1px solid rgba(255,255,255,0.4);
+        .output-heading svg { width: 22px; height: 22px; color: var(--primary); flex-shrink: 0; }
+        .you-asked {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            margin-bottom: 1rem;
+            padding: 10px 14px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border-left: 3px solid var(--primary);
         }
-        .play-triangle {
-            width: 0; height: 0;
-            border-top: 8px solid transparent;
-            border-bottom: 8px solid transparent;
-            border-left: 14px solid white;
-            margin-left: 4px;
+        .you-asked strong { color: var(--text-main); font-weight: 600; }
+        .output-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
         }
-        
-        .method-step {
-            padding: 16px;
-            border: 1px solid var(--border);
+        .output-toolbar .toolbar-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
             border-radius: 8px;
-            margin-bottom: 12px;
-            background: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-sub);
+            background: #f9fafb;
+            border: 1px solid var(--border);
             cursor: pointer;
             transition: all 0.2s;
-            display: flex; gap: 12px;
         }
-        .method-step:hover { border-color: var(--primary); box-shadow: 0 2px 4px rgba(17, 116, 188, 0.1); }
-        .step-num { 
-            width: 24px; height: 24px; background: #e0e7ff; color: var(--primary); 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
+        .output-toolbar .toolbar-btn:hover { color: var(--primary); border-color: var(--primary); background: #eff6ff; }
+        .output-toolbar .toolbar-btn svg { width: 16px; height: 16px; }
+        .explore-further {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        .explore-further .ef-heading { font-size: 0.8rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+        .explore-further .ef-links { display: flex; flex-wrap: wrap; gap: 8px; }
+        .explore-further .ef-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary);
+            background: #eff6ff;
+            border: 1px solid rgba(17, 116, 188, 0.25);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .explore-further .ef-link:hover { background: #dbeafe; border-color: var(--primary); }
+        #aiResponseBlock {
+            display: none;
+            margin-bottom: 1.5rem;
+            padding: 1.25rem 1.5rem;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        #aiResponseBlock.visible { display: block; }
+        #aiResponseBlock.loading #aiResponseContent { display: none; }
+        #aiResponseBlock.loading #aiResponseLoading { display: block; }
+        #aiResponseBlock:not(.loading) #aiResponseLoading { display: none; }
+        #aiResponseBlock .ai-response-label { font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; }
+        #aiResponseContent { font-size: 0.95rem; line-height: 1.6; color: var(--text-main); white-space: pre-wrap; }
+        #aiResponseContent h3 { font-size: 1rem; margin: 1rem 0 0.5rem 0; }
+        #aiResponseContent h3:first-child { margin-top: 0; }
+        #aiResponseContent ul { margin: 0.5rem 0; padding-left: 1.25rem; }
+        #aiResponseLoading { color: var(--text-sub); font-size: 0.9rem; }
+        .using-sample { font-size: 0.8rem; color: var(--text-sub); margin-top: 0.5rem; padding: 8px 12px; background: #f8fafc; border-radius: 8px; }
+
+        .canvas-area { min-height: 520px; padding: 0 0.25rem; }
+
+        .graph-view {
+            background: linear-gradient(165deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            min-height: 560px;
+            padding: 0.5rem;
         }
 
-        /* --- DETAILED OUTPUT STYLES --- */
-        
-        /* 1. Protocol Metadata */
-        .protocol-header-meta {
-            display: flex; gap: 20px; padding-bottom: 15px; margin-bottom: 20px;
-            border-bottom: 1px solid #eee; font-size: 0.9rem; color: #555;
-        }
-        .meta-item { display: flex; align-items: center; gap: 6px; }
-        .meta-icon { color: var(--primary); }
-        .warning-box {
-            background: #fff5f5; border-left: 4px solid #f56565;
-            padding: 12px; font-size: 0.9rem; color: #742a2a; margin-top: 8px;
-        }
+        .view-layer { display: none; padding: 2rem 1.75rem; overflow-y: auto; height: 100%; min-height: 440px; }
+        .view-layer.active { display: block; }
 
-        /* 2. Lit Review Styles */
-        .lit-card {
-            background: white; border: 1px solid #eee; border-radius: 8px; padding: 15px;
-            margin-bottom: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        /* Knowledge Graph – horizontal flowchart, thin black edges, evenly spaced */
+        .kg-container { position: relative; width: 100%; height: 520px; margin-bottom: 0.5rem; }
+        .kg-container .kg-edges {
+            position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;
         }
-        .lit-title { font-weight: 600; color: var(--primary); margin-bottom: 4px; font-size: 1rem; }
-        .lit-meta { font-size: 0.8rem; color: #888; margin-bottom: 8px; }
-        .lit-finding { font-size: 0.9rem; color: #444; line-height: 1.5; }
-        .lit-score { 
-            display: inline-block; background: #e0f2f1; color: #00695c; 
-            padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; margin-top: 8px;
+        .kg-container .kg-edges line {
+            stroke: #1a1a1a;
+            stroke-width: 1;
+            stroke-linecap: round;
         }
-
-        /* 3. Comparison Table */
-        .compare-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .compare-table th { text-align: left; padding: 12px; background: #f8fafc; border-bottom: 2px solid #e2e8f0; color: #475569; font-size: 0.9rem;}
-        .compare-table td { padding: 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.9rem; color: #334155; }
-        .compare-table tr:hover { background: #f8fafc; }
-        .check-mark { color: #10b981; font-weight: bold; }
-        .x-mark { color: #ef4444; font-weight: bold; }
-
-        /* 4. PDF Preview Styles */
-        .pdf-preview {
-            background: white; width: 100%; height: 100%; padding: 40px;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.05); overflow-y: auto;
-            font-family: 'Times New Roman', serif;
-        }
-        .pdf-title { font-size: 1.8rem; font-weight: bold; margin-bottom: 10px; color: black; line-height: 1.2; }
-        .pdf-meta { font-size: 0.9rem; color: #666; margin-bottom: 30px; font-style: italic; }
-        .pdf-h2 { font-size: 1.2rem; font-weight: bold; margin-top: 20px; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
-        .pdf-p { font-size: 1rem; line-height: 1.6; margin-bottom: 15px; text-align: justify; color: #333; }
-
-        /* 5. Graphical Abstract */
-        .ga-grid {
-            display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
-            gap: 15px; height: 100%; padding: 10px;
-        }
-        .ga-panel {
-            border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; background: white;
-            display: flex; flex-direction: column;
-        }
-        .ga-header { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--primary); margin-bottom: 10px; }
-        .ga-content { flex-grow: 1; display: flex; align-items: center; justify-content: center; background: #f8fafc; border-radius: 6px; color: #64748b; font-size: 0.9rem; text-align: center; padding: 10px; }
-
-        /* --- FOOTER (JoVE Style) --- */
-        footer {
-            background-color: var(--footer-bg);
-            color: var(--footer-text);
-            padding: 3rem 2rem 1.5rem 2rem;
-            margin-top: 4rem;
-        }
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 2rem;
-            border-bottom: 1px solid #374151;
-            padding-bottom: 2rem;
-        }
-        .footer-col h4 {
-            color: white;
-            margin: 0 0 1.2rem 0;
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
-        .footer-col ul { list-style: none; padding: 0; margin: 0; }
-        .footer-col li { margin-bottom: 0.8rem; font-size: 0.9rem; }
-        .footer-col li:hover { color: white; cursor: pointer; }
-        
-        .footer-bottom {
-            max-width: 1200px;
-            margin: 1.5rem auto 0 auto;
+        .kg-container .node {
+            position: absolute;
+            width: 176px;
+            background: #fff;
+            border: 1px solid rgba(17, 116, 188, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 2;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            overflow: hidden;
+            transform: translate(-50%, -50%);
+        }
+        .kg-container .node .kg-node-thumb {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #1e3a5f;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .kg-container .node .kg-node-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .kg-container .node .kg-node-thumb .play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(13, 90, 148, 0.35);
+            transition: background 0.2s;
+        }
+        .kg-container .node:hover .kg-node-thumb .play-overlay { background: rgba(13, 90, 148, 0.5); }
+        .kg-container .node .kg-node-thumb .play-overlay svg {
+            width: 36px;
+            height: 36px;
+            color: #fff;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        .kg-container .node.kg-article .kg-node-thumb .play-overlay svg { width: 28px; height: 28px; }
+        .kg-container .node.active .kg-node-thumb .play-overlay { background: rgba(0,0,0,0.45); }
+        .kg-container .node .kg-node-body { padding: 8px 10px 10px; flex: 1; }
+        .kg-container .node .kg-node-title { font-size: 0.8rem; font-weight: 700; color: #0f3d6b; line-height: 1.25; margin-bottom: 4px; }
+        .kg-container .node .kg-node-meta { font-size: 0.7rem; color: var(--text-sub); display: flex; align-items: center; gap: 6px; }
+        .kg-container .node .kg-node-meta .jove-badge { color: var(--primary); font-weight: 600; }
+        .kg-container .node:hover { border-color: var(--primary); box-shadow: 0 6px 20px rgba(17, 116, 188, 0.18); }
+        .kg-container .node.active { border-color: var(--primary); background: var(--primary); box-shadow: 0 6px 24px rgba(17, 116, 188, 0.3); }
+        .kg-container .node.active .kg-node-thumb .play-overlay { background: rgba(0,0,0,0.5); }
+        .kg-container .node.active .kg-node-body { background: transparent; }
+        .kg-container .node.active .kg-node-title { color: #fff; }
+        .kg-container .node.active .kg-node-meta { color: rgba(255,255,255,0.85); }
+        .kg-container .node.active .kg-node-meta .jove-badge { color: rgba(255,255,255,0.95); }
+        .kg-container .node.hub { width: 196px; border-width: 2px; border-color: var(--primary); }
+        .kg-container .node.hub .kg-node-thumb .play-overlay svg { width: 44px; height: 44px; }
+        .kg-container .node.hub .kg-node-title { font-size: 0.88rem; }
+
+        /* Protocol view */
+        .protocol-title { font-size: 1.35rem; font-weight: 700; color: var(--text-main); margin: 0 0 1.25rem 0; line-height: 1.3; }
+        .protocol-meta {
+            display: flex; gap: 1.5rem; padding-bottom: 1.25rem; margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border); font-size: 0.85rem; color: var(--text-sub);
+        }
+        .protocol-meta span { display: flex; align-items: center; gap: 6px; }
+        .protocol-meta svg { flex-shrink: 0; }
+        .step-watch svg { flex-shrink: 0; }
+        .method-step {
+            padding: 1.25rem 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            background: #fff;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            gap: 16px;
+        }
+        .method-step:hover { border-color: var(--primary); box-shadow: 0 2px 6px rgba(17, 116, 188, 0.08); }
+        .method-step.active { border-color: var(--primary); background: #eff6ff; box-shadow: 0 0 0 1px var(--primary); }
+        .step-watch {
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
         }
-        
-        @media (max-width: 768px) {
-            .footer-content { grid-template-columns: 1fr 1fr; }
-            .header { padding: 0 20px; }
-            .nav-links { display: none; } /* Simplified for mobile mock */
+        .step-watch:hover { text-decoration: underline; }
+        .step-num {
+            width: 28px; height: 28px; background: #dbeafe; color: var(--primary);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+        }
+        .step-body strong { display: block; margin-bottom: 6px; color: var(--text-main); font-size: 1rem; }
+        .step-body span { font-size: 0.9rem; color: #555; line-height: 1.55; }
+        .warning-box {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 12px 14px;
+            font-size: 0.85rem;
+            color: #991b1b;
+            margin-top: 12px;
+            border-radius: 0 8px 8px 0;
         }
 
-        /* Animations */
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Literature view */
+        .lit-heading { font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin: 0 0 1.25rem 0; line-height: 1.3; }
+        .lit-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+        .lit-title { font-weight: 600; color: var(--primary); margin-bottom: 6px; font-size: 0.98rem; line-height: 1.35; }
+        .lit-meta { font-size: 0.8rem; color: var(--text-sub); margin-bottom: 8px; }
+        .lit-finding { font-size: 0.9rem; color: #444; line-height: 1.55; }
+        .lit-badge {
+            display: inline-block;
+            background: #d1fae5;
+            color: #065f46;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .lit-source-note {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            margin-bottom: 1.25rem;
+            padding: 12px 16px;
+            background: #f0fdf4;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
 
+        /* In-output JoVE video (researcher-focused, no separate panel) */
+        .output-video-block {
+            margin-top: 1.75rem;
+            padding: 1.5rem;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .output-video-block .video-heading { font-size: 0.8rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+        .output-video-block .video-title { font-size: 1.05rem; font-weight: 700; color: #0f3d6b; margin-bottom: 8px; line-height: 1.3; }
+        .output-video-block .video-desc { font-size: 0.9rem; color: #4b5563; line-height: 1.55; margin-bottom: 16px; }
+        .output-video-block .video-placeholder {
+            width: 100%;
+            max-width: 560px;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, rgba(17, 116, 188, 0.9) 0%, #0d5a94 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .output-video-block .video-placeholder::after {
+            content: 'JoVE';
+            position: absolute; bottom: 10px; right: 10px;
+            font-size: 0.8rem; font-weight: 800; opacity: 0.9;
+        }
+        .output-video-block .play-btn {
+            width: 64px; height: 64px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 3px solid rgba(255,255,255,0.6);
+        }
+        .output-video-block .play-triangle { width: 0; height: 0; border-top: 12px solid transparent; border-bottom: 12px solid transparent; border-left: 18px solid #fff; margin-left: 6px; }
+        .output-video-block.protocol-video-top { margin-bottom: 1.75rem; }
+        .output-video-block .video-placeholder.playing { pointer-events: none; }
+
+        /* Footer */
+        footer {
+            background: var(--footer-bg);
+            color: var(--footer-text);
+            padding: 2rem 1.5rem 1.25rem;
+            margin-top: 3rem;
+        }
+        .footer-inner { max-width: 1100px; margin: 0 auto; text-align: center; }
+        .footer-inner .logo { justify-content: center; color: #fff; margin-bottom: 1rem; }
+        .footer-inner .logo span { color: #93c5fd; }
+        .footer-links { display: flex; justify-content: center; gap: 1.5rem; font-size: 0.85rem; margin-bottom: 1rem; }
+        .footer-links a { color: var(--footer-text); text-decoration: none; }
+        .footer-links a:hover { color: #fff; }
+        .footer-copy { font-size: 0.8rem; color: #6b7280; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">
-        JoVE <span>Visualize</span>
-    </div>
-    <div class="nav-links">
-        <div class="nav-item">Browse</div>
-        <div class="nav-item">Solutions</div>
-        <div class="nav-item">Community</div>
-        <button class="btn-header">Log In</button>
-        <button class="btn-header primary">Request Trial</button>
-    </div>
+    <div class="logo">JoVE <span>Visualize</span></div>
+    <nav class="nav-links">
+        <span class="nav-item">Browse</span>
+        <span class="nav-item">Solutions</span>
+        <button class="btn-header">Log in</button>
+        <button class="btn-header primary">Request trial</button>
+    </nav>
 </header>
 
 <main>
-    <!-- HERO -->
+    <div class="above-fold">
     <section class="hero">
         <h1>Visualize your research with <span>JoVE</span></h1>
-        <p class="subtext">Make sense of complex papers and methods. Ground your ideas in visual experiments used by top laboratories worldwide.</p>
-        
-        <div class="input-wrapper">
-            <textarea id="mainInput" placeholder="Select options below or type your query here..."></textarea>
-            <div class="input-footer">
-                <div class="attachments">
-                    <div class="attach-pill"><span>📎</span> Upload PDF</div>
-                    <div class="attach-pill"><span>🔗</span> Paste URL</div>
-                </div>
-                <button class="btn-visualize" onclick="triggerVisualization()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-                    Visualize
-                </button>
-            </div>
-        </div>
+        <p class="subtext">Specify your research objective—topic, methodology, or hypothesis—and obtain a concept map, experimental protocol, or synthesized literature grounded in peer-reviewed JoVE methods.</p>
     </section>
 
-    <!-- SCAFFOLD -->
-    <section class="scaffold-section" id="scaffold">
-        <!-- Col 1: Intent -->
-        <div class="scaffold-col" id="col-intent">
-            <div class="col-header">I WANT TO</div>
-            <div class="card-grid">
-                <div class="option-card" data-val="Review Literature" onclick="updatePrompt('intent', 'Review Literature', this)">
-                    <span class="card-icon">📚</span> Review Literature
-                </div>
-                <div class="option-card" data-val="Write a Draft" onclick="updatePrompt('intent', 'Write a Draft', this)">
-                    <span class="card-icon">✍️</span> Write a Draft
-                </div>
-                <div class="option-card" data-val="Generate Diagram" onclick="updatePrompt('intent', 'Generate Diagram', this)">
-                    <span class="card-icon">📐</span> Generate Diagram
-                </div>
-                <div class="option-card" data-val="Extract Data" onclick="updatePrompt('intent', 'Extract Data', this)">
-                    <span class="card-icon">⚡</span> Extract Data
-                </div>
-                <div class="option-card" data-val="Analyse Data" onclick="updatePrompt('intent', 'Analyse Data', this)">
-                    <span class="card-icon">📊</span> Analyse Data
-                </div>
-                <div class="option-card" data-val="Find Grants" onclick="updatePrompt('intent', 'Find Grants', this)">
-                    <span class="card-icon">💰</span> Find Grants
-                </div>
-                <div class="option-card" data-val="Design Experiment" onclick="updatePrompt('intent', 'Design Experiment', this)">
-                    <span class="card-icon">🔬</span> Design Experiment
-                </div>
+    <section class="search-card" id="searchCard">
+        <div class="search-prompt-wrap">
+            <div class="prompt-label">Query</div>
+            <div class="prompt-sentence">
+                <span class="prompt-before" id="promptBefore">I want to explore </span>
+                <span class="topic-input-wrap"><input type="text" class="topic-input" id="topicInput" placeholder="e.g. CRISPR-Cas9, Western blot, flow cytometry" aria-label="Topic" /></span>
+                <span class="prompt-after" id="promptAfter"> using JoVE videos to get a Concept map.</span>
+            </div>
+            <div class="topic-suggestions">
+                <span class="suggest-label">Example queries:</span>
+                <span class="suggest-chip" onclick="setTopic('CRISPR-Cas9')">CRISPR-Cas9</span>
+                <span class="suggest-chip" onclick="setTopic('Western blot')">Western blot</span>
+                <span class="suggest-chip" onclick="setTopic('Cell culture')">Cell culture</span>
+                <span class="suggest-chip" onclick="setTopic('PCR')">PCR</span>
+                <span class="suggest-chip" onclick="setTopic('Flow cytometry')">Flow cytometry</span>
             </div>
         </div>
-
-        <!-- Col 2: Source -->
-        <div class="scaffold-col" id="col-source">
-            <div class="col-header">USE</div>
-            <div class="card-grid">
-                <div class="option-card jove-card selected" data-val="JoVE Videos" onclick="updatePrompt('source', 'JoVE Videos', this)">
-                    <span class="card-icon">
-                        <!-- Custom JoVE Logo SVG -->
-                        <svg class="jove-logo-svg" viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <text x="0" y="30" fill="#1174bc" font-family="Arial" font-weight="bold" font-size="30">JoVE</text>
-                        </svg>
-                    </span> JoVE Videos
-                </div>
-                <div class="option-card" data-val="PubMed" onclick="updatePrompt('source', 'PubMed', this)">
-                    <span class="card-icon">⚕️</span> PubMed
-                </div>
-                <div class="option-card" data-val="Google Scholar" onclick="updatePrompt('source', 'Google Scholar', this)">
-                    <span class="card-icon">🎓</span> Google Scholar
-                </div>
-                <div class="option-card" data-val="Patents" onclick="updatePrompt('source', 'Patents', this)">
-                    <span class="card-icon">📜</span> Patents
-                </div>
-                <div class="option-card" data-val="Grants.gov" onclick="updatePrompt('source', 'Grants.gov', this)">
-                    <span class="card-icon">🏛️</span> Grants.gov
-                </div>
-                <div class="option-card" data-val="ClinicalTrials.gov" onclick="updatePrompt('source', 'ClinicalTrials.gov', this)">
-                    <span class="card-icon">🏥</span> ClinicalTrials.gov
-                </div>
-                <div class="option-card" data-val="Uploaded Files" onclick="updatePrompt('source', 'Uploaded Files', this)">
-                    <span class="card-icon">📎</span> Uploaded Files
-                </div>
+        <div class="search-columns">
+            <div class="search-col">
+                <div class="search-col-header">Objective</div>
+                <div class="option-card selected" data-intent="explore" onclick="setIntent('explore', this)"><span class="card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2"/></svg></span> Understand a method</div>
+                <div class="option-card" data-intent="protocol" onclick="setIntent('protocol', this)"><span class="card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31M14 9.3V2M8.5 2h7M12 22v-5.5M9 18l3-3 3 3"/><path d="M4 17c0-4 4-6 8-6s8 2 8 6"/></svg></span> Replicate a method</div>
+                <div class="option-card" data-intent="literature" onclick="setIntent('literature', this)"><span class="card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M8 7h8M8 11h8"/></svg></span> Review the literature</div>
+            </div>
+            <div class="search-col">
+                <div class="search-col-header">Source</div>
+                <div class="option-card selected" data-source="jove" onclick="setSource('jove', this)"><span class="card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span> JoVE videos</div>
+                <div class="option-card" data-source="jove-pubmed" onclick="setSource('jove-pubmed', this)"><span class="card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></span> JoVE + PubMed</div>
+            </div>
+            <div class="search-col">
+                <div class="search-col-header">Output</div>
+                <div class="option-card selected" data-output="graph" onclick="setOutput('graph', this)"><span class="card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2"/></svg></span> Concept map</div>
+                <div class="option-card" data-output="protocol" onclick="setOutput('protocol', this)"><span class="card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31M14 9.3V2M8.5 2h7M12 22v-5.5M9 18l3-3 3 3"/><path d="M4 17c0-4 4-6 8-6s8 2 8 6"/></svg></span> Step-by-step protocol</div>
+                <div class="option-card" data-output="literature" onclick="setOutput('literature', this)"><span class="card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M8 7h8M8 11h8"/></svg></span> Literature synthesis</div>
             </div>
         </div>
-
-        <!-- Col 3: View/Make A -->
-        <div class="scaffold-col" id="col-view">
-            <div class="col-header">MAKE A</div>
-            <div class="card-grid">
-                <div class="option-card selected" data-val="Knowledge Graph" onclick="updatePrompt('view', 'Knowledge Graph', this)">
-                    <span class="card-icon">🕸️</span> Knowledge Graph
-                </div>
-                <div class="option-card" data-val="Lab Protocol" onclick="updatePrompt('view', 'Lab Protocol', this)">
-                    <span class="card-icon">🧪</span> Lab Protocol
-                </div>
-                <div class="option-card" data-val="PDF Report" onclick="updatePrompt('view', 'PDF Report', this)">
-                    <span class="card-icon">📄</span> PDF Report
-                </div>
-                <div class="option-card" data-val="Data Visualisation" onclick="updatePrompt('view', 'Data Visualisation', this)">
-                    <span class="card-icon">📉</span> Data Visualisation
-                </div>
-                <div class="option-card" data-val="Infographic" onclick="updatePrompt('view', 'Infographic', this)">
-                    <span class="card-icon">🖼️</span> Infographic
-                </div>
-                <div class="option-card" data-val="Flowchart" onclick="updatePrompt('view', 'Flowchart', this)">
-                    <span class="card-icon">🔀</span> Flowchart
-                </div>
-                <div class="option-card" data-val="Graphical Abstract" onclick="updatePrompt('view', 'Graphical Abstract', this)">
-                    <span class="card-icon">🎨</span> Graphical Abstract
-                </div>
+        <div class="search-actions">
+            <div>
+                <span class="attach-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg> Upload PDF</span>
+                <span class="attach-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg> Paste URL</span>
             </div>
+            <button class="btn-visualize" id="btnVisualize" disabled>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                Visualize
+            </button>
         </div>
     </section>
+    </div>
 
-    <!-- VISUAL WORKSPACE (Hidden Initially) -->
     <div class="workspace-container" id="workspace">
-        <div class="workspace-tabs" id="tabs-container">
-            <div class="tab active" onclick="switchTab('concept', event)">Knowledge Graph</div>
-            <div class="tab" onclick="switchTab('method', event)">Lab Protocol</div>
-            <div class="tab" onclick="switchTab('evidence', event)">Literature Review</div>
-            <div class="tab" onclick="switchTab('compare', event)">Comparison Matrix</div>
+        <div class="journey-strip" id="journeyStrip">
+            <span class="step" id="stripIntent">Understand a method</span>
+            <span class="arrow">→</span>
+            <span class="result" id="stripOutput">Concept map</span>
+            <span style="color:#86efac;">·</span>
+            <span id="stripSource">from JoVE videos</span>
         </div>
-
+        <div class="output-heading" id="outputHeading">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+            <span id="outputHeadingText">Concept map</span>
+        </div>
+        <div class="you-asked" id="youAsked">Query: <strong id="youAskedText">—</strong></div>
+        <div class="output-toolbar">
+            <button type="button" class="toolbar-btn" title="Export"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg> Export</button>
+            <button type="button" class="toolbar-btn" title="Share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg> Share</button>
+            <button type="button" class="toolbar-btn" id="btnEditPrompt" title="Refine query">Refine query</button>
+        </div>
+        <div id="aiResponseBlock">
+            <div class="ai-response-label">Generated summary (Gemini)</div>
+            <div id="aiResponseLoading">Generating…</div>
+            <div id="aiResponseContent"></div>
+        </div>
+        <div id="usingSampleNote" class="using-sample" style="display:none;">API unavailable — displaying sample content.</div>
         <div class="canvas-area">
-            <!-- CANVAS: CONTENT CHANGES BASED ON TAB -->
-            <div class="graph-view" id="graph-canvas">
-                
-                <!-- 1. Concept Map Mode (Rich Hub & Spoke) -->
-                <div id="concept-layer">
-                    <!-- Central Hub -->
-                    <div class="node" id="central-node" style="top: 45%; left: 42%; transform: scale(1.3); border-width: 3px; font-weight:800; z-index:10;">
-                        <span>🧬</span> CRISPR-Cas9 System
-                    </div>
-                    
-                    <!-- Spoke 1: Mechanism -->
-                    <div class="node sub-node" style="top: 20%; left: 42%; background:#f0f9ff; border-color:#bae6fd;" onclick="loadVideo('Cas9 Cleavage')">
-                        <span>⚙️</span> Mechanism
-                    </div>
-                    <div class="connector-line" style="top: 32%; left: 46%; height: 13%; width: 2px; background:#cbd5e1;"></div>
-                    
-                    <!-- Leaf Nodes for Mechanism -->
-                    <div class="node sub-node" style="top: 10%; left: 30%; font-size:0.8rem;" onclick="loadVideo('gRNA Design')">sgRNA Guidance</div>
-                    <div class="node sub-node" style="top: 10%; left: 55%; font-size:0.8rem;" onclick="loadVideo('Cas9 Cleavage')">DSB Induction</div>
-
-                    <!-- Spoke 2: Applications -->
-                    <div class="node sub-node" style="top: 60%; left: 20%; background:#f0fdf4; border-color:#bbf7d0;" onclick="loadVideo('Transfection')">
-                        <span>🚀</span> Applications
-                    </div>
-                    
-                    <!-- Spoke 3: Limitations -->
-                    <div class="node sub-node" style="top: 60%; left: 65%; background:#fef2f2; border-color:#fecaca;">
-                        <span>⚠️</span> Off-Target Effects
-                    </div>
-                </div>
-
-                <!-- 2. Method Flow Mode (Detailed Protocol) -->
-                <div id="method-layer" style="display:none; padding: 2rem; overflow-y:auto; background: #fafbfd;">
-                    <div style="background:white; padding:30px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
-                        <h2 style="margin-top:0; color:var(--text-main);">Lipid-Mediated Transfection of HEK293T</h2>
-                        
-                        <div class="protocol-header-meta">
-                            <div class="meta-item"><span class="meta-icon">⏱️</span> <strong>Time:</strong> 3 Days</div>
-                            <div class="meta-item"><span class="meta-icon">🌡️</span> <strong>Temp:</strong> 37°C</div>
-                            <div class="meta-item"><span class="meta-icon">🧪</span> <strong>Materials:</strong> Lipofectamine 3000, Opti-MEM</div>
-                        </div>
-
-                        <div class="method-step" onclick="loadVideo('Prep Cells')">
-                            <div class="step-num">1</div>
-                            <div style="width:100%">
-                                <strong style="display:block; margin-bottom:4px;">Cell Seeding</strong>
-                                <span style="font-size:0.9rem; color:#555;">Seed 2.5 x 10^5 HEK293T cells per well in a 6-well plate. Ensure 70-80% confluency at time of transfection.</span>
-                            </div>
-                        </div>
-
-                        <div class="method-step" onclick="loadVideo('Transfection')">
-                            <div class="step-num">2</div>
-                            <div style="width:100%">
-                                <strong style="display:block; margin-bottom:4px;">Prepare Lipid-DNA Complex</strong>
-                                <span style="font-size:0.9rem; color:#555;">Dilute 2.5µg plasmid DNA in 125µL Opti-MEM. In separate tube, dilute 5µL Lipofectamine in 125µL Opti-MEM. Combine and incubate 15 mins.</span>
-                                <div class="warning-box">
-                                    <strong>⚠️ Critical:</strong> Do not vortex the complex. Mix gently by pipetting.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="method-step" onclick="loadVideo('Incubation')">
-                            <div class="step-num">3</div>
-                            <div style="width:100%">
-                                <strong style="display:block; margin-bottom:4px;">Incubation & Analysis</strong>
-                                <span style="font-size:0.9rem; color:#555;">Add complex dropwise to cells. Incubate for 48 hours before harvesting for Western Blot or PCR.</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. Evidence Mode (Rich Lit Review) -->
-                <div id="evidence-layer" style="display:none; padding: 2rem; overflow-y:auto; background: #f1f5f9;">
-                    <div style="max-width:800px; margin:0 auto;">
-                        <h3 style="margin-top:0; margin-bottom:1rem; color:var(--text-main);">Synthesized Evidence (12 Papers)</h3>
-                        
-                        <div class="lit-card">
-                            <div class="lit-title">A Programmable Dual-RNA-Guided DNA Endonuclease in Adaptive Bacterial Immunity</div>
-                            <div class="lit-meta">Jinek et al. (2012) • Science • <span style="color:var(--primary)">25k Citations</span></div>
-                            <div class="lit-finding"><strong>Key Finding:</strong> Identified that Cas9 can be programmed with a single guide RNA (sgRNA) to cleave specific DNA sequences.</div>
-                            <div class="lit-score">Highly Relevant</div>
-                        </div>
-
-                        <div class="lit-card">
-                            <div class="lit-title">Multiplex Genome Engineering Using CRISPR/Cas Systems</div>
-                            <div class="lit-meta">Cong et al. (2013) • Science • <span style="color:var(--primary)">18k Citations</span></div>
-                            <div class="lit-finding"><strong>Key Finding:</strong> Demonstrated successful genome editing in mammalian cells using CRISPR-Cas9.</div>
-                            <div class="lit-score">Foundational</div>
-                        </div>
-
-                        <div class="lit-card">
-                            <div class="lit-title">High-fidelity CRISPR-Cas9 Nucleases with No Detectable Genome-wide Off-target Effects</div>
-                            <div class="lit-meta">Kleinstiver et al. (2016) • Nature</div>
-                            <div class="lit-finding"><strong>Key Finding:</strong> Engineered "HiFi" Cas9 variants significantly reduce off-target cleavage events while maintaining on-target efficiency.</div>
-                            <div class="lit-score">Methodology</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4. Compare Mode (Detailed Matrix) -->
-                <div id="compare-layer" style="display:none; padding: 2rem; background:white;">
-                    <h3 style="margin-top:0;">Genome Editing Tool Comparison</h3>
-                    <table class="compare-table">
-                        <thead>
-                            <tr>
-                                <th>Feature</th>
-                                <th>CRISPR-Cas9</th>
-                                <th>TALENs</th>
-                                <th>ZFNs</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Target Design</strong></td>
-                                <td><span class="check-mark">Simple (RNA)</span></td>
-                                <td>Complex (Protein)</td>
-                                <td>Very Complex</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Cost</strong></td>
-                                <td><span class="check-mark">Low ($)</span></td>
-                                <td>High ($$$)</td>
-                                <td>Very High ($$$$)</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Precision</strong></td>
-                                <td>Moderate</td>
-                                <td><span class="check-mark">High</span></td>
-                                <td>High</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Off-Target Effects</strong></td>
-                                <td><span class="x-mark">Higher Risk</span></td>
-                                <td>Low</td>
-                                <td>Low</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Multiplexing</strong></td>
-                                <td><span class="check-mark">Easy</span></td>
-                                <td>Difficult</td>
-                                <td>Difficult</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- 5. PDF Report (Document Simulation) -->
-                <div id="pdf-layer" style="display:none; width:100%; height:100%; background:#525659; padding:20px;">
-                     <div class="preview-page">
-                         <div class="pdf-title">CRISPR-Cas9 Mediated Genome Editing in HEK293T Cells: A Comprehensive Review</div>
-                         <div class="pdf-meta">Generated by JoVE Visualize • January 30, 2026</div>
-                         
-                         <div class="pdf-h2">Abstract</div>
-                         <div class="pdf-p">
-                             The clustered regularly interspaced short palindromic repeats (CRISPR)-Cas9 system has revolutionized genomic engineering. This report synthesizes current methodologies for lipid-mediated transfection of Cas9-sgRNA plasmids into HEK293T cells, highlighting critical optimization parameters for maximal cleavage efficiency.
-                         </div>
-
-                         <div class="pdf-h2">Introduction</div>
-                         <div class="pdf-p">
-                             Precise manipulation of the genome is essential for functional genomics. While Zinc Finger Nucleases (ZFNs) and TALENs provided early tools, they were limited by complex protein engineering requirements. CRISPR-Cas9 offers a programmable RNA-guided alternative that is both cost-effective and scalable.
-                         </div>
-                         
-                         <div class="pdf-h2">Methodology</div>
-                         <div class="pdf-p">
-                             Cells were seeded at a density of 2.5 x 10^5 cells/ml in DMEM supplemented with 10% FBS. Transfection was performed using Lipofectamine 3000 following the manufacturer's protocol...
-                         </div>
-                     </div>
-                </div>
-
-                <!-- 6. Data Visualisation (Chart) -->
-                <div id="chart-layer" style="display:none; width:100%; height:100%; padding:20px;">
-                    <h3 style="text-align:center; margin-bottom:40px;">Indel Frequency Analysis (%)</h3>
-                    <div class="chart-bar-container">
-                        <div class="chart-bar" style="height:10%; background:#cbd5e1;" title="Control"><span style="display:block; margin-top:-20px; text-align:center; font-weight:bold;">1%</span></div>
-                        <div class="chart-bar" style="height:65%;" title="WT Cas9"><span style="display:block; margin-top:-20px; text-align:center; color:white; font-weight:bold;">65%</span></div>
-                        <div class="chart-bar" style="height:85%; background:#0ea5e9;" title="Cas9-HF1"><span style="display:block; margin-top:-20px; text-align:center; color:white; font-weight:bold;">85%</span></div>
-                        <div class="chart-bar" style="height:92%; background:#0369a1;" title="eSpCas9"><span style="display:block; margin-top:-20px; text-align:center; color:white; font-weight:bold;">92%</span></div>
-                    </div>
-                    <div style="display:flex; justify-content:center; gap:25px; margin-top:10px; font-size:0.85rem; color:#555;">
-                        <span>Control</span><span>WT Cas9</span><span>Cas9-HF1</span><span>eSpCas9</span>
-                    </div>
-                </div>
-
-                <!-- 7. Infographic -->
-                <div id="infographic-layer" style="display:none; width:100%; height:100%;">
-                    <div class="infographic-block">
-                        <div class="info-card">
-                            <div class="info-big">3B+</div>
-                            <div>Base Pairs Screened</div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-big">48h</div>
-                            <div>Rapid Turnaround</div>
-                        </div>
-                        <div class="info-card" style="grid-column: span 2; background:#e0f7fa; text-align:left;">
-                            <h4 style="margin:0 0 10px 0;">Workflow Summary</h4>
-                            1. <strong>Design</strong> sgRNA targeting gene of interest.<br>
-                            2. <strong>Transfect</strong> cells with Cas9 plasmid.<br>
-                            3. <strong>Harvest</strong> DNA after 48-72 hours.<br>
-                            4. <strong>Analyze</strong> via T7E1 assay or Sequencing.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 8. Flowchart -->
-                <div id="flowchart-layer" style="display:none; width:100%; height:100%; overflow-y:auto;">
-                     <div class="flow-container">
-                         <div class="flow-box" style="background:#f0fdf4;">Start: Define Target Locus</div>
-                         <div class="flow-arrow"></div>
-                         <div class="flow-box">Select sgRNA Sequence</div>
-                         <div class="flow-arrow"></div>
-                         <div class="flow-box" style="border:2px dashed #999;">Check Off-Target Risk</div>
-                         <div class="flow-arrow"></div>
-                         <div class="flow-box" style="border-color:var(--primary); color:var(--primary);">Cloning into Vector</div>
-                         <div class="flow-arrow"></div>
-                         <div class="flow-box">Transfection (HEK293T)</div>
-                         <div class="flow-arrow"></div>
-                         <div class="flow-box" style="background:#fef2f2;">Validation (Western Blot)</div>
-                     </div>
-                </div>
-
-                <!-- 9. Graphical Abstract (4-Panel) -->
-                <div id="abstract-layer" style="display:none; width:100%; height:100%;">
-                    <div class="abstract-preview">
-                        <div class="abs-header">Mechanism of CRISPR-Cas9 Gene Editing</div>
-                        <div class="ga-grid">
-                            <div class="ga-panel">
-                                <div class="ga-header">1. Complex Formation</div>
-                                <div class="ga-content">Cas9 binds to sgRNA</div>
-                            </div>
-                            <div class="ga-panel">
-                                <div class="ga-header">2. Target Recognition</div>
-                                <div class="ga-content">PAM recognition & DNA unwinding</div>
-                            </div>
-                            <div class="ga-panel">
-                                <div class="ga-header">3. Cleavage</div>
-                                <div class="ga-content">Double-strand break (DSB)</div>
-                            </div>
-                            <div class="ga-panel">
-                                <div class="ga-header">4. Repair</div>
-                                <div class="ga-content">NHEJ (Indels) or HDR (Edit)</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- JOVE CONTEXT PANEL (Assistant) -->
-            <div class="jove-panel" id="jove-panel">
-                <div class="panel-header">
-                    <div class="copilot-brand">
-                        <svg class="copilot-icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z"/>
+            <div class="graph-view">
+                <div class="view-layer active" id="layer-graph">
+                    <div class="kg-container">
+                        <svg class="kg-edges" viewBox="0 0 100 100" preserveAspectRatio="none" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                            <g stroke="#1a1a1a" stroke-width="1" stroke-linecap="round">
+                                <line x1="18" y1="50" x2="32" y2="50"/>
+                                <line x1="32" y1="50" x2="32" y2="20"/>
+                                <line x1="32" y1="50" x2="32" y2="80"/>
+                                <line x1="42" y1="20" x2="58" y2="20"/>
+                                <line x1="42" y1="20" x2="58" y2="45"/>
+                            </g>
                         </svg>
-                        Visualize Assistant
+                        <div class="node hub" id="node-central" style="top: 50%; left: 10%;" onclick="selectNode('CRISPR-Cas9 System', event)">
+                            <div class="kg-node-thumb">
+                                <img src="https://picsum.photos/seed/jove-crispr/352/198" alt=""/>
+                                <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+                            </div>
+                            <div class="kg-node-body">
+                                <div class="kg-node-title">CRISPR-Cas9 System</div>
+                                <div class="kg-node-meta"><span class="jove-badge">JoVE Video</span> · 12:45</div>
+                            </div>
+                        </div>
+                        <div class="node" style="top: 20%; left: 38%;" onclick="selectNode('Mechanism', event)">
+                            <div class="kg-node-thumb">
+                                <img src="https://picsum.photos/seed/jove-mechanism/352/198" alt=""/>
+                                <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+                            </div>
+                            <div class="kg-node-body">
+                                <div class="kg-node-title">Mechanism</div>
+                                <div class="kg-node-meta"><span class="jove-badge">JoVE Video</span> · 8:20</div>
+                            </div>
+                        </div>
+                        <div class="node" style="top: 20%; left: 65%;" onclick="selectNode('sgRNA design', event)">
+                            <div class="kg-node-thumb">
+                                <img src="https://picsum.photos/seed/jove-sgrna/352/198" alt=""/>
+                                <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+                            </div>
+                            <div class="kg-node-body">
+                                <div class="kg-node-title">sgRNA design</div>
+                                <div class="kg-node-meta"><span class="jove-badge">JoVE Video</span> · 5:10</div>
+                            </div>
+                        </div>
+                        <div class="node" style="top: 45%; left: 65%;" onclick="selectNode('DSB induction', event)">
+                            <div class="kg-node-thumb">
+                                <img src="https://picsum.photos/seed/jove-dsb/352/198" alt=""/>
+                                <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+                            </div>
+                            <div class="kg-node-body">
+                                <div class="kg-node-title">DSB induction</div>
+                                <div class="kg-node-meta"><span class="jove-badge">JoVE Video</span> · 6:30</div>
+                            </div>
+                        </div>
+                        <div class="node" style="top: 50%; left: 38%;" onclick="selectNode('Applications', event)">
+                            <div class="kg-node-thumb">
+                                <img src="https://picsum.photos/seed/jove-apps/352/198" alt=""/>
+                                <div class="play-overlay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+                            </div>
+                            <div class="kg-node-body">
+                                <div class="kg-node-title">Applications</div>
+                                <div class="kg-node-meta"><span class="jove-badge">JoVE Video</span> · 10:15</div>
+                            </div>
+                        </div>
+                        <div class="node kg-article" style="top: 80%; left: 38%;" onclick="selectNode('Off-target effects', event)">
+                            <div class="kg-node-thumb">
+                                <img src="https://picsum.photos/seed/jove-article/352/198" alt=""/>
+                                <div class="play-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+                            </div>
+                            <div class="kg-node-body">
+                                <div class="kg-node-title">Off-target effects</div>
+                                <div class="kg-node-meta"><span class="jove-badge">JoVE Article</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="output-video-block" id="graphVideoBlock">
+                        <div class="video-heading">Method video (JoVE)</div>
+                        <div class="video-title" id="graphVideoTitle">Select a node to load the corresponding method</div>
+                        <div class="video-desc" id="graphVideoDesc">Select a concept node to display the associated JoVE video and protocol description.</div>
+                        <div class="video-placeholder" id="graphVideoPlaceholder" onclick="playVideo('graph')"><div class="play-btn"><div class="play-triangle"></div></div></div>
+                    </div>
+                    <div class="explore-further">
+                        <div class="ef-heading">Related outputs</div>
+                        <div class="ef-links">
+                            <span class="ef-link" onclick="runWithOutput('protocol')">Get protocol</span>
+                            <span class="ef-link" onclick="runWithOutput('literature')">Review literature</span>
+                        </div>
                     </div>
                 </div>
-                <div class="panel-content">
-                    <div class="chat-bubble">
-                        <div class="chat-label">Context</div>
-                        <div class="chat-title" id="video-title">Select a node to begin</div>
-                        <div class="chat-desc" id="video-desc">I can show you exactly how these experiments are performed in the lab.</div>
+                <div class="view-layer" id="layer-protocol">
+                    <div class="output-video-block protocol-video-top">
+                        <div class="video-heading">Full protocol (JoVE)</div>
+                        <div class="video-title">Lipid-mediated transfection of HEK293T with CRISPR-Cas9</div>
+                        <div class="video-desc">Complete experimental procedure from cell seeding through transfection and downstream analysis.</div>
+                        <div class="video-placeholder" id="protocolVideoPlaceholder" onclick="playVideo('protocol')"><div class="play-btn"><div class="play-triangle"></div></div></div>
                     </div>
-
-                    <div class="video-container" id="video-container-wrapper" style="opacity: 0.5; pointer-events: none; transition: opacity 0.3s;">
-                        <div class="chat-label">Visual Grounding</div>
-                        <div class="video-placeholder" id="video-player-container" onclick="playMockVideo()">
-                            <div class="play-btn"><div class="play-triangle"></div></div>
+                    <h2 class="protocol-title">Procedure</h2>
+                    <div class="protocol-meta">
+                        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> ~3 days</span>
+                        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg> 37°C</span>
+                        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31M14 9.3V2M8.5 2h7M12 22v-5.5M9 18l3-3 3 3"/><path d="M4 17c0-4 4-6 8-6s8 2 8 6"/></svg> Lipofectamine 3000, Opti-MEM</span>
+                    </div>
+                    <div class="method-step" onclick="selectNode('Cell seeding', event)">
+                        <div class="step-num">1</div>
+                        <div class="step-body">
+                            <strong>Cell seeding</strong>
+                            <span>Seed 2.5×10⁵ HEK293T cells per well in a 6-well plate. Aim for 70–80% confluency at transfection.</span>
+                            <div class="step-watch" onclick="selectNode('Cell seeding', event)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Watch on JoVE</div>
                         </div>
-                        
-                        <div style="margin-top: 1rem;">
-                            <div class="chat-label" style="margin-bottom:8px;">Related Methods</div>
-                            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                                <span style="background:#f3f4f6; padding:4px 10px; border-radius:100px; font-size:0.75rem; color:var(--text-main); border:1px solid #e5e7eb;">Electroporation</span>
-                                <span style="background:#f3f4f6; padding:4px 10px; border-radius:100px; font-size:0.75rem; color:var(--text-main); border:1px solid #e5e7eb;">Microinjection</span>
-                            </div>
+                    </div>
+                    <div class="method-step" onclick="selectNode('Lipid–DNA complex', event)">
+                        <div class="step-num">2</div>
+                        <div class="step-body">
+                            <strong>Prepare lipid–DNA complex</strong>
+                            <span>Dilute 2.5 µg plasmid in 125 µL Opti-MEM; in another tube dilute 5 µL Lipofectamine in 125 µL Opti-MEM. Combine and incubate 15 min.</span>
+                            <div class="warning-box"><strong>Critical:</strong> Do not vortex. Mix gently by pipetting.</div>
+                            <div class="step-watch" onclick="selectNode('Lipid–DNA complex', event)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Watch on JoVE</div>
+                        </div>
+                    </div>
+                    <div class="method-step" onclick="selectNode('Transfection and analysis', event)">
+                        <div class="step-num">3</div>
+                        <div class="step-body">
+                            <strong>Transfection and analysis</strong>
+                            <span>Add complex dropwise to cells. Incubate 48 h before harvest for Western blot or PCR.</span>
+                            <div class="step-watch" onclick="selectNode('Transfection and analysis', event)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Watch on JoVE</div>
+                        </div>
+                    </div>
+                    <div class="explore-further">
+                        <div class="ef-heading">Related outputs</div>
+                        <div class="ef-links">
+                            <span class="ef-link" onclick="runWithOutput('graph')">Concept map</span>
+                            <span class="ef-link" onclick="runWithOutput('literature')">Review literature</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="view-layer" id="layer-literature">
+                    <div class="lit-source-note" id="litSourceNote" style="display:none;">Including results from PubMed alongside JoVE methods.</div>
+                    <div class="output-video-block">
+                        <div class="video-heading">Demonstrated method (JoVE)</div>
+                        <div class="video-title">CRISPR-Cas9: Mechanism and applications</div>
+                        <div class="video-desc">Peer-reviewed JoVE method demonstrating the experimental basis for the synthesized literature; supports reproducibility and protocol adaptation.</div>
+                        <div class="video-placeholder" id="litVideoPlaceholder" onclick="playVideo('literature')"><div class="play-btn"><div class="play-triangle"></div></div></div>
+                    </div>
+                    <h2 class="lit-heading" id="litHeading">Synthesized evidence</h2>
+                    <div class="lit-card">
+                        <div class="lit-title">A programmable dual-RNA–guided DNA endonuclease in adaptive bacterial immunity</div>
+                        <div class="lit-meta">Jinek et al. (2012) · Science · 25k+ citations</div>
+                        <div class="lit-finding"><strong>Key finding:</strong> Cas9 can be programmed with a single guide RNA (sgRNA) to cleave specific DNA sequences.</div>
+                        <span class="lit-badge">Highly relevant</span>
+                    </div>
+                    <div class="lit-card">
+                        <div class="lit-title">Multiplex genome engineering using CRISPR/Cas systems</div>
+                        <div class="lit-meta">Cong et al. (2013) · Science · 18k+ citations</div>
+                        <div class="lit-finding"><strong>Key finding:</strong> Genome editing in mammalian cells using CRISPR-Cas9.</div>
+                        <span class="lit-badge">Foundational</span>
+                    </div>
+                    <div class="lit-card">
+                        <div class="lit-title">High-fidelity CRISPR-Cas9 nucleases with no detectable genome-wide off-target effects</div>
+                        <div class="lit-meta">Kleinstiver et al. (2016) · Nature</div>
+                        <div class="lit-finding"><strong>Key finding:</strong> HiFi Cas9 variants reduce off-target cleavage while keeping on-target efficiency.</div>
+                        <span class="lit-badge">Methodology</span>
+                    </div>
+                    <div class="explore-further">
+                        <div class="ef-heading">Related outputs</div>
+                        <div class="ef-links">
+                            <span class="ef-link" onclick="runWithOutput('graph')">Concept map</span>
+                            <span class="ef-link" onclick="runWithOutput('protocol')">Get protocol</span>
                         </div>
                     </div>
                 </div>
@@ -985,343 +829,290 @@
 </main>
 
 <footer>
-    <div class="footer-content">
-        <div class="footer-col">
-            <h4>Visualize</h4>
-            <ul>
-                <li>Browse Content</li>
-                <li>Subjects</li>
-                <li>For Authors</li>
-                <li>Collections</li>
-            </ul>
+    <div class="footer-inner">
+        <div class="logo">JoVE <span>Visualize</span></div>
+        <div class="footer-links">
+            <a href="#">Browse</a>
+            <a href="#">Solutions</a>
+            <a href="#">Help</a>
+            <a href="#">Contact</a>
         </div>
-        <div class="footer-col">
-            <h4>Solutions</h4>
-            <ul>
-                <li>JoVE Research</li>
-                <li>JoVE Education</li>
-                <li>Book a Demo</li>
-                <li>Librarians</li>
-            </ul>
-        </div>
-        <div class="footer-col">
-            <h4>Company</h4>
-            <ul>
-                <li>About JoVE</li>
-                <li>Careers</li>
-                <li>Press</li>
-                <li>Blog</li>
-            </ul>
-        </div>
-        <div class="footer-col">
-            <h4>Support</h4>
-            <ul>
-                <li>Help Center</li>
-                <li>Contact Us</li>
-                <li>System Requirements</li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <div>© 2024 JoVE Corporation</div>
-        <div style="display:flex; gap:20px;">
-            <span>Terms of Use</span>
-            <span>Privacy Policy</span>
-        </div>
+        <p class="footer-copy">© 2025 JoVE. All rights reserved.</p>
     </div>
 </footer>
 
 <script>
-    // --- STATE MANAGEMENT ---
-    let selectedState = {
-        intent: 'Review Literature',
-        source: ['JoVE Videos'],
-        view: 'Knowledge Graph'
+    // Add your Gemini API key here (get one at https://aistudio.google.com/apikey).
+    // If you get CORS errors, run the page via a local server or use a backend proxy for the API.
+    var GEMINI_API_KEY = '';
+
+    const state = { intent: 'explore', source: 'jove', output: 'graph', query: '' };
+
+    const JOURNEY_LABELS = {
+        intent: { explore: 'Understand a method', protocol: 'Replicate a method', literature: 'Review the literature' },
+        output: { graph: 'Concept map', protocol: 'Step-by-step protocol', literature: 'Literature synthesis' },
+        source: { jove: 'JoVE videos', 'jove-pubmed': 'JoVE + PubMed' }
     };
-    
-    // CONSTRAINTS LOGIC
-    // Rules defining what is allowed based on Intent
-    const constraints = {
-        intents: {
-            "Review Literature": {
-                sources: ["JoVE Videos", "PubMed", "Google Scholar", "Patents", "Uploaded Files"],
-                views: ["Knowledge Graph", "PDF Report", "Literature Review"]
-            },
-            "Write a Draft": {
-                sources: ["JoVE Videos", "PubMed", "Google Scholar", "Patents", "Uploaded Files"],
-                views: ["PDF Report", "Graphical Abstract", "Knowledge Graph"]
-            },
-            "Generate Diagram": {
-                sources: ["JoVE Videos", "Uploaded Files"],
-                views: ["Flowchart", "Graphical Abstract", "Knowledge Graph", "Infographic"]
-            },
-            "Extract Data": {
-                sources: ["PubMed", "Google Scholar", "ClinicalTrials.gov", "Uploaded Files", "Patents"],
-                views: ["Data Visualisation"]
-            },
-            "Analyse Data": {
-                sources: ["Uploaded Files", "ClinicalTrials.gov"],
-                views: ["Data Visualisation"]
-            },
-            "Find Grants": {
-                sources: ["Grants.gov", "Patents"],
-                views: ["PDF Report"]
-            },
-            "Design Experiment": {
-                sources: ["JoVE Videos", "PubMed", "Uploaded Files", "Patents"],
-                views: ["Lab Protocol", "Flowchart", "Knowledge Graph"]
-            }
-        },
-        sources: {
-            // Refine views based on source (Intersect logic)
-            "JoVE Videos": ["Knowledge Graph", "Lab Protocol", "Graphical Abstract", "Flowchart", "Infographic", "PDF Report"],
-            "PubMed": ["Knowledge Graph", "PDF Report", "Data Visualisation", "Literature Review"],
-            "Google Scholar": ["Knowledge Graph", "PDF Report", "Data Visualisation", "Literature Review"],
-            "Patents": ["Knowledge Graph", "PDF Report", "Literature Review", "Data Visualisation"],
-            "Grants.gov": ["PDF Report"],
-            "ClinicalTrials.gov": ["Data Visualisation", "PDF Report"],
-            "Uploaded Files": ["Knowledge Graph", "Data Visualisation", "PDF Report", "Flowchart", "Infographic", "Graphical Abstract", "Lab Protocol"]
+    var PROMPT_INTENT = { explore: 'understand a method', protocol: 'replicate a method', literature: 'review the literature' };
+
+    function getPromptBefore() {
+        var intent = PROMPT_INTENT[state.intent] || state.intent;
+        return 'I want to ' + intent + ' ';
+    }
+    function getPromptAfter() {
+        var source = JOURNEY_LABELS.source[state.source] || state.source;
+        var output = JOURNEY_LABELS.output[state.output] || state.output;
+        return ' using ' + source + ' to get a ' + output + '.';
+    }
+    function updatePromptLabels() {
+        var before = document.getElementById('promptBefore');
+        var after = document.getElementById('promptAfter');
+        if (before) before.textContent = getPromptBefore();
+        if (after) after.textContent = getPromptAfter();
+    }
+    function getFullPrompt() {
+        var topicEl = document.getElementById('topicInput');
+        var topic = topicEl ? (topicEl.value || '').trim() : '';
+        return getPromptBefore() + topic + getPromptAfter();
+    }
+    function setTopic(topic) {
+        var topicEl = document.getElementById('topicInput');
+        if (topicEl) { topicEl.value = topic; topicEl.focus(); updateVisualizeButton(); }
+    }
+    function updateYouAsked() {
+        var el = document.getElementById('youAskedText');
+        if (el) el.textContent = getFullPrompt();
+    }
+    function runWithOutput(outputId) {
+        state.output = outputId;
+        var intentMap = { graph: 'explore', protocol: 'protocol', literature: 'literature' };
+        state.intent = intentMap[outputId] || state.intent;
+        document.querySelectorAll('.search-col .option-card[data-intent]').forEach(function(c) { c.classList.toggle('selected', c.getAttribute('data-intent') === state.intent); });
+        document.querySelectorAll('.search-col .option-card[data-output]').forEach(function(c) { c.classList.toggle('selected', c.getAttribute('data-output') === outputId); });
+        updatePromptLabels();
+        switchTab(outputId);
+        document.getElementById('workspace').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function setIntent(val, el) {
+        state.intent = val;
+        document.querySelectorAll('.search-col .option-card[data-intent]').forEach(function(c) { c.classList.remove('selected'); });
+        if (el) el.classList.add('selected');
+        syncOutputToIntent();
+        updatePromptLabels();
+    }
+    function setSource(val, el) {
+        state.source = val;
+        document.querySelectorAll('.search-col .option-card[data-source]').forEach(function(c) { c.classList.remove('selected'); });
+        if (el) el.classList.add('selected');
+        updatePromptLabels();
+    }
+    function setOutput(val, el) {
+        state.output = val;
+        document.querySelectorAll('.search-col .option-card[data-output]').forEach(function(c) { c.classList.remove('selected'); });
+        if (el) el.classList.add('selected');
+        updatePromptLabels();
+    }
+    function syncOutputToIntent() {
+        var map = { explore: 'graph', protocol: 'protocol', literature: 'literature' };
+        var out = map[state.intent];
+        state.output = out;
+        document.querySelectorAll('.search-col .option-card[data-output]').forEach(function(c) {
+            c.classList.toggle('selected', c.getAttribute('data-output') === out);
+        });
+    }
+
+    function updateVisualizeButton() {
+        var topicEl = document.getElementById('topicInput');
+        var btn = document.getElementById('btnVisualize');
+        if (!topicEl || !btn) return;
+        var len = (topicEl.value || '').trim().length;
+        btn.disabled = len < 3;
+    }
+
+    function getGeminiSystemPrompt(outputType) {
+        var topic = (document.getElementById('topicInput') && document.getElementById('topicInput').value) ? document.getElementById('topicInput').value.trim() : 'the topic';
+        if (outputType === 'graph') {
+            return 'You are JoVE Visualize, helping researchers explore scientific topics with JoVE video methods. The user wants a concept map for: ' + topic + '. Reply with a concise overview: 2-3 sentences on the topic, then a bullet list of 5-7 key concepts or sub-topics (each one line) that would appear on a concept map. Focus on concepts that have JoVE video methods. Use clear, academic language.';
         }
+        if (outputType === 'protocol') {
+            return 'You are JoVE Visualize. The user wants a step-by-step lab protocol for: ' + topic + '. Reply with a short intro (1-2 sentences), then numbered steps (4-8 steps). Each step: one line title and one line description. Be practical and suitable for lab use.';
+        }
+        if (outputType === 'literature') {
+            return 'You are JoVE Visualize. The user wants a literature synthesis for: ' + topic + '. Reply with 2-3 sentences summarizing the landscape, then 3-5 key findings or themes as bullet points (one line each). Mention how JoVE methods can demonstrate or support these.';
+        }
+        return 'You are JoVE Visualize. Reply helpfully and concisely to the user\'s research question.';
+    }
+
+    function callGemini(userPrompt, outputType) {
+        var apiKey = (typeof GEMINI_API_KEY === 'string' && GEMINI_API_KEY.length > 0) ? GEMINI_API_KEY : null;
+        if (!apiKey) return Promise.reject(new Error('No API key'));
+
+        var url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + encodeURIComponent(apiKey);
+        var systemInstruction = getGeminiSystemPrompt(outputType);
+        var body = {
+            contents: [{ parts: [{ text: userPrompt }] }],
+            systemInstruction: { parts: [{ text: systemInstruction }] },
+            generationConfig: { temperature: 0.4, maxOutputTokens: 1024 }
+        };
+
+        return fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        }).then(function(res) {
+            if (!res.ok) throw new Error('API error: ' + res.status);
+            return res.json();
+        }).then(function(data) {
+            var text = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0];
+            if (text && text.text) return text.text.trim();
+            throw new Error('No text in response');
+        });
+    }
+
+    function showAIResponse(text) {
+        var block = document.getElementById('aiResponseBlock');
+        var content = document.getElementById('aiResponseContent');
+        var note = document.getElementById('usingSampleNote');
+        if (block && content) {
+            block.classList.remove('loading');
+            block.classList.add('visible');
+            content.textContent = text;
+        }
+        if (note) note.style.display = 'none';
+    }
+
+    function hideAIResponseAndShowSample() {
+        var block = document.getElementById('aiResponseBlock');
+        var note = document.getElementById('usingSampleNote');
+        if (block) { block.classList.remove('visible', 'loading'); }
+        if (note) note.style.display = 'block';
+    }
+
+    (function initPrompt() {
+        updatePromptLabels();
+        updateVisualizeButton();
+    })();
+
+    var topicInput = document.getElementById('topicInput');
+    if (topicInput) topicInput.addEventListener('input', updateVisualizeButton);
+
+    document.getElementById('btnVisualize').onclick = function () {
+        var btn = this;
+        state.query = getFullPrompt().toLowerCase();
+        btn.textContent = 'Building…';
+        btn.disabled = true;
+
+        var aiBlock = document.getElementById('aiResponseBlock');
+        var sampleNote = document.getElementById('usingSampleNote');
+        if (aiBlock) { aiBlock.classList.remove('visible'); aiBlock.classList.add('loading'); }
+        if (sampleNote) sampleNote.style.display = 'none';
+
+        setTimeout(function() {
+            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> Visualize';
+            updateVisualizeButton();
+            document.getElementById('workspace').style.display = 'block';
+            setJourneyStrip();
+            applyJourneyContent();
+            switchTab(state.output);
+            setPanelDefaultForTab(state.output);
+            updateYouAsked();
+            document.getElementById('workspace').scrollIntoView({ behavior: 'smooth' });
+
+            if (GEMINI_API_KEY) {
+                if (aiBlock) { aiBlock.classList.add('visible'); aiBlock.classList.add('loading'); }
+                callGemini(getFullPrompt(), state.output)
+                    .then(function(text) { showAIResponse(text); })
+                    .catch(function() { hideAIResponseAndShowSample(); });
+            }
+            // If no key, nothing to do — dummy content is already visible
+        }, 600);
     };
-    
-    let hasVisualized = false;
+    document.getElementById('btnEditPrompt').onclick = function () {
+        document.getElementById('searchCard').scrollIntoView({ behavior: 'smooth' });
+        setTimeout(function() { var t = document.getElementById('topicInput'); if (t) t.focus(); }, 400);
+    };
 
-    // --- PROMPT BUILDING LOGIC ---
-    
-    function updatePrompt(category, value, el) {
-        // Handle visual selection
-        if (category === 'source') {
-            // Multi-select logic for Source
-            el.classList.toggle('selected');
-            if (selectedState.source.includes(value)) {
-                selectedState.source = selectedState.source.filter(item => item !== value);
-            } else {
-                selectedState.source.push(value);
-            }
+    function setJourneyStrip() {
+        const stripIntent = document.getElementById('stripIntent');
+        const stripOutput = document.getElementById('stripOutput');
+        const stripSource = document.getElementById('stripSource');
+        if (stripIntent) stripIntent.textContent = JOURNEY_LABELS.intent[state.intent];
+        if (stripOutput) stripOutput.textContent = JOURNEY_LABELS.output[state.output];
+        if (stripSource) stripSource.textContent = 'from ' + (JOURNEY_LABELS.source[state.source] || state.source);
+    }
+    function applyJourneyContent() {
+        const litNote = document.getElementById('litSourceNote');
+        const litHeading = document.getElementById('litHeading');
+        if (state.output === 'literature' && state.source === 'jove-pubmed') {
+            if (litNote) { litNote.style.display = 'block'; litNote.textContent = 'Including results from PubMed alongside JoVE methods.'; }
+            if (litHeading) litHeading.textContent = 'Synthesized evidence (JoVE + PubMed, 18 sources)';
         } else {
-            // Single-select logic for Intent and View
-            const siblings = el.parentElement.children;
-            for (let sib of siblings) { sib.classList.remove('selected'); }
-            el.classList.add('selected');
-            selectedState[category] = value;
+            if (litNote) litNote.style.display = 'none';
+            if (litHeading) litHeading.textContent = 'Synthesized evidence (12 papers)';
         }
-        
-        applyConstraints();
-        buildPromptText();
     }
-    
-    function applyConstraints() {
-        const intent = selectedState.intent;
-        if (!intent) return;
-        
-        const validSources = constraints.intents[intent]?.sources || [];
-        const validViewsFromIntent = constraints.intents[intent]?.views || [];
-        
-        // 1. Disable irrelevant SOURCES
-        const sourceCards = document.querySelectorAll('#col-source .option-card');
-        sourceCards.forEach(card => {
-            const val = card.getAttribute('data-val');
-            if (validSources.includes(val)) {
-                card.classList.remove('disabled');
-            } else {
-                card.classList.add('disabled');
-                // Deselect if disabled
-                if (card.classList.contains('selected')) {
-                    card.classList.remove('selected');
-                    selectedState.source = selectedState.source.filter(s => s !== val);
-                }
-            }
-        });
-        
-        // 2. Disable irrelevant VIEWS based on INTENT + Selected SOURCES
-        // We calculate allowed views = (Intent Allowed) INTERSECTION (Union of Source Allowed)
-        // If no source is selected, we fall back to Intent Allowed only.
-        
-        let finalAllowedViews = new Set(validViewsFromIntent);
-        
-        if (selectedState.source.length > 0) {
-            const sourceAllowedUnion = new Set();
-            selectedState.source.forEach(src => {
-                const allowed = constraints.sources[src] || [];
-                allowed.forEach(v => sourceAllowedUnion.add(v));
-            });
-            
-            // Intersection
-            finalAllowedViews = new Set(
-                [...finalAllowedViews].filter(x => sourceAllowedUnion.has(x))
-            );
-        }
-        
-        const viewCards = document.querySelectorAll('#col-view .option-card');
-        let currentViewStillValid = false;
-        
-        viewCards.forEach(card => {
-            const val = card.getAttribute('data-val');
-            if (finalAllowedViews.has(val)) {
-                card.classList.remove('disabled');
-                if (val === selectedState.view) currentViewStillValid = true;
-            } else {
-                card.classList.add('disabled');
-                if (val === selectedState.view) {
-                     card.classList.remove('selected');
-                }
-            }
-        });
-        
-        // Auto-select first available view if current became invalid
-        if (!currentViewStillValid) {
-            const firstValid = document.querySelector('#col-view .option-card:not(.disabled)');
-            if (firstValid) {
-                firstValid.classList.add('selected');
-                selectedState.view = firstValid.getAttribute('data-val');
-            } else {
-                selectedState.view = null;
-            }
+    function setPanelDefaultForTab(tabId) {
+        var titleEl = document.getElementById('graphVideoTitle');
+        var descEl = document.getElementById('graphVideoDesc');
+        if (tabId === 'graph' && titleEl && descEl) {
+            titleEl.textContent = 'Select a node to load the corresponding method';
+            descEl.textContent = 'Select a concept node to display the associated JoVE video and protocol description.';
         }
     }
 
-    function buildPromptText() {
-        const intentText = selectedState.intent ? selectedState.intent : "...";
-        const sourceText = selectedState.source.length > 0 ? selectedState.source.join(", ") : "resources";
-        const viewText = selectedState.view ? selectedState.view : "visual output";
-        
-        const fullPrompt = `I want to ${intentText} using ${sourceText} to create a ${viewText}.`;
-        document.getElementById('mainInput').value = fullPrompt;
+    var OUTPUT_ICONS = {
+        graph: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>',
+        protocol: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>',
+        literature: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 004 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M8 7h8M8 11h8"/></svg>'
+    };
+    function switchTab(tabId, tabEl) {
+        document.querySelectorAll('.view-layer').forEach(function(l) { l.classList.remove('active'); });
+        var layer = document.getElementById('layer-' + tabId);
+        if (layer) layer.classList.add('active');
+        var heading = document.getElementById('outputHeading');
+        var textEl = document.getElementById('outputHeadingText');
+        if (heading && textEl) {
+            heading.querySelector('svg') && heading.querySelector('svg').remove();
+            heading.insertAdjacentHTML('afterbegin', OUTPUT_ICONS[tabId] || OUTPUT_ICONS.graph);
+            textEl.textContent = JOURNEY_LABELS.output[tabId] || tabId;
+        }
+        setPanelDefaultForTab(tabId);
     }
 
-    // Initialize the prompt on load
-    window.onload = function() {
-        // Find default selected elements to init state correctly if HTML static class="selected" differs from JS state
-        applyConstraints();
-        buildPromptText();
+    const content = {
+        'CRISPR-Cas9 System': { title: 'CRISPR-Cas9 system', desc: 'Overview of the molecular mechanism: Cas9 binding, PAM recognition, and double-strand break.' },
+        'Mechanism': { title: 'Mechanism', desc: 'How Cas9 is programmed by sgRNA and cleaves target DNA.' },
+        'sgRNA design': { title: 'sgRNA design', desc: 'Design and synthesis of single guide RNA for your target sequence.' },
+        'DSB induction': { title: 'DSB induction', desc: 'Double-strand break formation and repair pathways (NHEJ/HDR).' },
+        'Applications': { title: 'Applications', desc: 'Gene knockout, knock-in, and base editing in cell lines and in vivo.' },
+        'Off-target effects': { title: 'Off-target effects', desc: 'Strategies to assess and reduce off-target cleavage.' },
+        'Cell seeding': { title: 'Cell seeding', desc: 'HEK293T culture and seeding density for transfection.' },
+        'Lipid–DNA complex': { title: 'Lipid–DNA complex', desc: 'Lipofectamine 3000 and Opti-MEM preparation and handling.' },
+        'Transfection and analysis': { title: 'Transfection and analysis', desc: 'Adding complex to cells and downstream validation (Western, PCR).' }
+    };
+
+    function selectNode(name, ev) {
+        if (ev) ev.stopPropagation();
+        document.querySelectorAll('.node').forEach(function(n) { n.classList.remove('active'); });
+        document.querySelectorAll('.method-step').forEach(function(s) { s.classList.remove('active'); });
+        var target = ev && ev.currentTarget;
+        if (target) target.classList.add('active');
+        var data = content[name] || { title: name, desc: 'JoVE method for this step or concept.' };
+        var titleEl = document.getElementById('graphVideoTitle');
+        var descEl = document.getElementById('graphVideoDesc');
+        if (titleEl) titleEl.textContent = data.title;
+        if (descEl) descEl.textContent = data.desc;
     }
 
-    // --- INTERACTION LOGIC ---
-
-    function triggerVisualization() {
-        const input = document.getElementById('mainInput');
-        const btn = document.querySelector('.btn-visualize');
-        
-        // Visual Feedback
-        const originalHTML = btn.innerHTML;
-        btn.innerHTML = "Building...";
-        btn.style.opacity = "0.7";
-        btn.style.cursor = "wait";
-        
-        setTimeout(() => {
-            btn.innerHTML = originalHTML;
-            btn.style.opacity = "1";
-            btn.style.cursor = "pointer";
-            
-            // Reveal Workspace
-            const workspace = document.getElementById('workspace');
-            workspace.style.display = "block";
-            hasVisualized = true;
-            
-            // Determine active view based on selectedState.view
-            let targetView = 'concept';
-            if(selectedState.view === 'Lab Protocol') targetView = 'method';
-            else if(selectedState.view === 'PDF Report') targetView = 'pdf';
-            else if(selectedState.view === 'Data Visualisation') targetView = 'chart';
-            else if(selectedState.view === 'Infographic') targetView = 'infographic';
-            else if(selectedState.view === 'Flowchart') targetView = 'flowchart';
-            else if(selectedState.view === 'Graphical Abstract') targetView = 'abstract';
-            else if(selectedState.view === 'Literature Review') targetView = 'evidence'; // Fix mapping
-            
-            switchTab(targetView, null);
-
-            // Scroll to workspace
-            workspace.scrollIntoView({ behavior: 'smooth' });
-        }, 800);
-    }
-
-    function expandNode(el) {
-        if (!hasVisualized) return;
-        
-        // Activate Node
-        el.classList.add('active');
-        
-        // Trigger JoVE Panel for the central concept
-        loadVideo('CRISPR Overview');
-    }
-
-    function loadVideo(topic) {
-        const wrapper = document.getElementById('video-container-wrapper');
-        const title = document.getElementById('video-title');
-        const desc = document.getElementById('video-desc');
-
-        // Enable Panel
-        wrapper.style.opacity = "1";
-        wrapper.style.pointerEvents = "all";
-
-        // Dynamic Content
-        if (topic === 'CRISPR Overview') {
-            title.innerText = "Mechanism of CRISPR/Cas9";
-            desc.innerText = "Here is a visualization of the molecular mechanism of Cas9 binding and cleavage.";
-        } else if (topic === 'Transfection') {
-            title.innerText = "Lipofection Protocol";
-            desc.innerText = "Step-by-step guide to lipid-mediated transfection in adherent cell lines.";
-        } else if (topic === 'Prep Cells') {
-            title.innerText = "Cell Culture Techniques";
-            desc.innerText = "Proper handling and seeding density calculations for HEK293T cells.";
-        } else if (topic === 'gRNA Design') {
-            title.innerText = "sgRNA Synthesis";
-            desc.innerText = "Designing and synthesizing single guide RNA for specific targets.";
-        } else if (topic === 'Cas9 Cleavage') {
-            title.innerText = "DNA Cleavage Assays";
-            desc.innerText = "Measuring double-strand break efficiency in vitro.";
-        } else {
-            title.innerText = topic;
-            desc.innerText = "Experimental visualization from the JoVE library.";
+    function playVideo(layer) {
+        var id = layer === 'graph' ? 'graphVideoPlaceholder' : layer === 'protocol' ? 'protocolVideoPlaceholder' : 'litVideoPlaceholder';
+        var el = document.getElementById(id);
+        if (el && !el.classList.contains('playing')) {
+            el.classList.add('playing');
+            el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#0d5a94;color:#fff;font-size:0.9rem;">JoVE video player (simulation)</div>';
         }
     }
-
-    function playMockVideo() {
-        const container = document.getElementById('video-player-container');
-        container.innerHTML = '<div style="background:#000; color:white; width:100%; height:100%; display:flex; align-items:center; justify-content:center; text-align:center; padding:10px;">JoVE Video Player Active<br><span style="font-size:0.8rem; opacity:0.7">(Simulation)</span></div>';
-    }
-
-    function switchTab(view, event) {
-        // Handle UI Tabs
-        if(event) {
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(t => t.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-        } else {
-            // Programmatic switch - find matching tab
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(t => t.classList.remove('active'));
-            // Map view to index or title
-            // Simplified: just highlight the one matching text for this prototype or skip UI sync if complex
-        }
-
-        // Hide all layers
-        const allLayers = [
-            'concept-layer', 'method-layer', 'evidence-layer', 'compare-layer',
-            'pdf-layer', 'chart-layer', 'infographic-layer', 'flowchart-layer', 'abstract-layer'
-        ];
-        allLayers.forEach(id => {
-             const el = document.getElementById(id);
-             if(el) el.style.display = 'none';
-        });
-
-        // Show specific layer
-        if (view === 'concept') document.getElementById('concept-layer').style.display = 'block';
-        else if (view === 'method') document.getElementById('method-layer').style.display = 'block';
-        else if (view === 'evidence') document.getElementById('evidence-layer').style.display = 'block';
-        else if (view === 'compare') document.getElementById('compare-layer').style.display = 'block';
-        else if (view === 'pdf') document.getElementById('pdf-layer').style.display = 'flex';
-        else if (view === 'chart') document.getElementById('chart-layer').style.display = 'block';
-        else if (view === 'infographic') document.getElementById('infographic-layer').style.display = 'block';
-        else if (view === 'flowchart') document.getElementById('flowchart-layer').style.display = 'block';
-        else if (view === 'abstract') document.getElementById('abstract-layer').style.display = 'block';
-    }
-
-    function showTooltip(el) {
-        el.title = "Click to see how this looks in practice";
-    }
-
 </script>
-
 </body>
 </html>
