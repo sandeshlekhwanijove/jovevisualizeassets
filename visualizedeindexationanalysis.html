@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO Indexation Analysis — Visualize JoVE</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #4fffb0;
+    --green-dim: rgba(79,255,176,0.15);
+    --green-glow: rgba(79,255,176,0.35);
+    --red: #ff6b6b;
+    --red-dim: rgba(255,107,107,0.15);
+    --amber: #ffc947;
+    --amber-dim: rgba(255,201,71,0.15);
+    --blue: #60a5fa;
+    --blue-dim: rgba(96,165,250,0.12);
+    --bg: #080c14;
+    --bg2: #0d1525;
+    --glass: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.08);
+    --glass-hover: rgba(255,255,255,0.07);
+    --text: #e8eaf0;
+    --text-2: #8b9ab5;
+    --text-3: #4a5568;
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Instrument Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background orbs */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px; left: -200px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(79,255,176,0.06) 0%, transparent 65%);
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -150px; right: -150px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(96,165,250,0.07) 0%, transparent 65%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .orb-mid {
+    position: fixed;
+    top: 40%; left: 55%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,201,71,0.04) 0%, transparent 65%);
+    pointer-events: none; z-index: 0;
+    transform: translate(-50%, -50%);
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 0 32px 80px; }
+
+  /* Header */
+  header {
+    padding: 52px 0 40px;
+    border-bottom: 0.5px solid var(--glass-border);
+    margin-bottom: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+  }
+  .header-left {}
+  .site-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .site-tag::before {
+    content: '';
+    width: 20px; height: 1px;
+    background: var(--green);
+    display: inline-block;
+  }
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: #fff;
+  }
+  h1 em { font-style: italic; color: var(--green); }
+  .header-meta {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.6;
+    max-width: 320px;
+    text-align: right;
+  }
+
+  /* KPI row */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .kpi {
+    background: var(--glass);
+    border: 0.5px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 24px 22px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .kpi:hover { border-color: rgba(255,255,255,0.14); background: var(--glass-hover); }
+  .kpi::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent, rgba(255,255,255,0.15)), transparent);
+  }
+  .kpi.green { --accent: var(--green-glow); }
+  .kpi.red { --accent: rgba(255,107,107,0.5); }
+  .kpi.amber { --accent: rgba(255,201,71,0.4); }
+  .kpi.blue { --accent: rgba(96,165,250,0.4); }
+  .kpi-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-2);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 10px;
+  }
+  .kpi-val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px;
+    line-height: 1;
+    color: #fff;
+  }
+  .kpi.green .kpi-val { color: var(--green); }
+  .kpi.red .kpi-val { color: var(--red); }
+  .kpi.amber .kpi-val { color: var(--amber); }
+  .kpi-sub { font-size: 12px; color: var(--text-3); margin-top: 6px; }
+
+  /* Section */
+  .section { margin-bottom: 48px; }
+  .section-head {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 20px;
+  }
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--green);
+    background: var(--green-dim);
+    border: 0.5px solid rgba(79,255,176,0.2);
+    border-radius: 6px;
+    padding: 3px 8px;
+    letter-spacing: 0.08em;
+  }
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #fff;
+  }
+  .section-desc {
+    font-size: 13px;
+    color: var(--text-2);
+    margin-bottom: 20px;
+    line-height: 1.6;
+    max-width: 700px;
+  }
+
+  /* Glass card */
+  .card {
+    background: var(--glass);
+    border: 0.5px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 28px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: border-color 0.3s;
+  }
+  .card:hover { border-color: rgba(255,255,255,0.12); }
+  .card-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-2);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-title .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+    display: inline-block;
+  }
+
+  /* Grid layouts */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid-asymm { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; }
+
+  /* Bar chart rows */
+  .bar-group { display: flex; flex-direction: column; gap: 10px; }
+  .bar-lbl {
+    width: 110px; flex-shrink: 0;
+    font-size: 12px; color: var(--text-2);
+    text-align: right;
+    font-family: 'DM Mono', monospace;
+  }
+  .bar-lbl.wide { width: 140px; }
+  .bar-track {
+    flex: 1; height: 22px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    border: 0.5px solid rgba(255,255,255,0.05);
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    position: relative;
+  }
+  .bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 2px; height: 100%;
+    background: rgba(255,255,255,0.3);
+    border-radius: 0 4px 4px 0;
+  }
+  .bar-pct {
+    width: 46px; flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    text-align: right;
+  }
+  .bar-n { width: 48px; flex-shrink: 0; font-size: 11px; color: var(--text-3); }
+
+  /* Color helpers */
+  .c-green { color: var(--green); }
+  .c-red { color: var(--red); }
+  .c-amber { color: var(--amber); }
+  .bg-green { background: linear-gradient(90deg, rgba(79,255,176,0.6), rgba(79,255,176,0.4)); }
+  .bg-green-mid { background: linear-gradient(90deg, rgba(79,255,176,0.4), rgba(79,255,176,0.25)); }
+  .bg-green-lo { background: linear-gradient(90deg, rgba(79,255,176,0.2), rgba(79,255,176,0.12)); }
+  .bg-amber { background: linear-gradient(90deg, rgba(255,201,71,0.5), rgba(255,201,71,0.3)); }
+  .bg-amber-lo { background: linear-gradient(90deg, rgba(255,201,71,0.25), rgba(255,201,71,0.12)); }
+  .bg-red { background: linear-gradient(90deg, rgba(255,107,107,0.5), rgba(255,107,107,0.3)); }
+  .bg-blue { background: linear-gradient(90deg, rgba(96,165,250,0.4), rgba(96,165,250,0.2)); }
+  .bg-blue-lo { background: linear-gradient(90deg, rgba(96,165,250,0.2), rgba(96,165,250,0.1)); }
+  .bg-neutral { background: rgba(255,255,255,0.08); }
+
+  /* Badge pills */
+  .pill {
+    display: inline-flex; align-items: center;
+    padding: 2px 9px; border-radius: 20px;
+    font-size: 11px; font-family: 'DM Mono', monospace;
+    font-weight: 500; line-height: 1.6;
+    border: 0.5px solid;
+  }
+  .pill-g { background: var(--green-dim); color: var(--green); border-color: rgba(79,255,176,0.25); }
+  .pill-r { background: var(--red-dim); color: var(--red); border-color: rgba(255,107,107,0.25); }
+  .pill-a { background: var(--amber-dim); color: var(--amber); border-color: rgba(255,201,71,0.25); }
+  .pill-b { background: var(--blue-dim); color: var(--blue); border-color: rgba(96,165,250,0.25); }
+
+  /* Insight cards */
+  .insights-row { display: flex; flex-direction: column; gap: 10px; }
+  .insight {
+    background: var(--glass);
+    border: 0.5px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-2);
+    display: flex; gap: 12px; align-items: flex-start;
+    backdrop-filter: blur(10px);
+    transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    cursor: default;
+  }
+  .insight:hover { transform: translateX(3px); }
+  .insight .icon {
+    width: 22px; height: 22px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%; font-size: 11px; font-weight: 600;
+    margin-top: 1px;
+  }
+  .insight.good { border-left: 2px solid var(--green); background: linear-gradient(90deg, rgba(79,255,176,0.06) 0%, rgba(255,255,255,0.02) 60%); }
+  .insight.good:hover { border-color: rgba(79,255,176,0.5); background: linear-gradient(90deg, rgba(79,255,176,0.1) 0%, rgba(255,255,255,0.03) 60%); }
+  .insight.good .icon { background: rgba(79,255,176,0.15); color: var(--green); border: 0.5px solid rgba(79,255,176,0.3); }
+  .insight.bad { border-left: 2px solid var(--red); background: linear-gradient(90deg, rgba(255,107,107,0.06) 0%, rgba(255,255,255,0.02) 60%); }
+  .insight.bad:hover { border-color: rgba(255,107,107,0.5); background: linear-gradient(90deg, rgba(255,107,107,0.1) 0%, rgba(255,255,255,0.03) 60%); }
+  .insight.bad .icon { background: rgba(255,107,107,0.15); color: var(--red); border: 0.5px solid rgba(255,107,107,0.25); }
+  .insight.note { border-left: 2px solid rgba(255,255,255,0.2); }
+  .insight.note:hover { border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.05); }
+  .insight.note .icon { background: rgba(255,255,255,0.08); color: var(--text-2); border: 0.5px solid rgba(255,255,255,0.12); }
+  .insight strong { color: var(--text); font-weight: 500; }
+
+  /* Interactive bar rows */
+  .bar-row { position: relative; border-radius: 6px; padding: 3px 4px; margin: 1px -4px; transition: background 0.15s; cursor: default; display: flex; align-items: center; gap: 12px; }
+  .bar-row:hover { background: rgba(255,255,255,0.04); }
+  .bar-row .bar-tooltip {
+    display: none; position: absolute; right: 0; top: -38px;
+    background: rgba(8,12,20,0.96); border: 0.5px solid rgba(255,255,255,0.14);
+    border-radius: 8px; padding: 5px 11px;
+    font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text);
+    white-space: nowrap; z-index: 20; pointer-events: none;
+    backdrop-filter: blur(16px);
+  }
+  .bar-row .bar-tooltip::after {
+    content: ''; position: absolute; bottom: -4px; right: 14px;
+    width: 8px; height: 8px; background: rgba(8,12,20,0.96);
+    border-right: 0.5px solid rgba(255,255,255,0.14);
+    border-bottom: 0.5px solid rgba(255,255,255,0.14);
+    transform: rotate(45deg);
+  }
+  .bar-row:hover .bar-tooltip { display: block; }
+  .bar-fill { transition: width 1s cubic-bezier(0.22, 1, 0.36, 1), filter 0.15s; }
+  .bar-row:hover .bar-fill { filter: brightness(1.3) saturate(1.2); }
+
+  /* Reading scale */
+  .scale {
+    display: flex; border-radius: 8px; overflow: hidden;
+    font-size: 11px; font-family: 'DM Mono', monospace;
+    margin-bottom: 16px;
+    border: 0.5px solid rgba(255,255,255,0.06);
+  }
+  .scale-seg { flex: 1; padding: 7px 6px; text-align: center; line-height: 1.3; }
+
+  /* Feature importance chart */
+  .fi-row {
+    display: flex; align-items: center; gap: 10px;
+    margin: 6px 0;
+  }
+  .fi-lbl { font-size: 12px; color: var(--text-2); flex: 1; }
+  .fi-track { width: 140px; height: 16px; background: rgba(255,255,255,0.04); border-radius: 3px; overflow: hidden; }
+  .fi-fill { height: 100%; border-radius: 3px; }
+  .fi-val { font-family: 'DM Mono', monospace; font-size: 11px; width: 52px; text-align: right; }
+
+  /* Image count custom chart */
+  .img-chart-wrap { display: flex; align-items: flex-end; gap: 4px; height: 110px; padding-bottom: 20px; position: relative; margin-top: 12px; }
+  .img-chart-wrap::after { content: ''; position: absolute; bottom: 20px; left: 0; right: 0; border-top: 0.5px solid rgba(255,255,255,0.06); }
+  .img-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; height: 100%; position: relative; }
+  .img-bar { width: 100%; border-radius: 3px 3px 0 0; min-height: 2px; position: relative; }
+  .avg-line { position: absolute; bottom: 20px; left: 0; right: 0; border-top: 1.5px dashed rgba(255,201,71,0.6); z-index: 2; }
+  .avg-label { position: absolute; right: 4px; bottom: 22px; font-size: 9px; color: var(--amber); font-family: 'DM Mono', monospace; z-index: 3; }
+  .img-col-lbl { font-size: 9px; color: var(--text-3); position: absolute; bottom: 4px; font-family: 'DM Mono', monospace; }
+  .img-col-pct { font-size: 9px; color: var(--text-2); margin-bottom: 3px; font-family: 'DM Mono', monospace; }
+
+  /* Divider */
+  hr { border: none; border-top: 0.5px solid var(--glass-border); margin: 22px 0; }
+
+  /* Tab nav */
+  .tab-nav { display: flex; gap: 4px; margin-bottom: 20px; }
+  .tab-btn {
+    padding: 7px 16px;
+    font-size: 12px; font-family: 'DM Mono', monospace;
+    background: transparent;
+    border: 0.5px solid var(--glass-border);
+    border-radius: 8px;
+    color: var(--text-2);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+  }
+  .tab-btn:hover { border-color: rgba(255,255,255,0.15); color: var(--text); }
+  .tab-btn.active { background: var(--green-dim); border-color: rgba(79,255,176,0.3); color: var(--green); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Progress dots */
+  .progress-row { display: flex; gap: 6px; align-items: center; margin-top: 8px; }
+  .pdot { width: 6px; height: 6px; border-radius: 50%; }
+
+  /* Footer */
+  footer {
+    border-top: 0.5px solid var(--glass-border);
+    padding-top: 24px;
+    margin-top: 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: var(--text-3);
+    font-family: 'DM Mono', monospace;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .card { animation: fadeIn 0.5s ease both; }
+  .kpi { animation: fadeIn 0.5s ease both; }
+  .kpi:nth-child(1) { animation-delay: 0.05s; }
+  .kpi:nth-child(2) { animation-delay: 0.1s; }
+  .kpi:nth-child(3) { animation-delay: 0.15s; }
+  .kpi:nth-child(4) { animation-delay: 0.2s; }
+
+  @media (max-width: 900px) {
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .grid2, .grid3, .grid-asymm { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; }
+    .header-meta { text-align: left; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="orb-mid"></div>
+<div class="wrap">
+
+  <header>
+    <div class="header-left">
+      <div class="site-tag">SEO Intelligence Report</div>
+      <h1>Indexation <em>Analysis</em><br>Visualize JoVE</h1>
+    </div>
+    <div class="header-meta">
+      3,505 pages analysed &middot; URLs ≤ 38 chars<br>
+      1,544 indexed &middot; 1,961 deindexed<br>
+      Crawl window: March 2026
+    </div>
+  </header>
+
+  <!-- KPI Row -->
+  <div class="kpi-row">
+    <div class="kpi blue">
+      <div class="kpi-label">Total pages (filtered)</div>
+      <div class="kpi-val">3,505</div>
+      <div class="kpi-sub">URLs ≤ 38 chars</div>
+    </div>
+    <div class="kpi green">
+      <div class="kpi-label">Indexed</div>
+      <div class="kpi-val">1,544</div>
+      <div class="kpi-sub">44.1% index rate</div>
+    </div>
+    <div class="kpi red">
+      <div class="kpi-label">Deindexed</div>
+      <div class="kpi-val">1,961</div>
+      <div class="kpi-sub">55.9% of all pages</div>
+    </div>
+    <div class="kpi amber">
+      <div class="kpi-label">Best predictor</div>
+      <div class="kpi-val" style="font-size:28px; padding-top:6px;">Lexical<br>Diversity</div>
+      <div class="kpi-sub">0.70+ = 81% index rate</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: Readability -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2>Readability Scores</h2>
+    </div>
+    <p class="section-desc">Three overlapping readability metrics each penalise long sentences and complex vocabulary. This content is academic — all scores skew hard. The question is whether variance within that range predicts indexation.</p>
+
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab(this,'read','flesch')">Flesch Ease</button>
+      <button class="tab-btn" onclick="switchTab(this,'read','fog')">Gunning Fog</button>
+      <button class="tab-btn" onclick="switchTab(this,'read','fk')">FK Grade Level</button>
+    </div>
+
+    <div class="grid-asymm">
+      <div>
+        <!-- Flesch panel -->
+        <div class="tab-panel active" id="read-flesch">
+          <div class="card">
+            <div class="card-title"><span class="dot"></span>Flesch Reading Ease — index rate by score band</div>
+            <div class="scale">
+              <div class="scale-seg" style="background:rgba(255,107,107,0.25);color:var(--red)">0–10<br>Very hard</div>
+              <div class="scale-seg" style="background:rgba(255,201,71,0.15);color:var(--amber)">10–20<br>Hard</div>
+              <div class="scale-seg" style="background:rgba(255,201,71,0.25);color:var(--amber)">20–30<br>Difficult</div>
+              <div class="scale-seg" style="background:rgba(79,255,176,0.2);color:var(--green)">30–50<br>Moderate</div>
+              <div class="scale-seg" style="background:rgba(79,255,176,0.35);color:var(--green)">50–70<br>Standard</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-row">
+                <div class="bar-lbl">&gt; 50</div>
+                <div class="bar-track"><div class="bar-fill bg-green" style="width:100%"></div></div>
+                <div class="bar-pct c-green">100%</div>
+                <div class="bar-n">n=1</div>
+                <div class="bar-tooltip">Score &gt;50 · 1 page · 100% indexed ✦ sweet spot</div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-lbl">30–50</div>
+                <div class="bar-track"><div class="bar-fill bg-green" style="width:56.3%"></div></div>
+                <div class="bar-pct c-green">56.3%</div>
+                <div class="bar-n">n=119</div>
+                <div class="bar-tooltip">Score 30–50 · 119 pages · 56.3% indexed ✦ best large band</div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-lbl">20–30</div>
+                <div class="bar-track"><div class="bar-fill bg-green-mid" style="width:48%"></div></div>
+                <div class="bar-pct c-green">48.0%</div>
+                <div class="bar-n">n=600</div>
+                <div class="bar-tooltip">Score 20–30 · 600 pages · 48.0% indexed</div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-lbl">&lt; 0</div>
+                <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:47.6%"></div></div>
+                <div class="bar-pct c-amber">47.6%</div>
+                <div class="bar-n">n=380</div>
+                <div class="bar-tooltip">Score &lt;0 · 380 pages · 47.6% indexed</div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-lbl">10–20</div>
+                <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:43.4%"></div></div>
+                <div class="bar-pct c-amber">43.4%</div>
+                <div class="bar-n">n=1,351</div>
+                <div class="bar-tooltip">Score 10–20 · 1,351 pages · 43.4% indexed</div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-lbl">0–10 ← worst</div>
+                <div class="bar-track"><div class="bar-fill bg-red" style="width:39.8%"></div></div>
+                <div class="bar-pct c-red">39.8%</div>
+                <div class="bar-n">n=1,054</div>
+                <div class="bar-tooltip">Score 0–10 · 1,054 pages · 39.8% indexed ✦ worst band</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fog panel -->
+        <div class="tab-panel" id="read-fog">
+          <div class="card">
+            <div class="card-title"><span class="dot"></span>Gunning Fog Index — index rate by score band</div>
+            <div class="scale">
+              <div class="scale-seg" style="background:rgba(79,255,176,0.25);color:var(--green)">&lt;12<br>High school</div>
+              <div class="scale-seg" style="background:rgba(79,255,176,0.15);color:var(--green)">12–16<br>College</div>
+              <div class="scale-seg" style="background:rgba(255,201,71,0.2);color:var(--amber)">16–20<br>Graduate</div>
+              <div class="scale-seg" style="background:rgba(255,107,107,0.2);color:var(--red)">20+<br>PhD level</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-row">
+                <div class="bar-lbl">12–16</div>
+                <div class="bar-track"><div class="bar-fill bg-green" style="width:57.4%"></div></div>
+                <div class="bar-pct c-green">57.4%</div>
+                <div class="bar-n">n=47</div>
+                <div class="bar-tooltip">Fog 12–16 · 47 pages · 57.4% indexed ✦ best band</div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-lbl">16–20</div>
+                <div class="bar-track"><div class="bar-fill bg-green-lo" style="width:45%"></div></div>
+                <div class="bar-pct">45.0%</div>
+                <div class="bar-n">n=1,740</div>
+                <div class="bar-tooltip">Fog 16–20 · 1,740 pages · 45.0% indexed</div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-lbl">20–24</div>
+                <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:43%"></div></div>
+                <div class="bar-pct c-amber">43.0%</div>
+                <div class="bar-n">n=1,646</div>
+                <div class="bar-tooltip">Fog 20–24 · 1,646 pages · 43.0% indexed</div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-lbl">&gt; 24</div>
+                <div class="bar-track"><div class="bar-fill bg-red" style="width:37.5%"></div></div>
+                <div class="bar-pct c-red">37.5%</div>
+                <div class="bar-n">n=72</div>
+                <div class="bar-tooltip">Fog &gt;24 · 72 pages · 37.5% indexed ✦ worst band</div>
+              </div>
+            </div>
+            <p style="font-size:12px;color:var(--text-3);margin-top:14px;font-family:'DM Mono',monospace">
+              Fog scores measure % of 3+ syllable words. Most pages score 16–24 (Graduate–PhD). The 12–16 band indexes 57% — but has only 47 pages.
+            </p>
+          </div>
+        </div>
+
+        <!-- FK panel -->
+        <div class="tab-panel" id="read-fk">
+          <div class="card">
+            <div class="card-title"><span class="dot"></span>Flesch-Kincaid Grade Level — index rate</div>
+            <div class="bar-group">
+              <div class="bar-row">
+                <div class="bar-lbl">Grade 10–13</div>
+                <div class="bar-track"><div class="bar-fill bg-green" style="width:56.5%"></div></div>
+                <div class="bar-pct c-green">56.5%</div>
+                <div class="bar-n">n=69</div>
+                <div class="bar-tooltip">Grade 10–13 · 69 pages · 56.5% indexed ✦ best band</div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-lbl">&gt; Grade 18</div>
+                <div class="bar-track"><div class="bar-fill bg-green-lo" style="width:45.1%"></div></div>
+                <div class="bar-pct">45.1%</div>
+                <div class="bar-n">n=587</div>
+                <div class="bar-tooltip">Grade &gt;18 · 587 pages · 45.1% indexed</div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-lbl">Grade 13–16</div>
+                <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:44.5%"></div></div>
+                <div class="bar-pct">44.5%</div>
+                <div class="bar-n">n=1,426</div>
+                <div class="bar-tooltip">Grade 13–16 · 1,426 pages · 44.5% indexed</div>
+              </div>
+              <div class="bar-lbl" style="width:auto;margin-left:122px;font-size:11px;color:var(--text-3);padding:4px 0">← 82% of pages are in these two bands</div>
+              <div class="bar-row">
+                <div class="bar-lbl">Grade 16–18</div>
+                <div class="bar-track"><div class="bar-fill bg-red" style="width:42.5%"></div></div>
+                <div class="bar-pct c-red">42.5%</div>
+                <div class="bar-n">n=1,423</div>
+                <div class="bar-tooltip">Grade 16–18 · 1,423 pages · 42.5% indexed ✦ worst large band</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="insights-row">
+        <div class="insight good">
+          <div class="icon">↑</div>
+          <div>Flesch 30–50 indexes at <strong>56.3%</strong> — the clearest readability sweet spot. Content that's hard but not impenetrable performs best.</div>
+        </div>
+        <div class="insight bad">
+          <div class="icon">↓</div>
+          <div>Score band 0–10 (very dense scientific prose) is the weakest performer at <strong>39.8%</strong>. This is where most content lives.</div>
+        </div>
+        <div class="insight note">
+          <div class="icon">≈</div>
+          <div>Mean Flesch scores: indexed = <strong>12.34</strong> vs deindexed = <strong>11.81</strong>. The gap is real but small — readability alone won't fix deindexation.</div>
+        </div>
+        <div class="insight good">
+          <div class="icon">↑</div>
+          <div>All three readability metrics agree: content readable at grade 10–13 level (Fog 12–16) indexes at roughly <strong>57%</strong>, well above the 44% average.</div>
+        </div>
+        <div class="insight note">
+          <div class="icon">i</div>
+          <div>These scores are highly correlated — improving any one (shorter sentences, simpler vocabulary) moves all three in the right direction.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Lexical Diversity -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2>Lexical Diversity</h2>
+    </div>
+    <p class="section-desc">Type-Token Ratio: proportion of unique words to total words. A score of 0.50 means half the words are repeated. This is the strongest and most consistent predictor in the dataset.</p>
+
+    <div class="grid-asymm">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Index rate by lexical diversity band</div>
+        <div class="bar-group">
+          <div class="bar-row">
+            <div class="bar-lbl">0.70–0.75</div>
+            <div class="bar-track"><div class="bar-fill bg-green" style="width:81.2%"></div></div>
+            <div class="bar-pct c-green">81.2%</div>
+            <div class="bar-n">n=16</div>
+          
+                <div class="bar-tooltip">0.70–0.75 · 16 pages · 81.2% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">&gt; 0.75</div>
+            <div class="bar-track"><div class="bar-fill bg-green" style="width:63.6%"></div></div>
+            <div class="bar-pct c-green">63.6%</div>
+            <div class="bar-n">n=44</div>
+          
+                <div class="bar-tooltip">&gt; 0.75 · 44 pages · 63.6% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">0.60–0.65</div>
+            <div class="bar-track"><div class="bar-fill bg-green-mid" style="width:53.1%"></div></div>
+            <div class="bar-pct c-green">53.1%</div>
+            <div class="bar-n">n=179</div>
+          
+                <div class="bar-tooltip">0.60–0.65 · 179 pages · 53.1% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">0.65–0.70</div>
+            <div class="bar-track"><div class="bar-fill bg-green-mid" style="width:48.9%"></div></div>
+            <div class="bar-pct">48.9%</div>
+            <div class="bar-n">n=45</div>
+          
+                <div class="bar-tooltip">0.65–0.70 · 45 pages · 48.9% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">0.55–0.60</div>
+            <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:46.3%"></div></div>
+            <div class="bar-pct">46.3%</div>
+            <div class="bar-n">n=962</div>
+          
+                <div class="bar-tooltip">0.55–0.60 · 962 pages · 46.3% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">0.50–0.55</div>
+            <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:42.5%"></div></div>
+            <div class="bar-pct c-amber">42.5%</div>
+            <div class="bar-n">n=1,647</div>
+          
+                <div class="bar-tooltip">0.50–0.55 · 1,647 pages · 42.5% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">0.45–0.50</div>
+            <div class="bar-track"><div class="bar-fill bg-red" style="width:39.9%"></div></div>
+            <div class="bar-pct">39.9%</div>
+            <div class="bar-n">n=587</div>
+          
+                <div class="bar-tooltip">0.45–0.50 · 587 pages · 39.9% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">&lt; 0.45 ← worst</div>
+            <div class="bar-track"><div class="bar-fill bg-red" style="width:28%"></div></div>
+            <div class="bar-pct c-red">28.0%</div>
+            <div class="bar-n">n=25</div>
+          
+                <div class="bar-tooltip">&lt; 0.45  worst · 25 pages · 28.0% indexed</div>
+              </div>
+        </div>
+        <!-- Mini progress bar showing distribution -->
+        <div style="margin-top:18px; padding-top:16px; border-top: 0.5px solid var(--glass-border);">
+          <div style="font-size:11px;color:var(--text-3);font-family:'DM Mono',monospace;margin-bottom:6px">Page distribution across bands</div>
+          <div style="display:flex;gap:2px;height:8px;border-radius:4px;overflow:hidden">
+            <div style="width:0.7%;background:rgba(255,107,107,0.6)" title="<0.45: 25"></div>
+            <div style="width:16.7%;background:rgba(255,107,107,0.35)" title="0.45-0.50: 587"></div>
+            <div style="width:47%;background:rgba(255,201,71,0.3)" title="0.50-0.55: 1647"></div>
+            <div style="width:27.4%;background:rgba(79,255,176,0.3)" title="0.55-0.60: 962"></div>
+            <div style="width:5.1%;background:rgba(79,255,176,0.5)" title="0.60-0.65: 179"></div>
+            <div style="width:1.3%;background:rgba(79,255,176,0.7)" title="0.65+: 60"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-3);font-family:'DM Mono',monospace;margin-top:4px">
+            <span>0.45 (repetitive)</span><span>0.75+ (rich vocabulary)</span>
+          </div>
+        </div>
+      </div>
+      <div class="insights-row">
+        <div class="insight good">
+          <div class="icon">★</div>
+          <div><strong>This is the #1 content quality signal.</strong> A near-monotonic relationship: every step up in diversity raises the index rate. 0.70+ scores hit 81%.</div>
+        </div>
+        <div class="insight bad">
+          <div class="icon">↓</div>
+          <div>Pages below 0.45 diversity index at only <strong>28%</strong> — the worst of any metric. Heavy repetition of jargon and boilerplate template copy drives this.</div>
+        </div>
+        <div class="insight note">
+          <div class="icon">i</div>
+          <div>75% of pages sit in the 0.45–0.55 band — average diversity. The opportunity is to push past 0.60, where index rates jump to <strong>53%+</strong>.</div>
+        </div>
+        <div class="insight bad">
+          <div class="icon">⚠</div>
+          <div>Root cause: repeated methodology boilerplate, copy-pasted procedure sections, and identical conclusion templates across hundreds of articles.</div>
+        </div>
+        <div style="background:var(--green-dim);border:0.5px solid rgba(79,255,176,0.2);border-radius:var(--radius-sm);padding:14px 16px;">
+          <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--green);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em">Target threshold</div>
+          <div style="font-size:28px;font-family:'DM Serif Display',serif;color:#fff">0.60+</div>
+          <div style="font-size:12px;color:var(--text-2);margin-top:4px">Cross this line and index probability moves from ~42% to 53%+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: Content Structure -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2>Content Structure</h2>
+    </div>
+    <div class="grid3">
+      <!-- Word count -->
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Word count</div>
+        <div class="bar-group">
+          <div class="bar-row">
+            <div class="bar-lbl">&lt; 400</div>
+            <div class="bar-track"><div class="bar-fill bg-green" style="width:51.5%"></div></div>
+            <div class="bar-pct c-green">51.5%</div>
+            <div class="bar-n">n=130</div>
+          
+                <div class="bar-tooltip">&lt; 400 · 130 pages · 51.5% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">600–800</div>
+            <div class="bar-track"><div class="bar-fill bg-green-lo" style="width:47.7%"></div></div>
+            <div class="bar-pct">47.7%</div>
+            <div class="bar-n">n=654</div>
+          
+                <div class="bar-tooltip">600–800 · 654 pages · 47.7% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">400–600</div>
+            <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:45.5%"></div></div>
+            <div class="bar-pct">45.5%</div>
+            <div class="bar-n">n=1,179</div>
+          
+                <div class="bar-tooltip">400–600 · 1,179 pages · 45.5% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">800–1,000</div>
+            <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:40.9%"></div></div>
+            <div class="bar-pct c-amber">40.9%</div>
+            <div class="bar-n">n=1,461</div>
+          
+                <div class="bar-tooltip">800–1,000 · 1,461 pages · 40.9% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">1,000–1,500</div>
+            <div class="bar-track"><div class="bar-fill bg-red" style="width:38.8%"></div></div>
+            <div class="bar-pct c-red">38.8%</div>
+            <div class="bar-n">n=80</div>
+          
+                <div class="bar-tooltip">1,000–1,500 · 80 pages · 38.8% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">&gt; 1,500</div>
+            <div class="bar-track"><div class="bar-fill bg-red" style="width:1%"></div></div>
+            <div class="bar-pct c-red">0%</div>
+            <div class="bar-n">n=1</div>
+          
+                <div class="bar-tooltip">&gt; 1,500 · 1 pages · 0% indexed</div>
+              </div>
+        </div>
+        <div class="insight bad" style="margin-top:14px">
+          <div class="icon">i</div>
+          <div style="font-size:12px">Means differ by only 22 words (695 vs 718). Shorter articles index better — but it's likely they're also higher-diversity pages.</div>
+        </div>
+      </div>
+
+      <!-- Paragraph count -->
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Paragraph count</div>
+        <div class="bar-group">
+          <div class="bar-row">
+            <div class="bar-lbl">&lt; 10</div>
+            <div class="bar-track"><div class="bar-fill bg-green" style="width:70.8%"></div></div>
+            <div class="bar-pct c-green">70.8%</div>
+            <div class="bar-n">n=24</div>
+          
+                <div class="bar-tooltip">&lt; 10 · 24 pages · 70.8% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">10–15</div>
+            <div class="bar-track"><div class="bar-fill bg-green-lo" style="width:45.7%"></div></div>
+            <div class="bar-pct">45.7%</div>
+            <div class="bar-n">n=1,684</div>
+          
+                <div class="bar-tooltip">10–15 · 1,684 pages · 45.7% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">15–20</div>
+            <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:42.2%"></div></div>
+            <div class="bar-pct c-amber">42.2%</div>
+            <div class="bar-n">n=1,796</div>
+          
+                <div class="bar-tooltip">15–20 · 1,796 pages · 42.2% indexed</div>
+              </div>
+        </div>
+        <div class="insight note" style="margin-top:14px">
+          <div class="icon">≈</div>
+          <div style="font-size:12px">Means: indexed = 15.25 vs deindexed = 15.45. Nearly identical. The &lt;10 result (71%) comes from only 24 pages.</div>
+        </div>
+
+        <hr>
+        <div class="card-title"><span class="dot"></span>H2 &amp; H3 subheadings</div>
+        <div class="bar-group">
+          <div class="bar-row">
+            <div class="bar-lbl">15–20</div>
+            <div class="bar-track"><div class="bar-fill bg-green" style="width:63%"></div></div>
+            <div class="bar-pct c-green">63.0%</div>
+            <div class="bar-n">n=46</div>
+          
+                <div class="bar-tooltip">15–20 · 46 pages · 63.0% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">20–25</div>
+            <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:45%"></div></div>
+            <div class="bar-pct">45.0%</div>
+            <div class="bar-n">n=1,528</div>
+          
+                <div class="bar-tooltip">20–25 · 1,528 pages · 45.0% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">25–30</div>
+            <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:42.8%"></div></div>
+            <div class="bar-pct c-amber">42.8%</div>
+            <div class="bar-n">n=1,930</div>
+          
+                <div class="bar-tooltip">25–30 · 1,930 pages · 42.8% indexed</div>
+              </div>
+        </div>
+      </div>
+
+      <!-- List count + Title length -->
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>List count (ul/ol)</div>
+        <div class="bar-group">
+          <div class="bar-row">
+            <div class="bar-lbl">11–15</div>
+            <div class="bar-track"><div class="bar-fill bg-green" style="width:66.7%"></div></div>
+            <div class="bar-pct c-green">66.7%</div>
+            <div class="bar-n">n=12</div>
+          
+                <div class="bar-tooltip">11–15 · 12 pages · 66.7% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">16–20</div>
+            <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:44%"></div></div>
+            <div class="bar-pct">44.0%</div>
+            <div class="bar-n">n=3,491</div>
+          
+                <div class="bar-tooltip">16–20 · 3,491 pages · 44.0% indexed</div>
+              </div>
+        </div>
+        <div class="insight bad" style="margin-top:10px">
+          <div class="icon">⚠</div>
+          <div style="font-size:12px"><strong>Dead metric.</strong> 99.6% of pages have 18–20 lists — a template constant. Means: indexed 19.84 vs deindexed 19.88.</div>
+        </div>
+
+        <hr>
+        <div class="card-title"><span class="dot"></span>Title length (chars)</div>
+        <div class="bar-group">
+          <div class="bar-row">
+            <div class="bar-lbl">&lt; 60</div>
+            <div class="bar-track"><div class="bar-fill bg-green" style="width:66.5%"></div></div>
+            <div class="bar-pct c-green">66.5%</div>
+            <div class="bar-n">n=176</div>
+          
+                <div class="bar-tooltip">&lt; 60 · 176 pages · 66.5% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">60–80</div>
+            <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:39.1%"></div></div>
+            <div class="bar-pct c-amber">39.1%</div>
+            <div class="bar-n">n=138</div>
+          
+                <div class="bar-tooltip">60–80 · 138 pages · 39.1% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">80–120</div>
+            <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:42.2%"></div></div>
+            <div class="bar-pct">42.2%</div>
+            <div class="bar-n">n=1,064</div>
+          
+                <div class="bar-tooltip">80–120 · 1,064 pages · 42.2% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">&gt; 150</div>
+            <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:43.7%"></div></div>
+            <div class="bar-pct">43.7%</div>
+            <div class="bar-n">n=1,054</div>
+          
+                <div class="bar-tooltip">&gt; 150 · 1,054 pages · 43.7% indexed</div>
+              </div>
+        </div>
+        <div class="insight good" style="margin-top:10px">
+          <div class="icon">↑</div>
+          <div style="font-size:12px">Short titles (&lt;60 chars) index at 66.5%. Mean: indexed = 129 chars vs deindexed = 133 chars.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: Images -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2>Image Analysis</h2>
+    </div>
+    <p class="section-desc">98% of pages have exactly 10 or 16 images — a template constant. The ratio of images to words is the meaningful signal here.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Index rate by exact image count (bar width ∝ page volume)</div>
+
+        <div style="display:flex;align-items:flex-end;gap:5px;height:130px;padding-bottom:22px;position:relative;margin-top:8px">
+          <div style="position:absolute;bottom:22px;left:0;right:0;border-top:0.5px solid rgba(255,255,255,0.06)"></div>
+          <!-- avg line -->
+          <div style="position:absolute;bottom:22px;bottom:calc(22px + 130px * 0.441);left:0;right:0;border-top:1.5px dashed rgba(255,201,71,0.5);z-index:2"></div>
+          <div style="position:absolute;right:4px;bottom:calc(22px + 130px * 0.441 + 3px);font-size:9px;color:var(--amber);font-family:'DM Mono',monospace;z-index:3">avg 44.1%</div>
+
+          <!-- img=4: 62.5%, n=8 -->
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:0.8;height:100%;position:relative">
+            <span style="font-size:9px;color:var(--green);font-family:'DM Mono',monospace;margin-bottom:2px">63%</span>
+            <div style="width:100%;background:linear-gradient(to top,rgba(79,255,176,0.5),rgba(79,255,176,0.25));border-radius:3px 3px 0 0;height:calc(108px * 0.625)"></div>
+            <span style="font-size:9px;color:var(--text-3);font-family:'DM Mono',monospace;position:absolute;bottom:5px">4</span>
+          </div>
+          <!-- img=5: 66.7%, n=3 -->
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:0.4;height:100%;position:relative">
+            <span style="font-size:9px;color:var(--green);font-family:'DM Mono',monospace;margin-bottom:2px">67%</span>
+            <div style="width:100%;background:linear-gradient(to top,rgba(79,255,176,0.5),rgba(79,255,176,0.25));border-radius:3px 3px 0 0;height:calc(108px * 0.667)"></div>
+            <span style="font-size:9px;color:var(--text-3);font-family:'DM Mono',monospace;position:absolute;bottom:5px">5</span>
+          </div>
+          <!-- img=8: 80%, n=5 -->
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:0.5;height:100%;position:relative">
+            <span style="font-size:9px;color:var(--green);font-family:'DM Mono',monospace;margin-bottom:2px">80%</span>
+            <div style="width:100%;background:linear-gradient(to top,rgba(79,255,176,0.7),rgba(79,255,176,0.4));border-radius:3px 3px 0 0;height:calc(108px * 0.80)"></div>
+            <span style="font-size:9px;color:var(--text-3);font-family:'DM Mono',monospace;position:absolute;bottom:5px">8</span>
+          </div>
+          <!-- img=10: 45.4%, n=797 -->
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:8;height:100%;position:relative">
+            <span style="font-size:9px;color:var(--text-2);font-family:'DM Mono',monospace;margin-bottom:2px">45%</span>
+            <div style="width:100%;background:linear-gradient(to top,rgba(96,165,250,0.35),rgba(96,165,250,0.15));border-radius:3px 3px 0 0;height:calc(108px * 0.454)"></div>
+            <span style="font-size:9px;color:var(--text-3);font-family:'DM Mono',monospace;position:absolute;bottom:5px">10</span>
+          </div>
+          <!-- img=11: 44.8%, n=384 -->
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:4;height:100%;position:relative">
+            <span style="font-size:9px;color:var(--text-2);font-family:'DM Mono',monospace;margin-bottom:2px">45%</span>
+            <div style="width:100%;background:linear-gradient(to top,rgba(96,165,250,0.35),rgba(96,165,250,0.15));border-radius:3px 3px 0 0;height:calc(108px * 0.448)"></div>
+            <span style="font-size:9px;color:var(--text-3);font-family:'DM Mono',monospace;position:absolute;bottom:5px">11</span>
+          </div>
+          <!-- img=12: 39.5%, n=286 -->
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:3;height:100%;position:relative">
+            <span style="font-size:9px;color:var(--red);font-family:'DM Mono',monospace;margin-bottom:2px">40%</span>
+            <div style="width:100%;background:linear-gradient(to top,rgba(255,107,107,0.4),rgba(255,107,107,0.15));border-radius:3px 3px 0 0;height:calc(108px * 0.395)"></div>
+            <span style="font-size:9px;color:var(--text-3);font-family:'DM Mono',monospace;position:absolute;bottom:5px">12</span>
+          </div>
+          <!-- img=13: 55.4%, n=213 -->
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:2.2;height:100%;position:relative">
+            <span style="font-size:9px;color:var(--green);font-family:'DM Mono',monospace;margin-bottom:2px">55%</span>
+            <div style="width:100%;background:linear-gradient(to top,rgba(79,255,176,0.45),rgba(79,255,176,0.2));border-radius:3px 3px 0 0;height:calc(108px * 0.554)"></div>
+            <span style="font-size:9px;color:var(--text-3);font-family:'DM Mono',monospace;position:absolute;bottom:5px">13</span>
+          </div>
+          <!-- img=14: 46.8%, n=154 -->
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:1.6;height:100%;position:relative">
+            <span style="font-size:9px;color:var(--text-2);font-family:'DM Mono',monospace;margin-bottom:2px">47%</span>
+            <div style="width:100%;background:linear-gradient(to top,rgba(96,165,250,0.3),rgba(96,165,250,0.12));border-radius:3px 3px 0 0;height:calc(108px * 0.468)"></div>
+            <span style="font-size:9px;color:var(--text-3);font-family:'DM Mono',monospace;position:absolute;bottom:5px">14</span>
+          </div>
+          <!-- img=15: 39.7%, n=126 -->
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:1.3;height:100%;position:relative">
+            <span style="font-size:9px;color:var(--red);font-family:'DM Mono',monospace;margin-bottom:2px">40%</span>
+            <div style="width:100%;background:linear-gradient(to top,rgba(255,107,107,0.35),rgba(255,107,107,0.12));border-radius:3px 3px 0 0;height:calc(108px * 0.397)"></div>
+            <span style="font-size:9px;color:var(--text-3);font-family:'DM Mono',monospace;position:absolute;bottom:5px">15</span>
+          </div>
+          <!-- img=16: 42%, n=1515 -->
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:15;height:100%;position:relative">
+            <span style="font-size:9px;color:var(--text-2);font-family:'DM Mono',monospace;margin-bottom:2px">42%</span>
+            <div style="width:100%;background:linear-gradient(to top,rgba(96,165,250,0.3),rgba(96,165,250,0.12));border-radius:3px 3px 0 0;height:calc(108px * 0.420)"></div>
+            <span style="font-size:9px;color:var(--text-3);font-family:'DM Mono',monospace;position:absolute;bottom:5px">16</span>
+          </div>
+        </div>
+        <div style="font-size:10px;color:var(--text-3);text-align:center;font-family:'DM Mono',monospace">image count per page (bar width ∝ volume of pages)</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="card">
+          <div class="card-title"><span class="dot"></span>Images per 100 words — index rate</div>
+          <div class="bar-group">
+            <div class="bar-row">
+              <div class="bar-lbl">&gt; 3.0</div>
+              <div class="bar-track"><div class="bar-fill bg-green" style="width:65.3%"></div></div>
+              <div class="bar-pct c-green">65.3%</div>
+              <div class="bar-n">n=72</div>
+            
+                <div class="bar-tooltip">&gt; 3.0 · 72 pages · 65.3% indexed</div>
+              </div>
+            <div class="bar-row">
+              <div class="bar-lbl">1.0–1.5</div>
+              <div class="bar-track"><div class="bar-fill bg-green-mid" style="width:61.3%"></div></div>
+              <div class="bar-pct c-green">61.3%</div>
+              <div class="bar-n">n=31</div>
+            
+                <div class="bar-tooltip">1.0–1.5 · 31 pages · 61.3% indexed</div>
+              </div>
+            <div class="bar-row">
+              <div class="bar-lbl">2.5–3.0</div>
+              <div class="bar-track"><div class="bar-fill bg-green-lo" style="width:50.5%"></div></div>
+              <div class="bar-pct">50.5%</div>
+              <div class="bar-n">n=97</div>
+            
+                <div class="bar-tooltip">2.5–3.0 · 97 pages · 50.5% indexed</div>
+              </div>
+            <div class="bar-row">
+              <div class="bar-lbl">&lt; 1.0</div>
+              <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:50%"></div></div>
+              <div class="bar-pct">50.0%</div>
+              <div class="bar-n">n=6</div>
+            
+                <div class="bar-tooltip">&lt; 1.0 · 6 pages · 50.0% indexed</div>
+              </div>
+            <div class="bar-row">
+              <div class="bar-lbl">2.0–2.5</div>
+              <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:45.8%"></div></div>
+              <div class="bar-pct c-amber">45.8%</div>
+              <div class="bar-n">n=1,051</div>
+            
+                <div class="bar-tooltip">2.0–2.5 · 1,051 pages · 45.8% indexed</div>
+              </div>
+            <div class="bar-row">
+              <div class="bar-lbl">1.5–2.0 ← most</div>
+              <div class="bar-track"><div class="bar-fill bg-red" style="width:42%"></div></div>
+              <div class="bar-pct c-red">42.0%</div>
+              <div class="bar-n">n=2,248</div>
+            
+                <div class="bar-tooltip">1.5–2.0  most · 2,248 pages · 42.0% indexed</div>
+              </div>
+          </div>
+        </div>
+        <div class="insights-row">
+          <div class="insight note">
+            <div class="icon">i</div>
+            <div style="font-size:12px"><strong>Image count is a template variable.</strong> 98% of pages have 10 or 16 images. Mean: indexed = 13.28 vs deindexed = 13.47 — negligible.</div>
+          </div>
+          <div class="insight good">
+            <div class="icon">↑</div>
+            <div style="font-size:12px">High image density (&gt;3 per 100 words) correlates with 65% index rate. These are short pages with many images — conciseness wins again.</div>
+          </div>
+          <div class="insight bad">
+            <div class="icon">↓</div>
+            <div style="font-size:12px">The 1.5–2.0 band (64% of all pages) has the lowest rate at 42%. Long-form content with average image load is the problem zone.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: Language + Links -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2>Language &amp; Link Signals</h2>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Index rate by language subdirectory</div>
+        <div class="bar-group">
+          <div class="bar-row">
+            <div class="bar-lbl">Chinese (zh)</div>
+            <div class="bar-track"><div class="bar-fill bg-green" style="width:84.4%"></div></div>
+            <div class="bar-pct c-green">84.4%</div>
+            <div class="bar-n">n=109</div>
+          
+                <div class="bar-tooltip">Chinese (zh) · 109 pages · 84.4% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">Spanish (es)</div>
+            <div class="bar-track"><div class="bar-fill bg-green-mid" style="width:44.2%"></div></div>
+            <div class="bar-pct">44.2%</div>
+            <div class="bar-n">n=52</div>
+          
+                <div class="bar-tooltip">Spanish (es) · 52 pages · 44.2% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">English (en)</div>
+            <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:42.9%"></div></div>
+            <div class="bar-pct c-amber">42.9%</div>
+            <div class="bar-n">n=3,271</div>
+          
+                <div class="bar-tooltip">English (en) · 3,271 pages · 42.9% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">Japanese (ja)</div>
+            <div class="bar-track"><div class="bar-fill bg-red" style="width:34.2%"></div></div>
+            <div class="bar-pct c-red">34.2%</div>
+            <div class="bar-n">n=73</div>
+          
+                <div class="bar-tooltip">Japanese (ja) · 73 pages · 34.2% indexed</div>
+              </div>
+        </div>
+        <div class="insight note" style="margin-top:14px">
+          <div class="icon">i</div>
+          <div style="font-size:12px">Chinese pages (84%) are likely category/hub pages with descriptive URLs, not standard article pages. English pages account for 93% of the dataset at a 43% index rate.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Links per 100 words — index rate</div>
+        <div class="bar-group">
+          <div class="bar-row">
+            <div class="bar-lbl">&gt; 20</div>
+            <div class="bar-track"><div class="bar-fill bg-green" style="width:59.7%"></div></div>
+            <div class="bar-pct c-green">59.7%</div>
+            <div class="bar-n">n=62</div>
+          
+                <div class="bar-tooltip">&gt; 20 · 62 pages · 59.7% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">12–16</div>
+            <div class="bar-track"><div class="bar-fill bg-green-lo" style="width:45.8%"></div></div>
+            <div class="bar-pct">45.8%</div>
+            <div class="bar-n">n=981</div>
+          
+                <div class="bar-tooltip">12–16 · 981 pages · 45.8% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">16–20</div>
+            <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:45.7%"></div></div>
+            <div class="bar-pct">45.7%</div>
+            <div class="bar-n">n=350</div>
+          
+                <div class="bar-tooltip">16–20 · 350 pages · 45.7% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">8–12</div>
+            <div class="bar-track"><div class="bar-fill bg-amber-lo" style="width:43%"></div></div>
+            <div class="bar-pct c-amber">43.0%</div>
+            <div class="bar-n">n=1,863</div>
+          
+                <div class="bar-tooltip">8–12 · 1,863 pages · 43.0% indexed</div>
+              </div>
+          <div class="bar-row">
+            <div class="bar-lbl">&lt; 8</div>
+            <div class="bar-track"><div class="bar-fill bg-red" style="width:38.6%"></div></div>
+            <div class="bar-pct c-red">38.6%</div>
+            <div class="bar-n">n=249</div>
+          
+                <div class="bar-tooltip">&lt; 8 · 249 pages · 38.6% indexed</div>
+              </div>
+        </div>
+        <div class="insight good" style="margin-top:14px">
+          <div class="icon">↑</div>
+          <div style="font-size:12px">More internal links per 100 words consistently improves indexation. Mean: indexed = 11.9 vs deindexed = 11.4 links/100w. Link density is a positive signal.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: Feature Importance -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <h2>Feature Importance — Logistic Regression</h2>
+    </div>
+    <p class="section-desc">Which metrics most strongly predict indexation vs deindexation when controlled against each other? Positive = increases index probability. Negative = decreases it.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Positive predictors — push toward indexed</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="fi-row">
+            <div class="fi-lbl">Images per 100 words ↑</div>
+            <div class="fi-track"><div class="fi-fill bg-green" style="width:100%"></div></div>
+            <div class="fi-val c-green">+0.332</div>
+          </div>
+          <div class="fi-row">
+            <div class="fi-lbl">H2 &amp; H3 count ↑</div>
+            <div class="fi-track"><div class="fi-fill bg-green" style="width:83.4%"></div></div>
+            <div class="fi-val c-green">+0.277</div>
+          </div>
+          <div class="fi-row">
+            <div class="fi-lbl">Links per 100 words ↑</div>
+            <div class="fi-track"><div class="fi-fill bg-green-mid" style="width:72.7%"></div></div>
+            <div class="fi-val c-green">+0.241</div>
+          </div>
+          <div class="fi-row">
+            <div class="fi-lbl">Lexical diversity ↑</div>
+            <div class="fi-track"><div class="fi-fill bg-green-mid" style="width:57.3%"></div></div>
+            <div class="fi-val c-green">+0.190</div>
+          </div>
+          <div class="fi-row">
+            <div class="fi-lbl">Word count ↑</div>
+            <div class="fi-track"><div class="fi-fill bg-green-lo" style="width:22.6%"></div></div>
+            <div class="fi-val">+0.075</div>
+          </div>
+          <div class="fi-row">
+            <div class="fi-lbl">Flesch reading ease ↑</div>
+            <div class="fi-track"><div class="fi-fill bg-green-lo" style="width:21%"></div></div>
+            <div class="fi-val">+0.070</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--red)"><span style="width:6px;height:6px;border-radius:50%;background:var(--red);display:inline-block"></span>&nbsp;Negative predictors — push toward deindexed</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="fi-row">
+            <div class="fi-lbl">Paragraph count ↑</div>
+            <div class="fi-track"><div class="fi-fill bg-red" style="width:100%"></div></div>
+            <div class="fi-val c-red">−0.347</div>
+          </div>
+          <div class="fi-row">
+            <div class="fi-lbl">Headings per 100 words ↑</div>
+            <div class="fi-track"><div class="fi-fill bg-red" style="width:89.7%"></div></div>
+            <div class="fi-val c-red">−0.311</div>
+          </div>
+          <div class="fi-row">
+            <div class="fi-lbl">Paragraphs per 100 words ↑</div>
+            <div class="fi-track"><div class="fi-fill bg-red" style="width:85.4%"></div></div>
+            <div class="fi-val c-red">−0.296</div>
+          </div>
+          <div class="fi-row">
+            <div class="fi-lbl">Text-to-HTML ratio ↑</div>
+            <div class="fi-track"><div class="fi-fill bg-red" style="width:16%"></div></div>
+            <div class="fi-val c-red">−0.054</div>
+          </div>
+          <div class="fi-row">
+            <div class="fi-lbl">Avg words per sentence ↑</div>
+            <div class="fi-track"><div class="fi-fill bg-red" style="width:11.8%"></div></div>
+            <div class="fi-val c-amber">−0.039</div>
+          </div>
+          <div class="fi-row">
+            <div class="fi-lbl">Title length ↑</div>
+            <div class="fi-track"><div class="fi-fill bg-red" style="width:10.7%"></div></div>
+            <div class="fi-val c-amber">−0.035</div>
+          </div>
+        </div>
+        <div class="insight note" style="margin-top:14px">
+          <div class="icon">i</div>
+          <div style="font-size:12px">The negative "paragraph count" signal is a structural paradox — more paragraphs = shorter content overall, which correlates with lower link/image density ratios. It's length, not paragraphs, that hurts.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: Summary + Action Plan -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">07</span>
+      <h2>Prioritised Action Plan</h2>
+    </div>
+    <div class="grid3">
+      <div class="card" style="border-color:rgba(79,255,176,0.25)">
+        <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--green);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.1em">Priority 1 — Highest impact</div>
+        <div style="font-size:20px;font-family:'DM Serif Display',serif;color:#fff;margin-bottom:8px">Vocabulary Diversity</div>
+        <div style="font-size:13px;color:var(--text-2);line-height:1.6">Target TTR &gt; 0.60. Audit boilerplate sections (methods, abstract, conclusions) for repeated phrasing. Vary terminology per article. Replace generic connectives ("furthermore", "in addition") with specific transitional language.</div>
+        <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
+          <span class="pill pill-g">28% → 81%</span>
+          <span style="font-size:11px;color:var(--text-3)">index rate range</span>
+        </div>
+      </div>
+      <div class="card" style="border-color:rgba(255,201,71,0.2)">
+        <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--amber);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.1em">Priority 2 — Strong signal</div>
+        <div style="font-size:20px;font-family:'DM Serif Display',serif;color:#fff;margin-bottom:8px">Readability Polish</div>
+        <div style="font-size:13px;color:var(--text-2);line-height:1.6">Target Flesch 20–50. Break sentences longer than 30 words. Replace 3-syllable technical terms with shorter synonyms where possible. Add topic sentences to each paragraph. Aim for FK Grade 13–15 where content allows.</div>
+        <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
+          <span class="pill pill-a">40% → 56%</span>
+          <span style="font-size:11px;color:var(--text-3)">index rate range</span>
+        </div>
+      </div>
+      <div class="card" style="border-color:rgba(96,165,250,0.2)">
+        <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--blue);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.1em">Priority 3 — Structural</div>
+        <div style="font-size:20px;font-family:'DM Serif Display',serif;color:#fff;margin-bottom:8px">Internal Links + Titles</div>
+        <div style="font-size:13px;color:var(--text-2);line-height:1.6">Increase internal link density (aim &gt;12 per 100 words). Shorten titles to &lt;60 characters where feasible — these index at 66.5%. Reduce H2/H3 count from 25–30 to 15–22 for better heading density per section.</div>
+        <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
+          <span class="pill pill-b">39% → 60%</span>
+          <span style="font-size:11px;color:var(--text-3)">index rate range</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>visualize.jove.com &mdash; SEO Indexation Report</span>
+    <span>Crawl window: March 2026 &mdash; URLs ≤ 38 chars &mdash; n=3,505</span>
+  </footer>
+
+</div>
+
+<script>
+function switchTab(btn, group, name) {
+  document.querySelectorAll('#' + group + '-' + btn.parentElement.children[0].dataset.group + ', [id^="' + group + '-"]').forEach(el => {
+    el.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-nav .tab-btn').forEach(b => b.classList.remove('active'));
+
+  // simpler approach
+  const allPanels = document.querySelectorAll('[id^="' + group + '-"]');
+  const allBtns = btn.closest('.tab-nav').querySelectorAll('.tab-btn');
+  allPanels.forEach(p => p.classList.remove('active'));
+  allBtns.forEach(b => b.classList.remove('active'));
+  document.getElementById(group + '-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
